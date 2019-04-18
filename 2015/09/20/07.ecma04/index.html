@@ -1,0 +1,726 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="JavaScript,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="概述“面向对象编程”（Object Oriented Programming，缩写为 OOP）是目前主流的编程范式。它的核心思想是将真实世界中各种复杂的关系，抽象为一个个对象，然后由对象之间的分工与合作，完成对真实世界的模拟。 传统的计算机程序由一系列函数或指令组成，而面向对象编程的程序由一系列对象组成。每一个对象都是功能中心，具有明确分工，可以完成接受信息、处理数据、发出信息等任务。因此，面向对">
+<meta name="keywords" content="JavaScript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript 读书心得之四：面向对象编程（OOP）">
+<meta property="og:url" content="http://yoursite.com/2015/09/20/07.ecma04/index.html">
+<meta property="og:site_name" content="Lizux">
+<meta property="og:description" content="概述“面向对象编程”（Object Oriented Programming，缩写为 OOP）是目前主流的编程范式。它的核心思想是将真实世界中各种复杂的关系，抽象为一个个对象，然后由对象之间的分工与合作，完成对真实世界的模拟。 传统的计算机程序由一系列函数或指令组成，而面向对象编程的程序由一系列对象组成。每一个对象都是功能中心，具有明确分工，可以完成接受信息、处理数据、发出信息等任务。因此，面向对">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2016-07-20T06:44:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaScript 读书心得之四：面向对象编程（OOP）">
+<meta name="twitter:description" content="概述“面向对象编程”（Object Oriented Programming，缩写为 OOP）是目前主流的编程范式。它的核心思想是将真实世界中各种复杂的关系，抽象为一个个对象，然后由对象之间的分工与合作，完成对真实世界的模拟。 传统的计算机程序由一系列函数或指令组成，而面向对象编程的程序由一系列对象组成。每一个对象都是功能中心，具有明确分工，可以完成接受信息、处理数据、发出信息等任务。因此，面向对">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/09/20/07.ecma04/">
+
+
+
+
+
+  <title> JavaScript 读书心得之四：面向对象编程（OOP） | Lizux </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Lizux</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Just go on</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/09/20/07.ecma04/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="可口可乐">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Lizux">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Lizux" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                JavaScript 读书心得之四：面向对象编程（OOP）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-09-20T00:00:00+08:00">
+                2015-09-20
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              <span class="post-meta-item-text">更新于</span>
+              <time title="更新于" itemprop="dateModified" datetime="2016-07-20T14:44:54+08:00">
+                2016-07-20
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>“面向对象编程”（Object Oriented Programming，缩写为 OOP）是目前主流的编程范式。它的核心思想是将真实世界中各种复杂的关系，抽象为一个个对象，然后由对象之间的分工与合作，完成对真实世界的模拟。</p>
+<p>传统的计算机程序由一系列函数或指令组成，而面向对象编程的程序由一系列对象组成。每一个对象都是功能中心，具有明确分工，可以完成接受信息、处理数据、发出信息等任务。因此，面向对象编程具有灵活性、代码的可重用性、模块性等特点，容易维护和开发，非常适合多人合作的大型软件项目。</p>
+<p>那么，“对象”（object）到底是什么？<br>我们从两个层次来理解。<br>（1）“对象” 是单个实物的抽象。<br>一本书、一辆汽车、一个人都可以是 “对象”，一个数据库、一张网页、一个与远程服务器的连接也可以是 “对象”。当实物被抽象成 “对象”，实物之间的关系就变成了 “对象” 之间的关系，从而就可以模拟现实情况，针对 “对象” 进行编程。<br>（2）“对象” 是一个容器，封装了 “属性”（property）和 “方法”（method）。<br>所谓 “属性”，就是对象的状态；所谓 “方法”，就是对象的行为（完成某种任务）。</p>
+<p>虽然不同于传统的面向对象编程语言，但是 JavaScript 具有很强的面向对象编程能力。</p>
+<h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3><p>典型的面向对象编程语言（比如 C++ 和 Java），存在 “类”（class）这样一个概念。所谓 “类” 就是对象的模板，对象就是 “类” 的实例。JavaScript 语言没有 “类”，而改用构造函数（constructor）作为对象的模板。<br>所谓 “构造函数”，就是专门用来生成 “对象” 的函数。它提供模板，作为对象的基本结构。一个构造函数，可以生成多个对象，这些对象都有相同的结构。<br>构造函数是一个正常的函数，但是它的特征和用法与普通函数不一样。构造函数的最大特点就是，函数体内部使用了 this 关键字，代表了所要生成的对象实例。生成对象的时候，必需用 new 命令，调用函数。<br>为了保证构造函数必须与 new 命令一起使用，一个解决办法是，在构造函数内部使用严格模式，即第一行加上 “<code>use strict</code>”。由于在严格模式下，函数内部的 this 禁止指向全局对象，其值默认为 undefined，导致不加 new 调用会报错（JavaScript 不允许对 undefined 添加属性）。<br>构造函数的名称为首字母大写，以区别普通函数。</p>
+<h3 id="this-关键字"><a href="#this-关键字" class="headerlink" title="this 关键字"></a>this 关键字</h3><p>this 就是指函数当前的运行环境。在 JavaScript 语言之中，所有函数都是在某个运行环境之中运行，this 就是这个环境。对于 JavaScipt 语言来说，一切皆对象，运行环境也是对象，所以可以理解成，所有函数总是在某个对象之中运行，this 就指向这个对象。<br>这本来并不会让用户糊涂，但是 JavaScript 支持运行环境动态切换，也就是说，this 的指向是动态的，没有办法事先确定到底指向哪个对象，这才是最让初学者感到困惑的地方。</p>
+<h4 id="运行场景"><a href="#运行场景" class="headerlink" title="运行场景"></a>运行场景</h4><ol>
+<li>在全局环境或函数调用（特别注意！）中使用 this，它指的就是全局对象 <code>window</code>。注：严格模式下，函数内部 this 禁止指向全局对象，其值默认为 undefined</li>
+<li>构造函数中的 this，指的是实例对象。</li>
+<li>对象的方法中的 this，指的是当前运行时所在的对象。注：对象的方法赋值给一个变量，变量执行时，是算函数调用的</li>
+<li>在 Node.js 中，this 的指向又分成两种情况：全局环境中，this 指向全局对象 <code>global</code>；模块环境中，this 指向 <code>module.exports</code>。</li>
+</ol>
+<h4 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h4><ol>
+<li><p>避免多层 this：由于 this 的指向是不确定的，所以切勿在函数中包含多层的 this。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123;</span><br><span class="line">  f1: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">var</span> f2 = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span>);</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">return</span> f2</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">o.f1()() <span class="comment">// o</span></span><br><span class="line">         <span class="comment">// window</span></span><br></pre></td></tr></table></figure>
+<p> 上面代码包含两层 this，结果运行后，第一层指向该对象 (属于对象的方法)，第二层指向全局对象（属于函数调用）</p>
+<p> 一个解决方法是在第二层改用一个指向外层 this 的变量。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> that = <span class="keyword">this</span>;</span><br><span class="line">o.f1()() <span class="comment">// o</span></span><br><span class="line">         <span class="comment">// o</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>数组的 map 和 foreach 方法，允许提供一个函数作为参数。这个函数内部不应该使用 this。</p>
+</li>
+<li>回调函数中的 this 往往会改变指向，最好避免使用。</li>
+</ol>
+<h4 id="固定-this"><a href="#固定-this" class="headerlink" title="固定 this"></a>固定 this</h4><p>this 的动态切换，固然为 JavaScript 创造了巨大的灵活性，但也使得编程变得困难和模糊。有时，需要把 this 固定下来，避免出现意想不到的情况。JavaScript 提供了 call、apply、bind 这三个方法，来切换 / 固定 this 的指向。</p>
+<ol>
+<li><p>函数的 call() 方法，可以改变指定该函数内部 this 的指向，然后再调用该函数。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">func.call(thisValue, arg1, arg2, ...) <span class="comment">// 第一个参数就是 this 所要指向的那个对象，后面的参数则是函数调用时所需的参数。</span></span><br></pre></td></tr></table></figure>
+<p> 如前面例子，可以改造为</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">o.f1().call(o) <span class="comment">// o</span></span><br><span class="line">               <span class="comment">// o</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>函数的 apply() 方法，可以改变指定该函数内部 this 的指向，然后再调用该函数。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">func.apply(thisValue, [arg1, arg2, ...])</span><br></pre></td></tr></table></figure>
+<p> 原函数的参数，在 call 方法中必须一个个添加，但是在 apply 方法中，必须以数组形式添加。<br> 利用这一点，可以做一些有趣的应用。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 快速取数组最大和最小值</span></span><br><span class="line"><span class="built_in">Math</span>.max.apply(<span class="literal">null</span>, [<span class="number">10</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">15</span>, <span class="number">9</span>]) <span class="comment">// 15</span></span><br><span class="line"><span class="built_in">Math</span>.min.apply(<span class="literal">null</span>, [<span class="number">10</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">15</span>, <span class="number">9</span>]) <span class="comment">// 2</span></span><br><span class="line"><span class="comment">// 数组扁平化</span></span><br><span class="line"><span class="built_in">Array</span>.prototype.concat.apply([],  [[<span class="number">0</span>, <span class="number">1</span>], [<span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>]])</span><br><span class="line"><span class="comment">// 将数组的空元素变为 undefined</span></span><br><span class="line"><span class="built_in">Array</span>.apply(<span class="literal">null</span>, [<span class="string">"a"</span>,,<span class="string">"b"</span>])</span><br></pre></td></tr></table></figure>
+<p> 空元素与 undefined 的差别在于，数组的 foreach 方法会跳过空元素，但是不会跳过 undefined。</p>
+</li>
+<li><p>函数的 bind() 方法，用于将函数体内的 this 绑定到某个对象，然后返回一个新函数。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">func.bind(thisValue, arg1, arg2,...)</span><br></pre></td></tr></table></figure>
+<p> bind() 比 call() 方法和 apply() 方法更进一步的是，除了绑定 this 以外，还可以绑定原函数的参数；另外可以不立即执行。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> add = <span class="function"><span class="keyword">function</span> (<span class="params">x, y</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> x * <span class="keyword">this</span>.m + y * <span class="keyword">this</span>.n;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">  m: <span class="number">2</span>,</span><br><span class="line">  n: <span class="number">3</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> newAdd = add.call(obj, <span class="number">5</span>, <span class="number">6</span>);</span><br><span class="line"><span class="built_in">console</span>.log(newAdd);</span><br><span class="line"><span class="keyword">var</span> newAdd2 = add.bind(obj, <span class="number">5</span>);</span><br><span class="line">newAdd2(<span class="number">6</span>);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<blockquote>
+<p>注意：</p>
+<ol>
+<li>每一次返回一个新函数。这样事件绑定 bind 方法生成的一个匿名函数，会导致无法取消绑定，必须提前赋值到变量。</li>
+<li>绑定函数运行时所在的对象，还可以使用 jQuery 的 $.proxy 方法，它与 bind 方法的作用基本相同。</li>
+</ol>
+</blockquote>
+<h2 id="封装"><a href="#封装" class="headerlink" title="封装"></a>封装</h2><h3 id="prototype-对象"><a href="#prototype-对象" class="headerlink" title="prototype 对象"></a>prototype 对象</h3><p>JavaScript 通过构造函数生成新对象，因此构造函数可以视为对象的模板。实例对象的属性和方法，可以定义在构造函数内部。<br>但是，这样做是对系统资源的浪费，因为同一个构造函数的对象实例之间，无法共享属性。</p>
+<p>在 JavaScript 语言中，每一个对象都有一个对应的原型对象，被称为 prototype 对象。定义在原型对象上的所有属性和方法，都能被派生对象继承。这就是 JavaScript 继承机制的基本设计。<br>除了这种方法，JavaScript 还提供了另一种定义实例对象的方法。我们知道，构造函数是一个函数，同时也是一个对象，也有自己的属性和方法，其中有一个 prototype 属性指向另一个对象，一般称为 prototype 对象。该对象非常特别，只要定义在它上面的属性和方法，能被所有实例对象共享。<br>更特别的是，只要修改 prototype 对象，变动就立刻会体现在实例对象。这是因为，当实例对象自身没有某个属性或方法的时候，它会到构造函数的 prototype 对象去寻找该属性或方法。这就是 prototype 对象的特殊之处。<br>如果实例对象自身就有某个属性或方法，它就不会再去 prototype 对象寻找这个属性或方法。<br><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Animal</span> (<span class="params">name</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.name = name;</span><br><span class="line">&#125;</span><br><span class="line">Animal.prototype.color = <span class="string">"white"</span>;</span><br><span class="line"><span class="keyword">var</span> cat = <span class="keyword">new</span> Animal(<span class="string">'mm'</span>);</span><br><span class="line">cat.color = <span class="string">'black'</span>;</span><br><span class="line"><span class="built_in">console</span>.log(cat.color);</span><br></pre></td></tr></table></figure></p>
+<p>总而言之，prototype 对象的作用，就是定义所有实例对象共享的属性和方法，所以它也被称为实例对象的原型，而实例对象可以视作从 prototype 对象衍生出来的。</p>
+<h3 id="原型链"><a href="#原型链" class="headerlink" title="原型链"></a>原型链</h3><p>由于 JavaScript 的所有对象都有构造函数，而所有构造函数都有 prototype 属性（其实是所有函数都有 prototype 属性），所以所有对象都有自己的 prototype 原型对象。<br>因此，一个对象的属性和方法，有可能是定义它自身上面，也有可能定义在它的原型对象上面。由于原型本身也是对象，又有自己的原型，所以形成了一条原型链（prototype chain）。以此类推，追根溯源，最源头的对象都是从 Object 构造函数生成（使用 new Object() 命令），所以如果一层层地上溯，所有对象的原型最终都可以上溯到 Object.prototype。那么，Object.prototype 有没有原型呢？回答可以是有，也可以是没有，因为 Object.prototype 的原型是没有任何属性和方法的 null。<br>“原型链” 的作用在于，当读取对象的某个属性时，JavaScript 引擎先寻找对象自身的属性，如果找不到，就到它的原型去找，如果还是找不到，就到原型的原型去找。以此类推，如果直到最顶层的 Object.prototype 还是找不到，则返回 undefined。<br>如果让某个函数的 prototype 属性指向一个数组，就意味着该函数可以用作数组的构造函数，因为它生成的实例对象都可以通过 prototype 属性调用数组方法。<br><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">MyArray</span> (<span class="params"></span>)</span>&#123;&#125;</span><br><span class="line">MyArray.prototype = <span class="keyword">new</span> <span class="built_in">Array</span>();</span><br><span class="line"><span class="keyword">var</span> mine = <span class="keyword">new</span> MyArray();</span><br><span class="line">mine.push(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);</span><br><span class="line">mine.length <span class="comment">// 3</span></span><br><span class="line">mine <span class="keyword">instanceof</span> <span class="built_in">Array</span> <span class="comment">// true</span></span><br></pre></td></tr></table></figure></p>
+<p>从上可以看到 instanceof 运算符的实质，它依次与实例对象的所有原型对象的 constructor 属性进行比较，只要有一个符合就返回 true，否则返回 false。<br><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">mine <span class="keyword">instanceof</span> <span class="built_in">Array</span></span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line">(<span class="built_in">Array</span> === MyArray.prototype.constructor) || (<span class="built_in">Array</span> === <span class="built_in">Array</span>.prototype.constructor) || (<span class="built_in">Array</span> === <span class="built_in">Object</span>.prototype.constructor)</span><br></pre></td></tr></table></figure></p>
+<h3 id="constructor-属性"><a href="#constructor-属性" class="headerlink" title="constructor 属性"></a>constructor 属性</h3><p>prototype 对象有一个 constructor 属性，默认指向 prototype 对象所在的构造函数。由于 constructor 属性定义在 prototype 对象上面，意味着可以被所有实例对象继承。<br>constructor 属性的作用是分辨 prototype 对象到底定义在哪个构造函数上面。</p>
+<h3 id="其他方法"><a href="#其他方法" class="headerlink" title="其他方法"></a>其他方法</h3><ul>
+<li>Object.getPrototypeOf() // 返回一个对象的原型。<br>  辨析：<pre><code>Object.getPrototypeOf(对象) === 原型（构造函数.prototype）
+对象 instanceof 构造函数
+原型（构造函数.prototype）.isPrototypeOf(对象)
+对象.constructor === 构造函数
+</code></pre></li>
+<li>Object.create() // 用于生成新的对象，可以替代 new 命令。它接受一个原型对象作为参数，返回一个新对象，后者完全继承前者的属性。<br>  如果想要生成一个不继承任何属性（比如 toString 和 valueOf 方法）的对象，可以将 Object.create 的参数设为 null。<br>  由于不使用构造函数，所以不能用 instanceof 运算符判断，对象是哪一个构造函数的实例。这时，可以使用 <code>Object.prototype.isPrototypeOf()</code> 方法，判断原型是哪一个对象。<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 为 Object 增加 create 方法（优先使用原生方法）</span></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="built_in">Object</span>.create !==<span class="string">'function'</span>) &#123;</span><br><span class="line">    <span class="built_in">Object</span>.create = <span class="function"><span class="keyword">function</span>(<span class="params">o</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> F = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">        F.prototype = o;</span><br><span class="line">        returen <span class="keyword">new</span> F();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Dog</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> spot = <span class="keyword">new</span> Dog(<span class="string">"Spot"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(Dog.prototype.isPrototypeOf(spot));</span><br><span class="line"><span class="built_in">console</span>.log(spot.constructor === Dog);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.getPrototypeOf(spot) === Dog.prototype);</span><br><span class="line">spot <span class="keyword">instanceof</span> Dog;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><p>JavaScript 通过构造函数生成实例对象，所以要实现对象的继承，就是要实现构造函数的继承。</p>
+<h3 id="构造函数的继承"><a href="#构造函数的继承" class="headerlink" title="构造函数的继承"></a>构造函数的继承</h3><p>构造函数的继承分成两部分，一部分是子类调用父类构造方法，另一部分是子类的原型指向父类的原型。</p>
+<h3 id="proto-属性"><a href="#proto-属性" class="headerlink" title="__proto__属性"></a>__proto__属性</h3><p>IE11+、现代浏览器都在 Object 对象的实例上，部署了一个非标准的 __proto__属性（曾经写入 ES6 草案），指向该对象的原型对象，即构造函数的 prototype 属性。<br>    <code>对象.__proto__ === 构造函数. prototype</code></p>
+<h3 id="属性的继承：属性分成两种。一种是对象的自有属性，另一种是继承自原型的继承属性。"><a href="#属性的继承：属性分成两种。一种是对象的自有属性，另一种是继承自原型的继承属性。" class="headerlink" title="属性的继承：属性分成两种。一种是对象的自有属性，另一种是继承自原型的继承属性。"></a>属性的继承：属性分成两种。一种是对象的自有属性，另一种是继承自原型的继承属性。</h3><p>对象的自有属性，可以用 <code>Object.getOwnPropertyNames()</code> 方法获得。只获取那些可以枚举的自有属性，使用 <code>Object.keys()</code> 方法。判断对象是否具有某个自有属性，使用 <code>hasOwnProperty()</code> 方法。<br>用 <code>Object.create()</code> 方法创造的对象，会继承所有原型对象的属性。<br>判断一个对象是否具有某个属性（不管是自有的还是继承的），使用 in 运算符。<br>获得对象的所有可枚举属性（不管是自有的还是继承的），可以使用 for…in 循环。</p>
+<p>如果要复制一个对象，需要做到下面两件事情：</p>
+<ul>
+<li>确保复制后的对象，与原对象具有同样的 prototype 原型对象。</li>
+<li>确保复制后的对象，与原对象具有同样的属性。<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">copyObject</span>(<span class="params">orig</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> copy = <span class="built_in">Object</span>.create(<span class="built_in">Object</span>.getPrototypeOf(orig));</span><br><span class="line">    copyOwnPropertiesFrom(copy, orig);</span><br><span class="line">    <span class="keyword">return</span> copy;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">copyOwnPropertiesFrom</span>(<span class="params">target, source</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">Object</span></span><br><span class="line">        .getOwnPropertyNames(source)</span><br><span class="line">        .forEach(<span class="function"><span class="keyword">function</span>(<span class="params">propKey</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> desc = <span class="built_in">Object</span>.getOwnPropertyDescriptor(source, propKey);</span><br><span class="line">            <span class="built_in">Object</span>.defineProperty(target, propKey, desc);</span><br><span class="line">        &#125;);</span><br><span class="line">    <span class="keyword">return</span> target;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="模块化编程"><a href="#模块化编程" class="headerlink" title="模块化编程"></a>模块化编程</h2><ol>
+<li><p>使用构造函数封装私有变量</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">StringBuilder</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> buffer = [];</span><br><span class="line">    <span class="keyword">this</span>.add = <span class="function"><span class="keyword">function</span> (<span class="params">str</span>) </span>&#123;</span><br><span class="line">        buffer.push(str);</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">this</span>.toString = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> buffer.join(<span class="string">''</span>);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 这种方法将私有变量封装在构造函数中，违反了构造函数与实例对象相分离的原则。并且，非常耗费内存。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">StringBuilder</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>._buffer = [];</span><br><span class="line">&#125;</span><br><span class="line">StringBuilder.prototype = &#123;</span><br><span class="line">    <span class="keyword">constructor</span>: StringBuilder,</span><br><span class="line">    add: function (str) &#123;</span><br><span class="line">        <span class="keyword">this</span>._buffer.push(str);</span><br><span class="line">    &#125;,</span><br><span class="line">    toString: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>._buffer.join(<span class="string">''</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p> 这种方法将私有变量放入实例对象中，好处是看上去更自然，但是它的私有变量可以从外部读写，不是很安全。</p>
+</li>
+<li>IIFE 封装私有变量<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="comment">// open IIFE</span></span><br><span class="line">    <span class="comment">// public</span></span><br><span class="line">    <span class="keyword">var</span> self = &#123;</span><br><span class="line">        publicMethod: <span class="function"><span class="keyword">function</span>(<span class="params">...</span>) </span>&#123;</span><br><span class="line">            privateData = ...;</span><br><span class="line">            privateFunction(...);</span><br><span class="line">        &#125;,</span><br><span class="line">        publicData: ...</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// private</span></span><br><span class="line">    <span class="keyword">var</span> privateData = ...;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">privateFunction</span>(<span class="params">...</span>) </span>&#123;</span><br><span class="line">        privateData = ...;</span><br><span class="line">        self.publicData = ...;</span><br><span class="line">        self.publicMethod(...);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> self;</span><br><span class="line">&#125;(); <span class="comment">// close IIFE</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="函数式编程"><a href="#函数式编程" class="headerlink" title="函数式编程"></a>函数式编程</h2><p>一种 “编程范式”（programming paradigm），也就是如何编写程序的方法论。它属于 “结构化编程” 的一种，主要思想是把运算过程尽量写成一系列嵌套的函数调用。<br>对于表达式：<br>    <code>(1 + 2) * 3 - 4</code><br>传统的过程式编程：<br>    <code>var a = 1 + 2;
+    var b = a * 3;
+    var c = b - 4;</code><br>函数式编程要求使用函数：<br>    <code>var result = subtract(multiply(add(1, 2), 3), 4);</code></p>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ol>
+<li>函数是 “第一等公民”<br>指的是函数与其他数据类型一样，处于平等地位，可以赋值给其他变量，也可以作为参数，传入另一个函数，或者作为别的函数的返回值。</li>
+<li>只用 “表达式”，不用 “语句”<br>“表达式”（expression）是一个单纯的运算过程，总是有返回值；“语句”（statement）是执行某种操作，没有返回值。函数式编程要求，只使用表达式，不使用语句。也就是说，每一步都是单纯的运算，而且都有返回值。<br>原因是函数式编程的开发动机，一开始就是为了处理运算（computation），不考虑系统的读写（I/O）。“语句” 属于对系统的读写操作，所以就被排斥在外。</li>
+<li>没有 “副作用”<br>所谓 “副作用”（side effect），指的是函数内部与外部互动（最典型的情况，就是修改全局变量的值），产生运算以外的其他结果。<br>函数式编程强调没有 “副作用”，意味着函数要保持独立，所有功能就是返回一个新的值，没有其他行为，尤其是不得修改外部变量的值。</li>
+<li>不修改状态<br>上一点已经提到，函数式编程只是返回新的值，不修改系统变量。因此，不修改变量，也是它的一个重要特点。<br>在其他类型的语言中，变量往往用来保存 “状态”（state）。不修改变量，意味着状态不能保存在变量中。函数式编程使用参数保存状态，最好的例子就是递归。</li>
+<li>引用透明<br>引用透明（Referential transparency），指的是函数的运行不依赖于外部变量或 “状态”，只依赖于输入的参数，任何时候只要参数相同，引用函数所得到的返回值总是相同的。<br>有了上面的第三点和第四点，这点是很显然的。其他类型的语言，函数的返回值往往与系统状态有关，不同的状态之下，返回值是不一样的。这就叫 “引用不透明”，很不利于观察和理解程序的行为。</li>
+</ol>
+<h3 id="意义"><a href="#意义" class="headerlink" title="意义"></a>意义</h3><ol>
+<li>代码简洁，易于敏捷开发</li>
+<li>接近自然语言，易于理解</li>
+<li>更方便的代码管理，易于模块化</li>
+<li>不锁线程，易于 “并发编程”</li>
+<li>没有副作用，易于代码的热升级</li>
+</ol>
+<h3 id="应用要点"><a href="#应用要点" class="headerlink" title="应用要点"></a>应用要点</h3><p>递归、闭包、柯里化 Currying、模块化、惰性求值</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/09/19/06.ecma03/" rel="next" title="JavaScript 读书心得之三：核心（二）">
+                <i class="fa fa-chevron-left"></i> JavaScript 读书心得之三：核心（二）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/09/21/08.ecma05/" rel="prev" title="JavaScript 读书心得之五：浏览器对象模型（BOM）">
+                JavaScript 读书心得之五：浏览器对象模型（BOM） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="可口可乐">
+          <p class="site-author-name" itemprop="name">可口可乐</p>
+          <p class="site-description motion-element" itemprop="description">Personal Blog</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">44</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构造函数"><span class="nav-number">1.1.</span> <span class="nav-text">构造函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#this-关键字"><span class="nav-number">1.2.</span> <span class="nav-text">this 关键字</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#运行场景"><span class="nav-number">1.2.1.</span> <span class="nav-text">运行场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#注意事项"><span class="nav-number">1.2.2.</span> <span class="nav-text">注意事项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#固定-this"><span class="nav-number">1.2.3.</span> <span class="nav-text">固定 this</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#封装"><span class="nav-number">2.</span> <span class="nav-text">封装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#prototype-对象"><span class="nav-number">2.1.</span> <span class="nav-text">prototype 对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原型链"><span class="nav-number">2.2.</span> <span class="nav-text">原型链</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#constructor-属性"><span class="nav-number">2.3.</span> <span class="nav-text">constructor 属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他方法"><span class="nav-number">2.4.</span> <span class="nav-text">其他方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#继承"><span class="nav-number">3.</span> <span class="nav-text">继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构造函数的继承"><span class="nav-number">3.1.</span> <span class="nav-text">构造函数的继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#proto-属性"><span class="nav-number">3.2.</span> <span class="nav-text">__proto__属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#属性的继承：属性分成两种。一种是对象的自有属性，另一种是继承自原型的继承属性。"><span class="nav-number">3.3.</span> <span class="nav-text">属性的继承：属性分成两种。一种是对象的自有属性，另一种是继承自原型的继承属性。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模块化编程"><span class="nav-number">4.</span> <span class="nav-text">模块化编程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数式编程"><span class="nav-number">5.</span> <span class="nav-text">函数式编程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特点"><span class="nav-number">5.1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#意义"><span class="nav-number">5.2.</span> <span class="nav-text">意义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用要点"><span class="nav-number">5.3.</span> <span class="nav-text">应用要点</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">可口可乐</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

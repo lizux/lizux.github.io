@@ -1,0 +1,717 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="JavaScript,Vue,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="Vue规范组件属性namecomponentsmodeldatapropscomputedwatchbeforeCreatecreatedbeforeMountmountedbeforeUpdateupdatedbeforeDestroydestroyedmethodstemplate 标签属性isv-forv-ifv-else-ifv-elsev-showv-onceidrefkeyslotv-">
+<meta name="keywords" content="JavaScript,Vue">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue 实践">
+<meta property="og:url" content="http://yoursite.com/2019/04/18/43.vue-practice/index.html">
+<meta property="og:site_name" content="Lizux">
+<meta property="og:description" content="Vue规范组件属性namecomponentsmodeldatapropscomputedwatchbeforeCreatecreatedbeforeMountmountedbeforeUpdateupdatedbeforeDestroydestroyedmethodstemplate 标签属性isv-forv-ifv-else-ifv-elsev-showv-onceidrefkeyslotv-">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-18T07:15:24.948Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vue 实践">
+<meta name="twitter:description" content="Vue规范组件属性namecomponentsmodeldatapropscomputedwatchbeforeCreatecreatedbeforeMountmountedbeforeUpdateupdatedbeforeDestroydestroyedmethodstemplate 标签属性isv-forv-ifv-else-ifv-elsev-showv-onceidrefkeyslotv-">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/18/43.vue-practice/">
+
+
+
+
+
+  <title> Vue 实践 | Lizux </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Lizux</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Just go on</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/18/43.vue-practice/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="可口可乐">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Lizux">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Lizux" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Vue 实践
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-18T00:00:00+08:00">
+                2019-04-18
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              <span class="post-meta-item-text">更新于</span>
+              <time title="更新于" itemprop="dateModified" datetime="2019-04-18T15:15:24+08:00">
+                2019-04-18
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Vue规范"><a href="#Vue规范" class="headerlink" title="Vue规范"></a>Vue规范</h2><h3 id="组件属性"><a href="#组件属性" class="headerlink" title="组件属性"></a>组件属性</h3><pre><code><figure class="highlight armasm"><table><tr><td class="code"><pre><span class="line"><span class="symbol">name</span></span><br><span class="line"><span class="symbol">components</span></span><br><span class="line"><span class="symbol">model</span></span><br><span class="line"><span class="symbol">data</span></span><br><span class="line"><span class="symbol">props</span></span><br><span class="line"><span class="symbol">computed</span></span><br><span class="line"><span class="symbol">watch</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">beforeCreate</span></span><br><span class="line"><span class="keyword">created</span></span><br><span class="line"><span class="keyword">beforeMount</span></span><br><span class="line"><span class="keyword">mounted</span></span><br><span class="line"><span class="keyword">beforeUpdate</span></span><br><span class="line"><span class="keyword">updated</span></span><br><span class="line"><span class="keyword">beforeDestroy</span></span><br><span class="line"><span class="keyword">destroyed</span></span><br><span class="line"><span class="keyword"></span></span><br><span class="line"><span class="keyword">methods</span></span><br><span class="line"><span class="keyword">template</span></span><br></pre></td></tr></table></figure>
+</code></pre><h3 id="标签属性"><a href="#标签属性" class="headerlink" title="标签属性"></a>标签属性</h3><pre><code><figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">is</span></span><br><span class="line">v-<span class="keyword">for</span></span><br><span class="line">v-<span class="keyword">if</span></span><br><span class="line">v-<span class="keyword">else</span>-<span class="keyword">if</span></span><br><span class="line">v-<span class="keyword">else</span></span><br><span class="line">v-show</span><br><span class="line">v-once</span><br><span class="line"><span class="built_in">id</span></span><br><span class="line"><span class="keyword">ref</span></span><br><span class="line">key</span><br><span class="line">slot</span><br><span class="line">v-bind</span><br><span class="line">v-model</span><br><span class="line">...其他属性</span><br><span class="line">v-<span class="keyword">on</span></span><br></pre></td></tr></table></figure>
+</code></pre><h3 id="命名规范"><a href="#命名规范" class="headerlink" title="命名规范"></a>命名规范</h3><pre><code><figure class="highlight delphi"><table><tr><td class="code"><pre><span class="line"><span class="string">'current'</span> + <span class="keyword">Name</span>：当前操作对象或变量</span><br><span class="line"><span class="string">'real'</span> + <span class="keyword">Name</span>：经过处理才能使用的对象或变量</span><br></pre></td></tr></table></figure>
+
+列表：
+
+<figure class="highlight delphi"><table><tr><td class="code"><pre><span class="line"><span class="keyword">name</span> + <span class="string">'List'</span>：用于直接定义的静态列表</span><br><span class="line"><span class="keyword">name</span> + <span class="string">'Data'</span>：用于接口返回的数据列表</span><br><span class="line"><span class="keyword">name</span> + <span class="string">'s'</span>   ：用于组件的属性，比较简练</span><br></pre></td></tr></table></figure>
+</code></pre><h2 id="Vue-技巧"><a href="#Vue-技巧" class="headerlink" title="Vue 技巧"></a>Vue 技巧</h2><ol start="0">
+<li><p>设置别名，简化导入组件的路径</p>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">- <span class="keyword">import</span> HiForm <span class="keyword">from</span> <span class="string">'components/hiform'</span>;</span><br><span class="line">- <span class="keyword">import</span> &#123;requiredInput, requiredSelect&#125; <span class="keyword">from</span> <span class="string">'components/constant'</span>;</span><br><span class="line"></span><br><span class="line">+ <span class="keyword">import</span> HiForm <span class="keyword">from</span> <span class="string">'@/hiform'</span>;</span><br><span class="line">+ <span class="keyword">import</span> &#123;requiredInput, requiredSelect&#125; <span class="keyword">from</span> <span class="string">'@/constant'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line">   alias: &#123;</span><br><span class="line">       <span class="string">'@'</span>: path.join(APP_PATH, <span class="string">'components'</span>)</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>因为vue data 初始化时不能嵌套定义（一个对象的属性值指向另外一个值），所以有类似需求用字符串来指定属性名，同时还能解决延迟加载的数据问题</p>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">data: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        toggleList: [</span><br><span class="line">            &#123;</span><br><span class="line">                label: <span class="string">'API'</span>,</span><br><span class="line">                key: <span class="string">'api'</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                label: <span class="string">'Server'</span>,</span><br><span class="line">                key: <span class="string">'server'</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                label: <span class="string">'Permission'</span>,</span><br><span class="line">                key: <span class="string">'permission'</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                label: <span class="string">'Git'</span>,</span><br><span class="line">                key: <span class="string">'git_repo'</span></span><br><span class="line">            &#125;</span><br><span class="line">        ],</span><br><span class="line">        risk: &#123;</span><br><span class="line">            label: <span class="string">'Risk Free'</span>,</span><br><span class="line">            key: <span class="string">'risk_free'</span>,</span><br><span class="line">            type: <span class="string">'radio'</span>,</span><br><span class="line">            values: <span class="string">'toggleList'</span>,</span><br><span class="line">            valueMode: <span class="string">'readonly'</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 使用时：</span></span><br><span class="line">   <span class="keyword">this</span>.riskValues = <span class="keyword">this</span>[<span class="keyword">this</span>.risk.values]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>路由链接尽量通过 name 来设置而非直接对 url 硬编码</p>
+ <figure class="highlight html"><table><tr><td class="code"><pre><span class="line">- <span class="tag">&lt;<span class="name">router-link</span> <span class="attr">:to</span>=<span class="string">"`/global/cloud_services/$&#123;scope.row.id&#125;`"</span>&gt;</span></span><br><span class="line">链接</span><br><span class="line"><span class="tag">&lt;/<span class="name">router-link</span>&gt;</span></span><br><span class="line"></span><br><span class="line">+ <span class="tag">&lt;<span class="name">router-link</span> <span class="attr">:to</span>=<span class="string">"&#123;name: 'cloudDetail', params: &#123;cloudID: scope.row.id&#125;&#125;"</span>&gt;</span></span><br><span class="line">链接</span><br><span class="line"><span class="tag">&lt;/<span class="name">router-link</span>&gt;</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    path: <span class="string">':cloudID'</span>,</span><br><span class="line">    name: <span class="string">'cloudDetail'</span>,</span><br><span class="line">    component: CloudDetail</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>路由链接会提前预解析，导致 vue-router 的警告“missing param for named route”，加 v-if 判断修复</p>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;router-link v-<span class="keyword">if</span>=<span class="string">"cloudID"</span> :to=<span class="string">"&#123;name: 'cloudDetail'&#125;"</span>&gt;</span><br><span class="line">    Member</span><br><span class="line">&lt;<span class="regexp">/router-link&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>路由组件通过特殊设置来对参数解耦</p>
+<p> 原始的路由设置：</p>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// vue-router</span></span><br><span class="line">&#123;</span><br><span class="line">       path: <span class="string">':cloudID'</span>,</span><br><span class="line">       component: CloudDetail</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">// cloudDetail</span></span><br><span class="line">   data: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">       <span class="keyword">return</span> &#123;</span><br><span class="line">           currentCloud: <span class="keyword">this</span>.$route.params.cloudID</span><br><span class="line">       &#125;;</span><br><span class="line">   &#125;,</span><br></pre></td></tr></table></figure>
+<p> 修改后的路由设置：</p>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// vue-router</span></span><br><span class="line">&#123;</span><br><span class="line">    path: <span class="string">':cloudID'</span>,</span><br><span class="line">    component: CloudDetail,</span><br><span class="line">    props: <span class="literal">true</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// cloudDetail</span></span><br><span class="line">props: &#123;</span><br><span class="line">    userID: &#123;</span><br><span class="line">        type: <span class="built_in">String</span>,</span><br><span class="line">        required: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p> 更复杂的用法（props 传递更多参数）：</p>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">   &#123;</span><br><span class="line">    path: <span class="string">':cloudID'</span>,</span><br><span class="line">    name: <span class="string">'cloudDetail'</span>,</span><br><span class="line">    component: CloudDetail,</span><br><span class="line">    props: <span class="function"><span class="params">route</span> =&gt;</span> (&#123;</span><br><span class="line">        cloudID: route.params.cloudID,</span><br><span class="line">        resourceType: <span class="string">'company'</span></span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>自定义组件复用后会有缓存问题：添加 key 值，避免翻页后缓存造成不渲染的问题</p>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;el-table-column label=<span class="string">"Title"</span>&gt;</span><br><span class="line">    &lt;template slot-scope=<span class="string">"scope"</span>&gt;</span><br><span class="line">-        <span class="xml"><span class="tag">&lt;<span class="name">record-title</span> <span class="attr">:detail-data</span>=<span class="string">"scope.row"</span>&gt;</span><span class="tag">&lt;/<span class="name">record-title</span>&gt;</span></span></span><br><span class="line">+        &lt;record-title :detail-data="scope.row" :key="scope.row.id"&gt;&lt;/record-title&gt;</span><br><span class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">template</span>&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;/<span class="name">el-table-column</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>组件提炼为公共组件后会有缓存问题：通过 router 加 key 避免复用组件不刷新的问题，会有副作用：内部组件不会缓存会重复刷新，改用 watch 方法实现</p>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">- <span class="xml"><span class="tag">&lt;<span class="name">router-view</span> <span class="attr">:key</span>=<span class="string">"$route.path"</span>&gt;</span><span class="tag">&lt;/<span class="name">router-view</span>&gt;</span></span></span><br><span class="line">+ &lt;router-view&gt;&lt;/router-view&gt;</span><br><span class="line">+</span><br><span class="line">watch: &#123;</span><br><span class="line">    resourceType: function(newValue) &#123;</span><br><span class="line">        this.init();</span><br><span class="line">    &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>vue 的 v-for 语句会把内部 this 指向全局变量（一般为 undefined）；而非当前 vm 实例的问题：重新绑定 this</p>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;el-tabs v-model=<span class="string">"activeTab"</span>&gt;</span><br><span class="line">    &lt;el-tab-pane v-<span class="keyword">for</span>=<span class="string">"tabScope in tabList"</span> :key=<span class="string">"tabScope.key"</span> :label=<span class="string">"tabScope.label"</span> :name=<span class="string">"tabScope.key"</span>&gt;</span><br><span class="line">-        <span class="xml"><span class="tag">&lt;<span class="name">hi-form</span> <span class="attr">:fields</span>=<span class="string">"currentFields"</span> <span class="attr">:model</span>=<span class="string">"realAppDetail"</span> <span class="attr">:rules</span>=<span class="string">"ruleList"</span> <span class="attr">:self</span>=<span class="string">"this"</span>&gt;</span><span class="tag">&lt;/<span class="name">hi-form</span>&gt;</span></span></span><br><span class="line">+        &lt;hi-form :fields="currentFields" :model="realAppDetail" :rules="ruleList" :self="_self"&gt;&lt;/hi-form&gt;</span><br><span class="line">    &lt;/el-tab-pane&gt;</span><br><span class="line">&lt;/el-tabs&gt;</span><br><span class="line"></span><br><span class="line">created() &#123;</span><br><span class="line">    this._self = this;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用 keepAlive 缓存组件后，假如内部有嵌套路由，则不能同时开启多个子路由组件的 meta.keepAlive 属性，需要对嵌套的 router-view 再次包裹 keepAlive（可以使用 include 指定要缓存的组件）</p>
+ <figure class="highlight stata"><table><tr><td class="code"><pre><span class="line">&lt;<span class="keyword">keep</span>-alive <span class="keyword">include</span>=<span class="string">"MeetingSummary,MeetingDetail"</span>&gt;&lt;router-<span class="keyword">view</span>&gt;&lt;/router-<span class="keyword">view</span>&gt;&lt;/<span class="keyword">keep</span>-alive&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用 keepAlive 缓存组件后，由于组件一直在缓存中，所以其 watch 方法会一直调用，假如观察的是 route 参数，会频繁触发，注意性能优化！</p>
+</li>
+<li><p>vue router 的 beforeRouteUpdate 事件不会在 keepAlive 包裹组件里面触发，可以使用 beforeRouteEnter 或 watch 解决（ <a href="https://github.com/vuejs/vue-router/issues/1875" target="_blank" rel="noopener">参考1</a> <a href="https://github.com/vuejs/vue-router/issues/2255" target="_blank" rel="noopener">参考2</a>）</p>
+</li>
+</ol>
+<h2 id="Element-UI-技巧"><a href="#Element-UI-技巧" class="headerlink" title="Element UI 技巧"></a>Element UI 技巧</h2><ol start="0">
+<li><p>使用 tab 组件时要优化性能，避免重复渲染</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;el-tab-pane v-<span class="keyword">for</span>=<span class="string">"tabScope in tabList"</span> :key=<span class="string">"tabScope.key"</span> :label=<span class="string">"tabScope.label"</span> :name=<span class="string">"tabScope.key"</span>&gt;</span><br><span class="line">-   <span class="xml"><span class="tag">&lt;<span class="name">hi-form</span> <span class="attr">:fields</span>=<span class="string">"currentFields[activeTab] || []"</span> <span class="attr">:model</span>=<span class="string">"realAppDetail"</span> <span class="attr">:rules</span>=<span class="string">"ruleList"</span> <span class="attr">:self</span>=<span class="string">"_self"</span>&gt;</span><span class="tag">&lt;/<span class="name">hi-form</span>&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;/<span class="name">el-tab-pane</span>&gt;</span></span></span><br><span class="line">+   &lt;hi-form :fields="currentFields[activeTab] || []" :model="realAppDetail" :rules="ruleList" :self="_self"&gt;&lt;/hi-form&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>表单初始值的问题:<br> multiselect、 file 类型必须设置初始值为空数组，否则报错<br> checkbox 初始值必须为空数组，否则无法实现多选</p>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">domains: [],</span><br><span class="line">google_account_name: []</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>表单静态渲染项也得加 prop 属性，否则校验程序不生效；同时还得设置 rules 属性</p>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">- <span class="xml"><span class="tag">&lt;<span class="name">el-form-item</span> <span class="attr">v-if</span>=<span class="string">"mode === 'view'"</span> <span class="attr">:key</span>=<span class="string">"field.key"</span> <span class="attr">:label</span>=<span class="string">"field.label"</span> <span class="attr">class</span>=<span class="string">"static-form-item"</span>&gt;</span></span></span><br><span class="line">+ &lt;el-form-item v-if="mode === 'view'" :key="field.key" :label="field.label" :prop="field.key" :rules="[]" class="static-form-item"&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>去除表单原生的 required 属性，避免重复校验</p>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">- <span class="xml"><span class="tag">&lt;<span class="name">el-form-item</span> <span class="attr">label</span>=<span class="string">"Role"</span> <span class="attr">prop</span>=<span class="string">"role_name"</span> <span class="attr">required</span>&gt;</span></span></span><br><span class="line">+ &lt;el-form-item label="Role" prop="role_name"&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>upload 组件实现限制大小</p>
+<p> 目标：要在选择文件而非提交表单时实现限制大小功能<br> 过程：因为没有 <code>before-change</code> 钩子函数，所以只能用 <code>on-change</code> 事件，在检测到文件超过限制时，调用 <code>clearFiles()</code> 方法</p>
+<blockquote>
+<p>注：在 v-for 循环中 upload 组件的 ref 会变成一个数组，而不是单个对象，即使该 ref 值是唯一值，所以需要特别处理 [0] 才能访问</p>
+</blockquote>
+</li>
+<li><p>upload 组件实现返回信息在 file list 中显示</p>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> fileList = <span class="built_in">document</span>.getElementsByClassName(</span><br><span class="line">    <span class="string">'el-upload-list'</span></span><br><span class="line">)[<span class="number">0</span>];</span><br><span class="line"><span class="keyword">if</span> (fileList) &#123;</span><br><span class="line">    <span class="keyword">let</span> lists = fileList.getElementsByTagName(<span class="string">'li'</span>);</span><br><span class="line">    <span class="keyword">let</span> clone = [].slice.call(lists);</span><br><span class="line">    clone.forEach(<span class="function"><span class="params">item</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> anchor = item.getElementsByClassName(</span><br><span class="line">            <span class="string">'el-upload-list__item-name'</span></span><br><span class="line">        )[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">if</span> (anchor) &#123;</span><br><span class="line">            <span class="keyword">let</span> title = anchor.innerText;</span><br><span class="line">            <span class="keyword">let</span> errormsg = result.upload_error[title];</span><br><span class="line">            <span class="keyword">let</span> successmsg = result.upload_success[title];</span><br><span class="line">            <span class="keyword">if</span> (errormsg) &#123;</span><br><span class="line">                <span class="keyword">var</span> txt = <span class="built_in">document</span>.createTextNode(errormsg);</span><br><span class="line">                <span class="keyword">var</span> errorInfo = <span class="built_in">document</span>.createElement(</span><br><span class="line">                    <span class="string">'span'</span></span><br><span class="line">                );</span><br><span class="line">                errorInfo.appendChild(txt);</span><br><span class="line">                <span class="keyword">this</span>.$util.superClass(</span><br><span class="line">                    errorInfo,</span><br><span class="line">                    <span class="string">'add'</span>,</span><br><span class="line">                    <span class="string">'alert'</span></span><br><span class="line">                );</span><br><span class="line">                <span class="keyword">this</span>.$util.insertAfter(errorInfo, anchor);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (successmsg) &#123;</span><br><span class="line">                <span class="keyword">this</span>.$util.superClass(</span><br><span class="line">                    item,</span><br><span class="line">                    <span class="string">'add'</span>,</span><br><span class="line">                    <span class="string">'is-success'</span></span><br><span class="line">                );</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>input 组件支持回车事件</p>
+<p> Element 的 input 组件没有实现 keyup 事件，所以要监听回车事件必须使用 <code>@keyup.native.enter=&#39;&#39;</code> 形式</p>
+</li>
+</ol>
+<ol start="0">
+<li><p>multiselect 组件被禁用的选项不能被移除</p>
+ <figure class="highlight cs"><table><tr><td class="code"><pre><span class="line">&lt;el-<span class="keyword">select</span> v-model=<span class="string">"formData[field.key]"</span> multiple @<span class="keyword">remove</span>-tag=<span class="string">"handleRemoveTag(field)"</span>&gt;</span><br><span class="line">handleRemoveTag(field) &#123;</span><br><span class="line">    <span class="keyword">let</span> oldValue = <span class="keyword">this</span>.cloneData[field.key];</span><br><span class="line">    <span class="keyword">let</span> options = <span class="keyword">this</span>.handleArrayData(field.values);</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">lock</span> = [];</span><br><span class="line">    options.forEach(item =&gt; &#123;</span><br><span class="line">        <span class="keyword">if</span> (oldValue.indexOf(item.key) &gt; <span class="number">-1</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.isUnselect(field, item)) &#123;</span><br><span class="line">                <span class="keyword">lock</span>.push(item.key);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">lock</span>.length) &#123;</span><br><span class="line">        <span class="keyword">let</span> <span class="keyword">value</span> = <span class="keyword">this</span>.formData[field.key];</span><br><span class="line">        <span class="keyword">this</span>.formData[field.key] = <span class="keyword">this</span>.$util.unique([</span><br><span class="line">            ...<span class="keyword">lock</span>,</span><br><span class="line">            ...<span class="keyword">value</span></span><br><span class="line">        ]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>date 组件实现日期范围限制</p>
+ <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">&lt;el-<span class="built_in">date</span>-picker <span class="built_in">type</span>=<span class="string">"date"</span> v-model=<span class="string">"formData[field.key]"</span> :picker-options=<span class="string">"dateLimit"</span> value-<span class="built_in">format</span>=<span class="string">"yyyy-MM-dd"</span>&gt;&lt;/el-<span class="built_in">date</span>-picker&gt;</span><br><span class="line"></span><br><span class="line">data: <span class="function"><span class="keyword">function</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        dateLimit: &#123;</span><br><span class="line">            disabledDate: <span class="built_in">time</span> =&gt; &#123;</span><br><span class="line">                let <span class="built_in">min</span> = this.minDate;</span><br><span class="line">                <span class="keyword">if</span> (<span class="built_in">min</span> &amp;&amp; <span class="built_in">time</span> &lt; new Date(<span class="built_in">min</span>)) &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (<span class="built_in">time</span> &gt; Date.now()) &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在 element 的 event 事件中增加自定义参数</p>
+<p> 如果你直接在方法中写，他就会将原生内置的参数覆盖！</p>
+<p> 但是你可以在自定义参数之前加入 <code>$event</code> 这个变量，然后再传其他值，这样的话事件的内置回调参数就会保留了。</p>
+<p> 例如：</p>
+ <figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">&lt;el-select <span class="attribute">v-model</span>=<span class="string">"formData[field.key]"</span> multiple @<span class="attribute">remove-tag</span>=<span class="string">"handleRemoveTag(<span class="variable">$event</span>, field)"</span>&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在把 vue 向父级传参方式由 传统 改为 $emit 时要注意：</p>
+<p> 传统方式：</p>
+ <figure class="highlight scala"><table><tr><td class="code"><pre><span class="line">父组件：</span><br><span class="line">&lt;<span class="keyword">package</span>-detail :on-change=<span class="string">"updateResult.bind(null, scope)"</span>&gt;&lt;/<span class="keyword">package</span>-detail&gt; <span class="comment">// 使用 bind 方法按需传入父级参数</span></span><br><span class="line"></span><br><span class="line">updateResult(scope, result) &#123;</span><br><span class="line">	<span class="comment">// 在父级参数之后读入 $emit 事件参数</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">子组件：</span><br><span class="line">props:&#123;</span><br><span class="line">	<span class="comment">// 对 props 的事件预设定可以移除（因为只针对变量属性而非事件属性）</span></span><br><span class="line">       onChange: &#123;</span><br><span class="line">           <span class="class"><span class="keyword">type</span></span>: <span class="type">Function</span></span><br><span class="line">       &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">this</span>.onChange(result);</span><br></pre></td></tr></table></figure>
+<p> $emit方式：</p>
+ <figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">父组件：</span><br><span class="line">&lt;<span class="keyword">package</span>-detail <span class="meta">@on</span>-change=<span class="string">"updateResult(<span class="variable">$event</span>, scope)"</span>&gt;&lt;/<span class="keyword">package</span>-detail&gt; <span class="comment">// 使用 $event 传入 $emit 事件参数，然后按需传入父级参数</span></span><br><span class="line"></span><br><span class="line">updateResult(result, scope) &#123;</span><br><span class="line">	<span class="comment">// 在 $emit 事件参数之后读入父级参数</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">子组件：</span><br><span class="line"><span class="keyword">this</span>.$emit(<span class="string">'on-change'</span>, result); <span class="comment">// 调用事件的名称用 原始连字符写法 而非 驼峰式写法</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>升级 element ui v2.4+，记得同时引入 <el-scrollbar> 避免 Table 组件打开筛选列表时报错</el-scrollbar></p>
+ <figure class="highlight xl"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">    Scrollbar</span><br><span class="line">&#125; from <span class="string">'element-ui'</span>;</span><br><span class="line"></span><br><span class="line">Vue.component(Scrollbar.<span class="keyword">name</span>, Scrollbar);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+            <a href="/tags/Vue/" rel="tag"># Vue</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/17/42.for-async/" rel="next" title="当迭代 iterate 碰到异步 async/await">
+                <i class="fa fa-chevron-left"></i> 当迭代 iterate 碰到异步 async/await
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="可口可乐">
+          <p class="site-author-name" itemprop="name">可口可乐</p>
+          <p class="site-description motion-element" itemprop="description">Personal Blog</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">44</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Vue规范"><span class="nav-number">1.</span> <span class="nav-text">Vue规范</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#组件属性"><span class="nav-number">1.1.</span> <span class="nav-text">组件属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标签属性"><span class="nav-number">1.2.</span> <span class="nav-text">标签属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命名规范"><span class="nav-number">1.3.</span> <span class="nav-text">命名规范</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Vue-技巧"><span class="nav-number">2.</span> <span class="nav-text">Vue 技巧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Element-UI-技巧"><span class="nav-number">3.</span> <span class="nav-text">Element UI 技巧</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">可口可乐</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
