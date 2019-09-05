@@ -1563,8 +1563,8 @@
                 <i class="fa fa-calendar-check-o"></i>
               </span>
               <span class="post-meta-item-text">更新于</span>
-              <time title="更新于" itemprop="dateModified" datetime="2019-04-18T15:45:55+08:00">
-                2019-04-18
+              <time title="更新于" itemprop="dateModified" datetime="2019-08-22T10:55:53+08:00">
+                2019-08-22
               </time>
             
           </span>
@@ -1605,6 +1605,9 @@
 
 <figure class="highlight delphi"><table><tr><td class="code"><pre><span class="line"><span class="keyword">name</span> + <span class="string">'List'</span>：用于直接定义的静态列表</span><br><span class="line"><span class="keyword">name</span> + <span class="string">'Data'</span>：用于接口返回的数据列表</span><br><span class="line"><span class="keyword">name</span> + <span class="string">'s'</span>   ：用于组件的属性，比较简练</span><br></pre></td></tr></table></figure>
 </code></pre><h2 id="Vue-技巧"><a href="#Vue-技巧" class="headerlink" title="Vue 技巧"></a>Vue 技巧</h2><ol start="0">
+<li><p>Vue-cli 打包出的 app.js 在 safari 下刷新也获取不到最新版本（也不是上个版本，奇怪的顺序）<br> 解决方案：</p>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">chainWebpack: <span class="function"><span class="params">config</span> =&gt;</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> (process.env.NODE_ENV === <span class="string">'development'</span>) &#123;</span><br><span class="line">	config</span><br><span class="line">		.output</span><br><span class="line">		.filename(<span class="string">'[name].[hash].js'</span>)</span><br><span class="line">		.end()</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">   <span class="comment">// 或</span></span><br><span class="line">devServer: &#123;</span><br><span class="line">	watchOptions: &#123;</span><br><span class="line">		poll: <span class="literal">true</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
 <li><p>设置别名，简化导入组件的路径</p>
  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">- <span class="keyword">import</span> HiForm <span class="keyword">from</span> <span class="string">'components/hiform'</span>;</span><br><span class="line">- <span class="keyword">import</span> &#123;requiredInput, requiredSelect&#125; <span class="keyword">from</span> <span class="string">'components/constant'</span>;</span><br><span class="line"></span><br><span class="line">+ <span class="keyword">import</span> HiForm <span class="keyword">from</span> <span class="string">'@/hiform'</span>;</span><br><span class="line">+ <span class="keyword">import</span> &#123;requiredInput, requiredSelect&#125; <span class="keyword">from</span> <span class="string">'@/constant'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line">   alias: &#123;</span><br><span class="line">       <span class="string">'@'</span>: path.join(APP_PATH, <span class="string">'components'</span>)</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
 </li>
