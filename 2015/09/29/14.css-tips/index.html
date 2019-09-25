@@ -92,7 +92,7 @@
 <meta property="og:site_name" content="Lizux">
 <meta property="og:description" content="CSS 选择符优先级!important 声明＞内联样式（style）＞id 选择符（#id）＞类选择符（.class）＝伪类选择符（:hover ）＝属性选择符（[attr] ）＞类型选择符（标签）＝伪元素选择符（:first-child） IE 的 “hasLayout” 模式研究“hasLayout” 模式hasLayout 是 Windows Internet Explorer 渲染引擎的">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-09-25T09:18:49.875Z">
+<meta property="og:updated_time" content="2019-09-25T09:24:36.276Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CSS 技巧汇总">
 <meta name="twitter:description" content="CSS 选择符优先级!important 声明＞内联样式（style）＞id 选择符（#id）＞类选择符（.class）＝伪类选择符（:hover ）＝属性选择符（[attr] ）＞类型选择符（标签）＝伪元素选择符（:first-child） IE 的 “hasLayout” 模式研究“hasLayout” 模式hasLayout 是 Windows Internet Explorer 渲染引擎的">
@@ -291,7 +291,7 @@
                 <i class="fa fa-calendar-check-o"></i>
               </span>
               <span class="post-meta-item-text">更新于</span>
-              <time title="更新于" itemprop="dateModified" datetime="2019-09-25T17:18:49+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2019-09-25T17:24:36+08:00">
                 2019-09-25
               </time>
             
@@ -406,7 +406,7 @@
 <h2 id="用-CSS-实现梯形角标时在-Firefox-下出现奇异白线的问题及解决方法"><a href="#用-CSS-实现梯形角标时在-Firefox-下出现奇异白线的问题及解决方法" class="headerlink" title="用 CSS 实现梯形角标时在 Firefox 下出现奇异白线的问题及解决方法"></a>用 CSS 实现梯形角标时在 Firefox 下出现奇异白线的问题及解决方法</h2><p>利用上条的思路，可以实现在容器上显示梯形角标：</p>
 <figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.box</span> &#123;</span><br><span class="line">    <span class="attribute">position</span>: relative;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">300px</span>;</span><br><span class="line">    <span class="attribute">height</span>: <span class="number">300px</span>;</span><br><span class="line">    <span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#f60</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.box</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">    <span class="attribute">position</span>: absolute;</span><br><span class="line">    <span class="attribute">top</span>: <span class="number">3px</span>;</span><br><span class="line">    <span class="attribute">left</span>: -<span class="number">27px</span>;</span><br><span class="line">    <span class="attribute">z-index</span>: <span class="number">1</span>;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">60px</span>;</span><br><span class="line">    <span class="attribute">border</span>: <span class="number">18px</span> solid transparent;</span><br><span class="line">    <span class="attribute">border-bottom-color</span>: <span class="number">#f60</span>;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">rotate</span>(-45deg);</span><br><span class="line">    <span class="attribute">content</span>: <span class="string">''</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>但是在 Firefox 下会出现在梯形两端各出现一条白线，经确认是 Firefox 对 rotate 支持的 bug。<br>可以使用如下代码修复：</p>
+<p>但是在 Firefox 下会在梯形两端各出现一条白线，经确认是 Firefox 对 rotate 支持的 bug。<br>可以使用如下代码修复：</p>
 <figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">transform</span>: <span class="selector-tag">rotate</span>(<span class="selector-tag">-45deg</span>) <span class="selector-tag">translate3d</span>( 0, 0, 1<span class="selector-tag">px</span>);</span><br></pre></td></tr></table></figure>
 
 <h2 id="清除（闭合）浮动"><a href="#清除（闭合）浮动" class="headerlink" title="清除（闭合）浮动"></a>清除（闭合）浮动</h2><p>按照 CSS 规范，浮动元素（floats）会被移出文档流，不会影响到块状元素的布局而只会影响内联元素（通常是文本）的排列。因此当其高度超出父级元素时，一般父级元素不会自动伸展以适应内容的高度，从而造成内容溢出影响破坏布局的现象。这种现象叫“浮动溢出”或者“高度塌陷”，如何避免？</p>
