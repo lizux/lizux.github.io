@@ -84,18 +84,18 @@
 
 
 
-<meta name="description" content="问题我们在实例化一个类的时候可能会要先异步执行一些操作，比如对一个 User 类来讲，实例化对象时，可能只有 user id，需要通过接口异步获取一下用户的更多信息，才能创建成一个完整的对象实例我们期望能使用如下方法进行实例对象：let myUser = await new User(data); 分析不管是用 Promise 还是 async/await ，其实本质上都是返回一个 Promise">
+<meta name="description" content="问题我们在实例化一个类的时候可能会要先异步执行一些操作，比如对一个 User 类来讲，实例化对象时，可能只有 user id，需要通过接口异步获取一下用户的更多信息，才能创建成一个完整的对象实例。这时，我们期望能使用如下方法进行实例对象：let myUser = await new User(data); 分析不管是用 Promise 还是 async/await ，其实本质上都是返回一个 Pro">
 <meta name="keywords" content="JavaScript,async,promise,class">
 <meta property="og:type" content="article">
 <meta property="og:title" content="当 Class 构造函数碰到异步 async&#x2F;await">
-<meta property="og:url" content="http://yoursite.com/2019/11/17/51.class-async/index.html">
+<meta property="og:url" content="http://yoursite.com/2019/11/05/51.class-async/index.html">
 <meta property="og:site_name" content="Lizux">
-<meta property="og:description" content="问题我们在实例化一个类的时候可能会要先异步执行一些操作，比如对一个 User 类来讲，实例化对象时，可能只有 user id，需要通过接口异步获取一下用户的更多信息，才能创建成一个完整的对象实例我们期望能使用如下方法进行实例对象：let myUser = await new User(data); 分析不管是用 Promise 还是 async/await ，其实本质上都是返回一个 Promise">
+<meta property="og:description" content="问题我们在实例化一个类的时候可能会要先异步执行一些操作，比如对一个 User 类来讲，实例化对象时，可能只有 user id，需要通过接口异步获取一下用户的更多信息，才能创建成一个完整的对象实例。这时，我们期望能使用如下方法进行实例对象：let myUser = await new User(data); 分析不管是用 Promise 还是 async/await ，其实本质上都是返回一个 Pro">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-06T02:10:30.930Z">
+<meta property="og:updated_time" content="2019-11-06T02:13:49.125Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="当 Class 构造函数碰到异步 async&#x2F;await">
-<meta name="twitter:description" content="问题我们在实例化一个类的时候可能会要先异步执行一些操作，比如对一个 User 类来讲，实例化对象时，可能只有 user id，需要通过接口异步获取一下用户的更多信息，才能创建成一个完整的对象实例我们期望能使用如下方法进行实例对象：let myUser = await new User(data); 分析不管是用 Promise 还是 async/await ，其实本质上都是返回一个 Promise">
+<meta name="twitter:description" content="问题我们在实例化一个类的时候可能会要先异步执行一些操作，比如对一个 User 类来讲，实例化对象时，可能只有 user id，需要通过接口异步获取一下用户的更多信息，才能创建成一个完整的对象实例。这时，我们期望能使用如下方法进行实例对象：let myUser = await new User(data); 分析不管是用 Promise 还是 async/await ，其实本质上都是返回一个 Pro">
 
 
 
@@ -123,7 +123,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/11/17/51.class-async/">
+  <link rel="canonical" href="http://yoursite.com/2019/11/05/51.class-async/">
 
 
 
@@ -240,7 +240,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/17/51.class-async/">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/05/51.class-async/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="可口可乐">
@@ -277,8 +277,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-17T00:00:00+08:00">
-                2019-11-17
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-05T00:00:00+08:00">
+                2019-11-05
               </time>
             
 
@@ -291,7 +291,7 @@
                 <i class="fa fa-calendar-check-o"></i>
               </span>
               <span class="post-meta-item-text">更新于</span>
-              <time title="更新于" itemprop="dateModified" datetime="2019-11-06T10:10:30+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2019-11-06T10:13:49+08:00">
                 2019-11-06
               </time>
             
@@ -323,7 +323,7 @@
       
 
       
-        <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>我们在实例化一个类的时候可能会要先异步执行一些操作，比如对一个 User 类来讲，实例化对象时，可能只有 user id，需要通过接口异步获取一下用户的更多信息，才能创建成一个完整的对象实例<br>我们期望能使用如下方法进行实例对象：<code>let myUser = await new User(data);</code></p>
+        <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>我们在实例化一个类的时候可能会要先异步执行一些操作，比如对一个 User 类来讲，实例化对象时，可能只有 user id，需要通过接口异步获取一下用户的更多信息，才能创建成一个完整的对象实例。<br>这时，我们期望能使用如下方法进行实例对象：<code>let myUser = await new User(data);</code></p>
 <h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>不管是用 Promise 还是 async/await ，其实本质上都是返回一个 Promise。但是另一方面，普通的构造函数默认返回它创建的实例对象本身。因此，我们不能直接对 new 操作符使用 await，因为正常的构造函数必须返回要创建的对象，而不是 Promise。</p>
 <h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><h3 id="方案一-使用静态方法：异步创建并返回对象实例"><a href="#方案一-使用静态方法：异步创建并返回对象实例" class="headerlink" title="方案一 使用静态方法：异步创建并返回对象实例"></a>方案一 使用静态方法：异步创建并返回对象实例</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">async</span> build(data) &#123;</span><br><span class="line">        <span class="keyword">let</span> userInfo = <span class="keyword">await</span> <span class="keyword">this</span>.updateInfo(data);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> User(userInfo);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">async</span> updateInfo(data) &#123;</span><br><span class="line">        <span class="keyword">if</span> (data.id) &#123;</span><br><span class="line">            <span class="keyword">let</span> param = &#123;<span class="attr">query_id</span>: data.id&#125;;</span><br><span class="line">            <span class="keyword">let</span> result = <span class="keyword">await</span> ajax.getUserInfo(param);</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> user = <span class="keyword">await</span> User.build(&#123;<span class="attr">id</span>: <span class="number">123</span>&#125;)</span><br></pre></td></tr></table></figure>
 
