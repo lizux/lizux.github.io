@@ -240,6 +240,145 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/17/51.class-async/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="可口可乐">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Lizux">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Lizux" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2019/11/17/51.class-async/" itemprop="url">
+                  当 Class 构造函数碰到异步 async/await
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-17T00:00:00+08:00">
+                2019-11-17
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              <span class="post-meta-item-text">更新于</span>
+              <time title="更新于" itemprop="dateModified" datetime="2019-11-06T10:10:30+08:00">
+                2019-11-06
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>我们在实例化一个类的时候可能会要先异步执行一些操作，比如对一个 User 类来讲，实例化对象时，可能只有 user id，需要通过接口异步获取一下用户的更多信息，才能创建成一个完整的对象实例<br>我们期望能使用如下方法进行实例对象：<code>let myUser = await new User(data);</code></p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>不管是用 Promise 还是 async/await ，其实本质上都是返回一个 Promise。但是另一方面，普通的构造函数默认返回它创建的实例对象本身。因此，我们不能直接对 new 操作符使用 await，因为正常的构造函数必须返回要创建的对象，而不是 Promise。</p>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><h3 id="方案一-使用静态方法：异步创建并返回对象实例"><a href="#方案一-使用静态方法：异步创建并返回对象实例" class="headerlink" title="方案一 使用静态方法：异步创建并返回对象实例"></a>方案一 使用静态方法：异步创建并返回对象实例</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">async</span> build(data) &#123;</span><br><span class="line">        <span class="keyword">let</span> userInfo = <span class="keyword">await</span> <span class="keyword">this</span>.updateInfo(data);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> User(userInfo);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">async</span> updateInfo(data) &#123;</span><br><span class="line">        <span class="keyword">if</span> (data.id) &#123;</span><br><span class="line">            <span class="keyword">let</span> param = &#123;<span class="attr">query_id</span>: data.id&#125;;</span><br><span class="line">            <span class="keyword">let</span> result = <span class="keyword">await</span> ajax.getUserInfo(param);</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> user = <span class="keyword">await</span> User.build(&#123;<span class="attr">id</span>: <span class="number">123</span>&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>方案一特点是，使用异步的静态方法来获取数据，成功后返回对象实例。这样在创建实例时，不再使用 new 方法，而是直接调用类的静态方法进行初始化。</p>
+<h3 id="方案二-使用异步构造器：返回-Promise-来替代默认返回的对象实例"><a href="#方案二-使用异步构造器：返回-Promise-来替代默认返回的对象实例" class="headerlink" title="方案二 使用异步构造器：返回 Promise 来替代默认返回的对象实例"></a>方案二 使用异步构造器：返回 Promise 来替代默认返回的对象实例</h3><p>在默认情况下，如果不显式指定构造函数的返回值，它会默认返回创建的实例本身，也就是运行时的 this；如果指定了，则返回值会替代默认值。所以，我们可以用一个立即执行的异步箭头函数作为返回值。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(data) &#123;</span><br><span class="line">        <span class="keyword">this</span>.initCompleted = !!data.user_name;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!<span class="keyword">this</span>.initCompleted) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="function">(<span class="params"><span class="keyword">async</span>(</span>) =&gt;</span> &#123;</span><br><span class="line">                <span class="keyword">await</span> <span class="keyword">this</span>.updateInfo();</span><br><span class="line">                <span class="keyword">this</span>.initCompleted = <span class="literal">true</span>;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">            &#125;)();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">async</span> updateInfo() &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.id) &#123;</span><br><span class="line">            <span class="keyword">let</span> param = &#123;<span class="attr">query_id</span>: <span class="keyword">this</span>.id&#125;;</span><br><span class="line">            <span class="keyword">let</span> result = <span class="keyword">await</span> ajax.getUserInfo(param).catch(<span class="function"><span class="params">()</span> =&gt;</span> mUtils.reject(<span class="string">'Get user info error'</span>));</span><br><span class="line">            <span class="keyword">this</span>.user_name = result.user_name;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> user = <span class="keyword">await</span> <span class="keyword">new</span> User(&#123;<span class="attr">id</span>: <span class="number">123</span>&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>方案二的特点是，返回一个立即执行的异步箭头函数用来替代默认返回的对象实例(this)。返回的这个 Promise 实例在 resolve 时才会将创建的对象实例(this)返回，这样外部就可以使用 await 得到了完成异步创建后的实例。</p>
+<p>注：在 TypeScript 等超集语言里，无法使用上述方法，因为它的 class 构造函数可能不支持返回值或返回不同类型的值。<br>    这种情况下，可以给实例手动添加 then 方法，await 操作符会调用该方法，使其成为一个 PromiseLike 对象，这就实现了不在 constructor 里替代返回值，却又能用 await new 的效果。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 替代部分代码</span></span><br><span class="line"><span class="keyword">if</span> (!<span class="keyword">this</span>.initCompleted) &#123;</span><br><span class="line">    <span class="keyword">const</span> init = <span class="function">(<span class="params"><span class="keyword">async</span>(</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">await</span> <span class="keyword">this</span>.updateInfo();</span><br><span class="line">        <span class="keyword">this</span>.initCompleted = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">delete</span> <span class="keyword">this</span>.then;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;)();</span><br><span class="line">    <span class="keyword">this</span>.then = init.then.bind(init);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注：then 方法的值则是 async 函数的运行结果 —— 一个Promise 实例的 then 方法，为了让 init.then 方法能够在外部正常调用，用 bind 方法重新绑定它的 this。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/17/50.es6-class/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1884,165 +2023,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/05/41.srcset/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="可口可乐">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/images/avatar.gif">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Lizux">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Lizux" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2019/03/05/41.srcset/" itemprop="url">
-                  响应式图片设计及 srcset 属性探索
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-05T00:00:00+08:00">
-                2019-03-05
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              <span class="post-meta-item-text">更新于</span>
-              <time title="更新于" itemprop="dateModified" datetime="2019-03-05T16:17:04+08:00">
-                2019-03-05
-              </time>
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="响应式图片设计"><a href="#响应式图片设计" class="headerlink" title="响应式图片设计"></a>响应式图片设计</h2><p>在整个网站的开发中，图片的处理是一个无法绕开或忽略的问题。因为，图片要在各种设备上平滑过渡显示，<br>它们将会碰到的问题有：</p>
-<ol start="0">
-<li>优化在不同设备下的观看体验（不同分辨率使用不同布局）</li>
-<li>避免浪费带宽（不同分辨率调用不同图片）</li>
-</ol>
-<p>第一个问题可以用 CSS 媒体查询解决。而第二个问题，如果是背景图片，也可以用媒体查询；但是对 HTML 里面的 img 标签就无能为力了。这时，<code>&lt;img&gt;</code> 元素的 srcset 属性就派上用场了。</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"images/demo.jpg"</span> <span class="attr">srcset</span>=<span class="string">"</span></span></span><br><span class="line"><span class="tag"><span class="string">images/demo_s.jpg 480w,</span></span></span><br><span class="line"><span class="tag"><span class="string">images/demo_m.jpg 1024w,</span></span></span><br><span class="line"><span class="tag"><span class="string">images/demo_l.jpg 1280w,</span></span></span><br><span class="line"><span class="tag"><span class="string">images/demo_xl.jpg 1440w,</span></span></span><br><span class="line"><span class="tag"><span class="string">images/demo_xxl.jpg 1920w,</span></span></span><br><span class="line"><span class="tag"><span class="string">images/demo_xxxl.jpg 5120w</span></span></span><br><span class="line"><span class="tag"><span class="string">"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="格式："><a href="#格式：" class="headerlink" title="格式："></a>格式：</h3><p>srcset 格式为每条规则包含:</p>
-<ol start="0">
-<li>一个图片文件名</li>
-<li>空格</li>
-<li>图像宽度</li>
-</ol>
-<p>规则间以逗号分隔</p>
-<blockquote>
-<p>注： srcset 生效时，自动忽略 src 属性</p>
-</blockquote>
-<h3 id="判断规则："><a href="#判断规则：" class="headerlink" title="判断规则："></a>判断规则：</h3><ol start="0">
-<li>没有指定单位时，默认为 1x</li>
-<li>为 *x 时，判断设备像素比</li>
-<li>为 *w 时，判断实际像素大小 (设备独立像素 DIPs × 设备像素比 DPR)</li>
-</ol>
-<blockquote>
-<p>注： 实际像素 也叫 物理像素，为设备的真实像素<br>       设备独立像素 也叫 CSS像素，独立于设备用于逻辑上衡量像素而抽象出来的虚拟像素。它是为了兼容不同物理尺寸不同分辨率下统一显示的问题。screen.width 可以获取该值；另外设置了 <meta name="viewport" content="width=device-width"> 时，document.documentElement.clientWidth 值等于该值。</p>
-</blockquote>
-<h3 id="判断优先级："><a href="#判断优先级：" class="headerlink" title="判断优先级："></a>判断优先级：</h3><ol start="0">
-<li>先入规则，优先显示最早满足的条件；</li>
-<li>等于规则，优先显示条件相等的;</li>
-<li>没有相等的话，会自动选择一个适当的可用图片<br> 单位是 x 时，规则不明确；<br> 单位是 w 时，PC 端会选择大于实际像素值的最近节点，移动端会选择和设备像素比的绝对差值为最小的节点。<blockquote>
-<p>注：如一移动设备横向分辨率为 1080 像素，DPR 为 3，则 360×3=1080，在1024(2.84)、1139(3.16)时选1024，在1024、1140(3.17)时选1140</p>
-</blockquote>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2086,7 +2066,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">51</span>
+              <span class="site-state-item-count">52</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -2096,7 +2076,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
