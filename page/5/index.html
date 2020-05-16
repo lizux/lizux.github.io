@@ -240,239 +240,6 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/09/29/14.css-tips/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="可口可乐">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/images/avatar.gif">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Lizux">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Lizux" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/09/29/14.css-tips/" itemprop="url">
-                  CSS 技巧汇总
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-09-29T00:00:00+08:00">
-                2015-09-29
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              <span class="post-meta-item-text">更新于</span>
-              <time title="更新于" itemprop="dateModified" datetime="2019-10-10T14:50:36+08:00">
-                2019-10-10
-              </time>
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="CSS-选择符优先级"><a href="#CSS-选择符优先级" class="headerlink" title="CSS 选择符优先级"></a>CSS 选择符优先级</h2><p>!important 声明＞内联样式（style）＞id 选择符（#id）＞类选择符（.class）＝伪类选择符（:hover ）＝属性选择符（[attr] ）＞类型选择符（标签）＝伪元素选择符（:first-child）</p>
-<h2 id="sticky-定位问题"><a href="#sticky-定位问题" class="headerlink" title="sticky 定位问题"></a>sticky 定位问题</h2><p>sticky 定位的元素受父级块级元素影响，其宽度继承的是父级的宽度，另外其只能显示在父级的内容区，当滚动距离超过其父级的高度时，即超过内容区后，其也会相应得被推出可视区域，使用时要注意。<br>注：sticky 元素的父级元素不能含有 overflow:hidden 和 overflow:auto 属性。</p>
-<h2 id="display-inline-block-详解及兼容性方法"><a href="#display-inline-block-详解及兼容性方法" class="headerlink" title="display:inline-block 详解及兼容性方法"></a>display:inline-block 详解及兼容性方法</h2><p>2002 年 W3C 推出 CSS2.1 规范时，给 <a href="http://www.w3.org/TR/CSS21/visuren.html#display-prop" target="_blank" rel="noopener">元素的 display 属性增加了 inline-block 值</a>。其作用是 “这个值导致一个元素产生一个块状盒模型（block box），而本身作为单一的内联盒模型（inline box）流动排列（flow）”。即 display 为 inline-block 的元素既可以像块状元素一样定义高度宽度，又可以和内联元素（比如文字）排列在一行。<br>这个效果在页面设计的时候，很多地方都可以带来便利，最常见的莫过于在对链接进行 “以图换字” 时，既可以像内联元素那样实现一行排列，又可以设置像块状元素那样设置单个链接大小，还可以通过 text-indent 来隐藏文字显示背景图片。<br>现在对于 inline-block 属性运用的需求也越来越多，可惜依旧只有 Firefox、Safari/Chrome、Opera、IE8+ 支持。但 IE6、7 可以通过触发 hasLayout 属性来模拟（因为 inline-block 会触发 IE 的 hasLayout，从而使内联元素具有类似 inline-block 元素的属性）。<del>Firefox2 有 -moz-inline-box 和 -moz-inline-stack 私有属性，在实际应用中两者都有一些 bug：-moz-inline-box 会存在 text-align（无法水平居中 / 居右，使用 -moz-box-pack:center/end 来修正）、line-height（无法垂直居中，使用 -moz-box-align:center 来修正）等属性无效的问题; 而相对来说 -moz-inline-stack 的表现好些，但也有 bug：如果元素的父级元素具有 display:inline 属性则会使 Firefox 中其包含的链接不可点击，这个需要对元素用 position:relative 来解决，另外 text-align、line-height 等属性无效，目前无法修正）。</del></p>
-<p>兼容实现方法：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">display</span><span class="selector-pseudo">:inline-block</span>;<span class="comment">/* 支持现代浏览器、IE8+，另外也能让 IE6、7 触发内联元素的 hasLayout */</span></span><br><span class="line">*<span class="selector-tag">display</span><span class="selector-pseudo">:inline</span>;</span><br><span class="line"><span class="selector-tag">zoom</span><span class="selector-pseudo">:1</span>;<span class="comment">/* 这两个属性在 IE6、7 中让块状元素实现 display:inline-block 的效果 */</span></span><br><span class="line"><span class="selector-tag">width</span><span class="selector-pseudo">:100px</span>;</span><br><span class="line"><span class="selector-tag">height</span><span class="selector-pseudo">:100px</span>;<span class="comment">/* 这两个属性为任意非 auto 值 */</span></span><br><span class="line"><span class="selector-tag">text-indent</span><span class="selector-pseudo">:-999em</span>;<span class="comment">/* 现代浏览器中隐藏文字 */</span></span><br><span class="line">font:0/0 "";</span><br><span class="line"><span class="selector-tag">overflow</span><span class="selector-pseudo">:hidden</span>;<span class="comment">/* 这两个属性任选其一配合上文，实现 IE 隐藏文字 */</span></span><br><span class="line"><span class="selector-tag">vertical-align</span><span class="selector-pseudo">:middle</span>;<span class="comment">/* 垂直居中，防止与其他内联元素有比较大的偏离 */</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="“垂直居中”-之研究"><a href="#“垂直居中”-之研究" class="headerlink" title="“垂直居中” 之研究"></a>“垂直居中” 之研究</h2><p>使用一个 100% 高的隐藏元素来辅助，设置 vertical-align 迫使内容区垂直居中，支持图片、多行文字（不固定高度），是目前兼容性最好的方法</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"vertical-center"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"text-wrap"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>text<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>text<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"vertical-center"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">""</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.vertical-center</span><span class="selector-pseudo">:after</span> &#123;</span><br><span class="line">    <span class="attribute">display</span>: inline-block;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">0</span>;</span><br><span class="line">    <span class="attribute">height</span>: <span class="number">100%</span>;</span><br><span class="line">    <span class="attribute">vertical-align</span>: middle;</span><br><span class="line">    <span class="attribute">content</span>: <span class="string">""</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.text-wrap</span> &#123;<span class="comment">/* 对于文本需要多包一层 */</span></span><br><span class="line">    <span class="attribute">display</span>: inline-block;</span><br><span class="line">    *display: inline;</span><br><span class="line">    *<span class="selector-tag">zoom</span>: 1;</span><br><span class="line">    <span class="selector-tag">width</span>: 100%;</span><br><span class="line">    <span class="selector-tag">vertical-align</span>: <span class="selector-tag">middle</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="iOS-设备下-iframe-内容无法滚动的问题"><a href="#iOS-设备下-iframe-内容无法滚动的问题" class="headerlink" title="iOS 设备下 iframe 内容无法滚动的问题"></a>iOS 设备下 iframe 内容无法滚动的问题</h2><p>很长时间以来，iOS 设备上 Safari 中超出边界的元素将不能滚动，这时候需要用个小技巧来解决这个问题。<br>html 代码：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"ios-scroll"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">iframe</span> <span class="attr">height</span>=<span class="string">"100%"</span> <span class="attr">width</span>=<span class="string">"100%"</span> <span class="attr">frameBorder</span>=<span class="string">"0"</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>注：外部包围 iframe 的容器必须有明确的高度值</p>
-</blockquote>
-<p>css 代码：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.ios-scroll</span> &#123;</span><br><span class="line">    <span class="attribute">-webkit-overflow-scrolling</span>:touch;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="禁止双击时选择页面内容"><a href="#禁止双击时选择页面内容" class="headerlink" title="禁止双击时选择页面内容"></a>禁止双击时选择页面内容</h2><p>在做图片滚动时，在双击左右箭头，快速切换图片滚动时，会选择附近区域的文字，感觉不是很好。<br>针对这个问题可以对相应的元素添加 <code>onselectstart=&quot;return false;&quot;</code>（IE、Chrome），另外针对火狐添加 <code>-moz-user-select:none</code>，即代码如下所示：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">onselectstart</span>=<span class="string">"return false;"</span> <span class="attr">style</span>=<span class="string">"-moz-user-select:none;"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="如何去除点击链接或按钮时出现的虚线？"><a href="#如何去除点击链接或按钮时出现的虚线？" class="headerlink" title="如何去除点击链接或按钮时出现的虚线？"></a>如何去除点击链接或按钮时出现的虚线？</h2><p>有时候在点击链接或者按钮的时，总有一个虚线框在触发元素上，显得特别刺眼（如用 a 标签 做 Tab 切换），那如何去除这个虚线框呢？</p>
-<p>在 IE 中，需要在元素的 html 代码中加入 hidefocus=”true” 属性。即：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"http://www.china.com"</span> <span class="attr">hidefocus</span>=<span class="string">"true"</span>&gt;</span>china<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>或者在直接给元素定义样式：</p>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">position</span><span class="selector-pseudo">:relative</span>;<span class="comment">/* 这是 IE 下的一个 bug，在自身或父级元素定义该样式会导致按钮或链接点击时失去虚线，刚好实现了我们需要的效果，有时无效 */</span></span><br><span class="line">blr:expression(this.onFocus=this.blur());/* 会反复执行，有严重的效率问题，不推荐使用 */</span><br></pre></td></tr></table></figure>
-
-<p>而在 Firefox 等浏览器中则相对比较容易，直接给元素定义样式 <code>outline:none;</code> 就可以了，另外针对 Firefox 的 input/button 元素要通过私有属性特别处理：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">button</span><span class="selector-pseudo">::-moz-focus-inner</span>,<span class="selector-tag">input</span><span class="selector-pseudo">::-moz-focus-inner</span> &#123;</span><br><span class="line">    <span class="attribute">border-color</span>:transparent<span class="meta">!important</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="多行文字两端对齐"><a href="#多行文字两端对齐" class="headerlink" title="多行文字两端对齐"></a>多行文字两端对齐</h2><p>多行文字尤其是表单的 label 标签，因为字数不一，却要两端排版对齐。</p>
-<p>正确的做法是 text-align:justify。但是还需要加上 CSS3 草案的 text-justify:distribute 。<br>这种做法存在的问题是：除了 IE 之外，尚无浏览器实现 text-justify:distribute。且 IE 必须还加上 text-align-last:justify。<br>是的，尽管 IE 常为我们所不齿，但是在文字排版和国际化方面，IE 是做的最好的。仅就两端分布对齐这个特例而言，IE 领先了其他浏览器 10 年以上。</p>
-<p>这样综合下来，有如下代码：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">display</span><span class="selector-pseudo">:block</span>;</span><br><span class="line"><span class="selector-tag">width</span><span class="selector-pseudo">:5em</span>;</span><br><span class="line"><span class="selector-tag">text-align</span><span class="selector-pseudo">:justify</span>;</span><br><span class="line"><span class="selector-tag">text-align</span><span class="selector-pseudo">:end</span>;<span class="comment">/* 对于除了 IE 之外的浏览器用尾对齐覆盖之前的两端对齐方式 */</span></span><br><span class="line"><span class="selector-tag">text-align-last</span><span class="selector-pseudo">:justify</span>;</span><br><span class="line"><span class="selector-tag">text-justify</span><span class="selector-pseudo">:distribute</span>;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>在 IE 和将来正确实现 CSS3-text 模块的浏览器中将两端分布对齐。<br>  在当前除 IE 以外的主流浏览器中将右对齐，作为合理的 fallback。</p>
-</blockquote>
-<h2 id="以图换字的思路及方法"><a href="#以图换字的思路及方法" class="headerlink" title="以图换字的思路及方法"></a>以图换字的思路及方法</h2><p>做网页的时候经常会遇到个问题：想让普通文字链接显示个性化的图片，就要对链接使用背景图片，同时让链接里的文字消失，这就需要用到 “以图换字”（Fahrner Image Replacement），就是用图片替换文字表现。</p>
-<p>具体方法是位置移动：也就是让内容进行位置移动，移出显示区之外。</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"logo"</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"URL"</span> <span class="attr">title</span>=<span class="string">"标题"</span>&gt;</span>标题内容<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.logo</span> &#123;</span><br><span class="line">    <span class="attribute">overflow</span>:hidden;</span><br><span class="line">    <span class="attribute">width</span>:<span class="number">100px</span>;</span><br><span class="line">    <span class="attribute">height</span>:<span class="number">100px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.logo</span> <span class="selector-tag">a</span> &#123;</span><br><span class="line">    <span class="attribute">display</span>:block;</span><br><span class="line">    <span class="attribute">background</span>:URL;</span><br><span class="line">    <span class="attribute">text-indent</span>:-<span class="number">999em</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>扩展阅读：<a href="http://www.mezzoblue.com/tests/revised-image-replacement/" target="_blank" rel="noopener">Revised Image Replacement</a> 上有更丰富的方法。</p>
-<h2 id="用-CSS-Border-实现三角形的思路及方法"><a href="#用-CSS-Border-实现三角形的思路及方法" class="headerlink" title="用 CSS Border 实现三角形的思路及方法"></a>用 CSS Border 实现三角形的思路及方法</h2><p>在盒模型中，上下左右边框交界处出会呈现平滑的斜线。利用这个特点，通过设置不同的上下左右边框宽度或者颜色可以得到小三角，小梯形等。</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"triangle"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"triangle2"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">overflow</span><span class="selector-pseudo">:hidden</span>;</span><br><span class="line"><span class="selector-tag">width</span><span class="selector-pseudo">:0</span>;</span><br><span class="line"><span class="selector-tag">height</span><span class="selector-pseudo">:0</span>;</span><br><span class="line">font:0/0 "";</span><br><span class="line"><span class="selector-tag">border</span><span class="selector-pseudo">:10px</span> <span class="selector-tag">dashed</span> <span class="selector-tag">transparent</span>;<span class="comment">/* IE6 下，设置边框的 border-style 为 dashed，即可达到透明的效果 */</span></span><br><span class="line"><span class="selector-tag">border-bottom</span><span class="selector-pseudo">:10px</span> <span class="selector-tag">solid</span> <span class="selector-id">#FF9600</span>;</span><br></pre></td></tr></table></figure>
-
-<h2 id="用-CSS-实现梯形角标时在-Firefox-下出现奇异白线的问题及解决方法"><a href="#用-CSS-实现梯形角标时在-Firefox-下出现奇异白线的问题及解决方法" class="headerlink" title="用 CSS 实现梯形角标时在 Firefox 下出现奇异白线的问题及解决方法"></a>用 CSS 实现梯形角标时在 Firefox 下出现奇异白线的问题及解决方法</h2><p>利用上条的思路，可以实现在容器上显示梯形角标：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.box</span> &#123;</span><br><span class="line">    <span class="attribute">position</span>: relative;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">300px</span>;</span><br><span class="line">    <span class="attribute">height</span>: <span class="number">300px</span>;</span><br><span class="line">    <span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#f60</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.box</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">    <span class="attribute">position</span>: absolute;</span><br><span class="line">    <span class="attribute">top</span>: <span class="number">3px</span>;</span><br><span class="line">    <span class="attribute">left</span>: -<span class="number">27px</span>;</span><br><span class="line">    <span class="attribute">z-index</span>: <span class="number">1</span>;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">60px</span>;</span><br><span class="line">    <span class="attribute">border</span>: <span class="number">18px</span> solid transparent;</span><br><span class="line">    <span class="attribute">border-bottom-color</span>: <span class="number">#f60</span>;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">rotate</span>(-45deg);</span><br><span class="line">    <span class="attribute">content</span>: <span class="string">''</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>但是在 Firefox 下会在梯形两端各出现一条白线，经确认是 Firefox 对 rotate 支持的 bug。<br>可以使用如下代码修复：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">transform</span>: <span class="selector-tag">rotate</span>(<span class="selector-tag">-45deg</span>) <span class="selector-tag">translate3d</span>(0, 0, 1<span class="selector-tag">px</span>);</span><br></pre></td></tr></table></figure>
-
-<h2 id="清除（闭合）浮动"><a href="#清除（闭合）浮动" class="headerlink" title="清除（闭合）浮动"></a>清除（闭合）浮动</h2><p>按照 CSS 规范，浮动元素（floats）会被移出文档流，不会影响到块状元素的布局而只会影响内联元素（通常是文本）的排列。因此当其高度超出父级元素时，一般父级元素不会自动伸展以适应内容的高度，从而造成内容溢出影响破坏布局的现象。这种现象叫“浮动溢出”或者“高度塌陷”，如何避免？</p>
-<p>解决方法：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">zoom</span><span class="selector-pseudo">:1</span>;<span class="comment">/* 针对 IE，触发 hasLayout */</span></span><br><span class="line"><span class="selector-tag">overflow</span><span class="selector-pseudo">:hidden</span>;<span class="comment">/* 针对现代浏览器 */</span></span><br></pre></td></tr></table></figure>
-
-<p>注：overflow:hidden 用来布局容易出问题，一是很可能造成其内部的浮动层显示不全（致命伤）；二是在某些情况下会造成双击空白处全选（没总结出规律，偶尔会出现）。此外，某些时候还会造成性能问题。</p>
-<p>这时，现代浏览器可以使用以下方法</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.clear</span><span class="selector-pseudo">:before</span>,</span><br><span class="line"><span class="selector-class">.clear</span><span class="selector-pseudo">:after</span> &#123;</span><br><span class="line">    <span class="attribute">display</span>: table; <span class="comment">/* 不用 block，而是用 table 的原因是用于 :before 可以触发 BFC，从而避免父级与第一个子级元素外边界合并。 */</span></span><br><span class="line">    <span class="attribute">content</span>: <span class="string">" "</span>; <span class="comment">/* 为了避免 Opera 的 bug，否则它会在被清除浮动的元素的顶部和底部产生一个可见空格 */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.clear</span><span class="selector-pseudo">:after</span> &#123;</span><br><span class="line">    <span class="attribute">clear</span>: both;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>另一种方法就是在父级元素内最后面插入一个额外的标签，并令其清除浮动以撑开父级元素。这种方法优点是兼容性好，缺点是需要额外的无语义的标签</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.clear</span> &#123;</span><br><span class="line">    <span class="attribute">overflow</span>:hidden;</span><br><span class="line">    <span class="attribute">clear</span>:both;</span><br><span class="line">    <span class="attribute">height</span>:<span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="强制文本自动换行和不换行的方法"><a href="#强制文本自动换行和不换行的方法" class="headerlink" title="强制文本自动换行和不换行的方法"></a>强制文本自动换行和不换行的方法</h2><p>防止文本撑破页面，强制自动换行：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">word-wrap</span><span class="selector-pseudo">:break-word</span>; <span class="comment">/* 可以把长单词强行断句；首先起一个新行来放置长单词，新的行还是放不下这个长单词则会对长单词进行强制断句（IE、Firefox3.5、Chrome、Opera 支持）。CSS3 中已经改名为 overflow-wrap（Chrome、Opera 支持）。 */</span></span><br><span class="line"><span class="selector-tag">word-break</span><span class="selector-pseudo">:break-all</span>; <span class="comment">/* 可以把长单词强行断句；不会把长单词放在一个新行里，当这一行放不下的时候就直接强制断句（IE、Firefox15、Chrome 支持）。 */</span></span><br><span class="line"><span class="selector-tag">table-layout</span><span class="selector-pseudo">:fixed</span>; <span class="comment">/* 针对 table 上使用，但是有副作用，会导致 td 宽度平均分配 */</span></span><br></pre></td></tr></table></figure>
-
-<p>强制&lt;pre&gt;换行：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">pre</span> &#123;</span><br><span class="line">    <span class="attribute">word-wrap</span>:break-word; <span class="comment">/* IE6+ */</span></span><br><span class="line">    <span class="attribute">white-space</span>:pre-wrap; <span class="comment">/* CSS3 属性, Firefox、Safari/Chrome、Opera、IE8 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>注：强制文本不换行可以使用：<code>white-space:nowrap;</code></p>
-<h2 id="IE-的-“hasLayout”-模式研究"><a href="#IE-的-“hasLayout”-模式研究" class="headerlink" title="IE 的 “hasLayout” 模式研究"></a>IE 的 “hasLayout” 模式研究</h2><h3 id="“hasLayout”-模式"><a href="#“hasLayout”-模式" class="headerlink" title="“hasLayout” 模式"></a>“hasLayout” 模式</h3><p>hasLayout 是 Windows Internet Explorer 渲染引擎的一个内部组成部分。在 IE 中，一个元素要么自己对自身的内容进行计算尺寸和组织，要么依赖于父元素来计算尺寸和组织内容。为了调节这两个不同的概念，渲染引擎采用了 hasLayout 的属性，属性值可以为 true 或 false。<br>当一个元素的 hasLayout 属性值为 true 时，我们说这个元素有一个布局（Layout）。当一个元素有一个布局时，它负责对自己和可能的子孙元素进行尺寸计算和定位，而不是依赖于祖先元素来完成这些工作。<br>IE6、7 上的很多布局方面 Bug 都是和这个属性有关或者可以用这个属性解决的。</p>
-<h3 id="触发-“hasLayout”"><a href="#触发-“hasLayout”" class="headerlink" title="触发 “hasLayout”"></a>触发 “hasLayout”</h3><ul>
-<li>body、img、table、tr、th、td 等元素的 hasLayout 一直为 true。</li>
-<li>type 为 text、button、file 或 select 的 input 的 hasLayout 一直为 true。</li>
-<li>设置 {position:absolute} 的元素的 hasLayout 为 true。</li>
-<li>设置 {float:left|right} 的元素的 hasLayout 为 true。</li>
-<li>设置 {display:inline-block} 的元素的 hasLayout 为 true。</li>
-<li>设置 {height:xx} 或 {width:xx} 的元素必须具备以下两个条件之一，其 hasLayout 才能为 true：<ol>
-<li>IE8 兼容模式和 IE8 以前的浏览器中，在标准 (strict) 模式下其 display 的值是 block。</li>
-<li>元素在怪异模式（Quirks mode）下。</li>
-</ol>
-</li>
-<li>设置了 {zoom:xx} 的元素在 IE8 的兼容模式或 IE8 之前的浏览器中其 hasLayout 为 true，但在 IE8 的标准模式下则不会触发 hasLayout。</li>
-<li>设置了 {writing-mode:tb-rl} 的元素的 hasLayout 为 true。</li>
-<li>元素的 contentEditable 的属性值为 true。</li>
-<li>在 IE8 标准模式下设置了 {display:block} 的元素的 hasLayout 一直为 true。</li>
-</ul>
-<h2 id="防止链接变成一次链接"><a href="#防止链接变成一次链接" class="headerlink" title="防止链接变成一次链接"></a>防止链接变成一次链接</h2><p>所谓伪类就是指依赖于浏览器或是用户的状态。对于链接来讲，存在 link，hover，visited，active 四种状态，即四种伪类选择器：a:link（存在链接，但无鼠标动作），a:visited（被点击或访问过），a:hover（鼠标悬停于链接上时的状态），a:active（鼠标点击与释放之间的状态）。<br>CSS 便是以这几个伪类选择器实现了其为数不多的动态效果。目前最为常用的就是导航条和按钮的动态显示。</p>
-<p>在使用链接的伪类选择器时，一般会发现链接点击一次后，会永远显示 visited 状态，没有办法表示 hover、active 了，所以我们要解决这个 “一次性按钮” 问题。<br>将样式表里面链接四种伪类选择器顺序修改成为：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">link</span></span><br><span class="line"><span class="selector-tag">visited</span></span><br><span class="line"><span class="selector-tag">hover</span></span><br><span class="line"><span class="selector-tag">active</span></span><br></pre></td></tr></table></figure>
-
-<p>顺序这样，后面的优先级大于前面的，就行了。</p>
-<p>之所以排在后面的优先级大，是因为浏览器读取 CSS 文件时是自上而下的。<br>但这并不是充分条件。visited，hover，active 这三种状态不是独立的，它们存在交集。<br>比方说一个按钮，如果它被点击过，而且你正点击这个按钮，那么这个按钮既是 visited，也是 active，而且因为鼠标悬于按钮之上，所以它也处在 hover 的状态。那么这个时候，你把 CSS 文件中的 visited 置于最后的话，那么 hover 和 active 两种状态的属性都会被 visited 的属性所覆盖而不显示。<br>同理，active 必须置于 hover 之后才能显示其属性。</p>
-<p>要点：</p>
-<ol>
-<li>visited 必须置于 hover 和 active 之上；</li>
-<li>active 必须置于 hover 之后；</li>
-<li>link 的位置无所谓，所以你只需保证 VHA 的顺序即可。</li>
-</ol>
-<p>所以我们一般设置 a 的样式时候，都是按照 LVHA（简记为 LoVeHAte）的顺序来进行设置，可以避免出现上述的 bug。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/09/28/13.css/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3209,6 +2976,187 @@ b = 10;</code></pre><h5 id="全局变量和简单属性的区别："><a href="#�
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/09/17/04.ecma01/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="可口可乐">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Lizux">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Lizux" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/09/17/04.ecma01/" itemprop="url">
+                  JavaScript 读书心得之一：前言
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-09-17T00:00:00+08:00">
+                2015-09-17
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              <span class="post-meta-item-text">更新于</span>
+              <time title="更新于" itemprop="dateModified" datetime="2020-03-06T10:12:39+08:00">
+                2020-03-06
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="序"><a href="#序" class="headerlink" title="序"></a>序</h2><p>本文是笔者在阅读学习 JavaScript 书籍过程中的一些心得总结和想法，记录以方便日后检索。<br>参考书籍包括但不限于以下目录：</p>
+<ul>
+<li>《JavaScript高级程序设计》</li>
+<li>《ppk谈JavaScript》</li>
+<li>《JavaScript DOM编程艺术》</li>
+<li>《精通JavaScript》 by jQuery 作者</li>
+<li>《JavaScript语言精粹》 by JSON、JSLint 作者</li>
+<li>《JavaScript权威指南(第5版)》</li>
+<li><a href="http://javascript.ruanyifeng.com/" target="_blank" rel="noopener">《JavaScript 标准参考教程（alpha）》</a> by 阮一峰</li>
+</ul>
+<p>一个面向对象的语言具备四种能力：封装、聚集、继承、多态，JavaScript 并不是一个严格意义上的面向对象的语言</p>
+<p>JavaScript 包括核心（ECMA）、BOM（WHAT-WG）、事件（W3C）、DOM（W3C）、CSS 修改（W3C）、数据检索（XMLHttpRequest，微软）</p>
+<p>JavaScript 属于解释型语言，直接由客户端来解释执行，而 Java 属于编译型语言，需要事先用 Compiler 编译成可执行文件</p>
+<h2 id="DOM-编程原则："><a href="#DOM-编程原则：" class="headerlink" title="DOM 编程原则："></a>DOM 编程原则：</h2><ul>
+<li>分离式 / 无侵入 JavaScript（Unobtrusive JavaScript）<ol start="0">
+<li>即易实现性，对开发者来说，脚本应该是 unobtrusive 的，只需要在文档中包含脚本文件，然后加上一个 class 或 id 来做钩子（Hook）以便触发（Trigger）脚本即可。</li>
+<li>向 CSS 学习，结构和行为分离，表现和行为分离；同时不影响用在同一文档的其他脚本，而且还易于后期维护（包括不懂 JavaScript 的人员）。</li>
+</ol>
+</li>
+<li>循序渐进 / 渐进增强（Progressive Enhancement）<ol start="0">
+<li>即可用性，对用户来说，脚本应该是 unobtrusive 的，它只是增加了一个应用层，以提高用户访问网站时的使用体验而不是干扰他们。</li>
+<li>首先用 HTML 来实现网站的基本内容，然后使用脚本来逐步增强网站的功能和应用，同时要对使用的方法和对象做检测，这样即使当浏览器部分或全部不支持 JavaScript 的时候不会出错。</li>
+</ol>
+</li>
+<li>预留退路 / 平稳退化（Graceful Degradation）<ol start="0">
+<li>即可访问性，对网站来说，脚本应该是 unobtrusive 的，网站的基本内容不能基于脚本来实现。</li>
+<li>浏览器不支持或禁用 JavaScript 的时候，网页应该依然是可阅读和可理解的，即使不可避免的损失了一些可用性。</li>
+</ol>
+</li>
+</ul>
+<p>前端开发应该支持的现代浏览器：IE9+、FireFox、Chrome、Safari、Opera，而对其他浏览器要预留退路，提供基础 JavaScript 的功能和内容</p>
+<blockquote>
+<p>注：浏览器使用的内核（渲染引擎）：IE（Trident，基于 Mosaic）、Edge（EdgeHTML，基于 Trident 和 Webkit）、FireFox/Mozilla/Netscape（Gecko）、Opera（Presto/Webkit）、Safari/Chrome（Webkit，基于 KHTML）</p>
+</blockquote>
+<h2 id="JavaScript-运行机制浅探"><a href="#JavaScript-运行机制浅探" class="headerlink" title="JavaScript 运行机制浅探"></a><a href="http://blog.csdn.net/chen_zw/article/details/18502937" target="_blank" rel="noopener">JavaScript 运行机制浅探</a></h2><p>如果一个文档流中包含多个 script 代码段（用 &lt;script&gt; 标签分隔），运行顺序是：<br>0. 读入第一个代码段<br>0. 做语法分析，有错则报语法错误（比如括号不匹配等），并跳转到 step5<br>0. 对 var 变量和 function 定义做 “预解析”（永远不会报错的，因为只解析正确的声明），但需要注意的是此时处理的函数只是声明式函数，而且变量也只是进行了声明但未进行初始化以及赋值。<br>   JavaScript 引擎的工作方式是：先解析代码，获取所有被声明的变量，然后再一行一行地运行。造成的结果，就是所有的变量的声明语句，都会被提升到代码的头部，这就叫做变量提升（Hoisting）。<br>0. 执行代码段，有错则报错（比如变量未定义）<br>0. 如果还有下一个代码段，则读入下一个代码段，重复 step2<br>0. 结束</p>
+<blockquote>
+<p>注：step3 中，所谓的 “预解析”，其实是在 step2 的语法分析阶段完成，并存储在语法树中。当执行到函数实例时，会将内部变量表 varDecls 和内嵌函数表 funcDecls 从语法树中复制到执行环境的 scriptObject 上。<br>注：step4 中，未定义变量意味着在 scriptObject 的变量表中找不到，Javascript 引擎会沿着 scriptObject 的 upvalue 往上寻找，如果都没找到，对于写操作 i = 1; 最后就会等价为 window.i = 1; 给 Window 对象新增了一个属性。对于读操作，如果一直追溯到全局执行环境的 scriptObject 上都找不到，就会产生运行期错误。</p>
+</blockquote>
+<h2 id="概念解释"><a href="#概念解释" class="headerlink" title="概念解释"></a>概念解释</h2><ul>
+<li><p>JavaScript 解析：就是通过语法分析和预解析构造合法的语法分析树。</p>
+</li>
+<li><p>JavaScript 执行：执行具体的某个function，JS引擎在执行每个函数实例时，都会创建一个执行环境（ExecutionContext）和活动对象（activeObject）（它们属于宿主对象，与函数实例的生命周期保持一致）</p>
+</li>
+<li><p>语法分析树（SyntaxTree）：可以直观地表示出这段代码的相关信息，具体的实现就是JS引擎创建了一些表，用来记录每个方法内的变量集（variables），方法集（functions）和作用域（scope）等。</p>
+</li>
+<li><p>执行环境（ExecutionContext）：可理解为一个记录当前执行的方法【外部描述信息】的对象，记录所执行方法的类型，名称，参数和活动对象（activeObject）。</p>
+</li>
+<li><p>活动对象（activeObject）：可理解为一个记录当前执行的方法【内部执行信息】的对象，记录内部变量集（variables）、内嵌函数集（functions）、实参（arguments）、作用域链（scopeChain）等执行所需信息，其中内部变量集（variables）、内嵌函数集（functions）是直接从第一步建立的语法分析树复制过来的。</p>
+</li>
+<li><p>词法作用域：变量的作用域是在定义时决定而不是执行时决定，也就是说词法作用域取决于源码，通过静态分析就能确定，因此词法作用域也叫做静态作用域。</p>
+<p>  作用域有两种常见的模型，一种叫做词法作用域（Lexical Scope），一种叫做动态作用域（Dynamic Scope）。而 javascript 采取的便是词法作用域。Javascript并不具有动态作用域，它只有词法作用域，简单明了。但是，它的 eval()、with、this 机制某种程度上很像动态作用域，使用上要特别注意。</p>
+</li>
+<li><p>作用域链：词法作用域的实现机制就是作用域链（scopeChain）。作用域链是一套按名称查找（Name Lookup）的机制，首先在当前执行环境的 ActiveObject 中寻找，没找到，则顺着作用域链到父 ActiveObject 中寻找，一直找到全局调用对象（Global Object）。</p>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
   </section>
 
   
@@ -3252,7 +3200,7 @@ b = 10;</code></pre><h5 id="全局变量和简单属性的区别："><a href="#�
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">52</span>
+              <span class="site-state-item-count">51</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
