@@ -84,18 +84,18 @@
 
 
 
-<meta name="description" content="数组展开操作符扩展运算符（spread）是三个点（…）。用于将一个数组转为用逗号分隔的参数序列。 function sum(x, y, z) &amp;#123;  return x + y + z;&amp;#125;const numbers = [1, 2, 3];console.log(sum(...numbers));  剩余参数（Rest syntax）看起来和展开操作符完全相同，不同点在于, 剩余参">
+<meta name="description" content="数组展开操作符扩展运算符（spread）是三个点（…）。用于将一个数组转为用逗号分隔的参数序列。 function sum(x, y, z) &amp;#123;  return x + y + z;&amp;#125;const numbers = [1, 2, 3];console.log(sum(...numbers));   剩余参数（Rest syntax）看起来和展开操作符完全相同，不同点在于, 剩余">
 <meta name="keywords" content="JavaScript,ES6">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ES6 阅读心得之六：数组">
 <meta property="og:url" content="http://yoursite.com/2019/05/16/49.es6-array/index.html">
 <meta property="og:site_name" content="Lizux">
-<meta property="og:description" content="数组展开操作符扩展运算符（spread）是三个点（…）。用于将一个数组转为用逗号分隔的参数序列。 function sum(x, y, z) &amp;#123;  return x + y + z;&amp;#125;const numbers = [1, 2, 3];console.log(sum(...numbers));  剩余参数（Rest syntax）看起来和展开操作符完全相同，不同点在于, 剩余参">
+<meta property="og:description" content="数组展开操作符扩展运算符（spread）是三个点（…）。用于将一个数组转为用逗号分隔的参数序列。 function sum(x, y, z) &amp;#123;  return x + y + z;&amp;#125;const numbers = [1, 2, 3];console.log(sum(...numbers));   剩余参数（Rest syntax）看起来和展开操作符完全相同，不同点在于, 剩余">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-11T02:26:44.810Z">
+<meta property="og:updated_time" content="2020-05-30T13:18:20.555Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ES6 阅读心得之六：数组">
-<meta name="twitter:description" content="数组展开操作符扩展运算符（spread）是三个点（…）。用于将一个数组转为用逗号分隔的参数序列。 function sum(x, y, z) &amp;#123;  return x + y + z;&amp;#125;const numbers = [1, 2, 3];console.log(sum(...numbers));  剩余参数（Rest syntax）看起来和展开操作符完全相同，不同点在于, 剩余参">
+<meta name="twitter:description" content="数组展开操作符扩展运算符（spread）是三个点（…）。用于将一个数组转为用逗号分隔的参数序列。 function sum(x, y, z) &amp;#123;  return x + y + z;&amp;#125;const numbers = [1, 2, 3];console.log(sum(...numbers));   剩余参数（Rest syntax）看起来和展开操作符完全相同，不同点在于, 剩余">
 
 
 
@@ -291,8 +291,8 @@
                 <i class="fa fa-calendar-check-o"></i>
               </span>
               <span class="post-meta-item-text">更新于</span>
-              <time title="更新于" itemprop="dateModified" datetime="2019-05-11T10:26:44+08:00">
-                2019-05-11
+              <time title="更新于" itemprop="dateModified" datetime="2020-05-30T21:18:20+08:00">
+                2020-05-30
               </time>
             
           </span>
@@ -324,7 +324,8 @@
 
       
         <h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><h3 id="展开操作符"><a href="#展开操作符" class="headerlink" title="展开操作符"></a>展开操作符</h3><p>扩展运算符（spread）是三个点（…）。用于将一个数组转为用逗号分隔的参数序列。</p>
-<figure class="highlight fortran"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span></span> <span class="built_in">sum</span>(x, y, z) &#123;</span><br><span class="line">  <span class="keyword">return</span> x + y + z;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const numbers = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"></span><br><span class="line">console.<span class="built_in">log</span>(<span class="built_in">sum</span>(...numbers));</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sum</span>(<span class="params">x, y, z</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> x + y + z;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> numbers = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(sum(...numbers));</span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>剩余参数（Rest syntax）看起来和展开操作符完全相同，不同点在于, 剩余参数用于解构数组和对象。剩余参数与展开操作符是相反的：展开操作符将数组展开为其中的各个元素，而剩余参数则是将多个元素收集起来并“凝聚”为单个元素。</p>
 </blockquote>
@@ -335,26 +336,28 @@
 </li>
 <li><p>复制数组</p>
 <p> 可以实现浅复制数组。</p>
- <figure class="highlight less"><table><tr><td class="code"><pre><span class="line"><span class="selector-attr">[...arr]</span></span><br><span class="line"><span class="comment">// 相当于</span></span><br><span class="line"><span class="selector-tag">arr</span><span class="selector-class">.concat</span>()</span><br><span class="line"><span class="selector-tag">arr</span><span class="selector-class">.slice</span>()</span><br></pre></td></tr></table></figure>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">[...arr]</span><br><span class="line"><span class="comment">// 相当于</span></span><br><span class="line">arr.concat()</span><br><span class="line">arr.slice()</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>合并数组</p>
 <p> 可以实现浅合并数组。</p>
- <figure class="highlight cos"><table><tr><td class="code"><pre><span class="line">[.<span class="built_in">..arr</span>1, .<span class="built_in">..arr</span>2]</span><br><span class="line"><span class="comment">// 相当于</span></span><br><span class="line">arr1.concat(arr2)</span><br></pre></td></tr></table></figure>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">[...arr1, ...arr2]</span><br><span class="line"><span class="comment">// 相当于</span></span><br><span class="line">arr1.concat(arr2)</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>解构赋值</p>
- <figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">[a, ...<span class="built_in">rest</span>] = <span class="built_in">list</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">[a, ...rest] = list</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>展开字符串</p>
- <figure class="highlight prolog"><table><tr><td class="code"><pre><span class="line">[...<span class="string">'hello'</span>] === [ <span class="string">"h"</span>, <span class="string">"e"</span>, <span class="string">"l"</span>, <span class="string">"l"</span>, <span class="string">"o"</span> ]</span><br></pre></td></tr></table></figure>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">[...<span class="string">'hello'</span>] === [ <span class="string">"h"</span>, <span class="string">"e"</span>, <span class="string">"l"</span>, <span class="string">"l"</span>, <span class="string">"o"</span> ]</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>转换类数组<br> 对于类数组对象，都可以使用扩展运算符转换为真正数组，从而使用数组方法</p>
  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> nodeList = <span class="built_in">document</span>.querySelectorAll(<span class="string">'div'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ES5 的写法</span></span><br><span class="line"><span class="keyword">let</span> array1 = [].slice.call(nodeList)</span><br><span class="line"></span><br><span class="line"><span class="comment">// ES6 的写法</span></span><br><span class="line"><span class="keyword">let</span> array2 = [...nodeList];</span><br></pre></td></tr></table></figure>
+
 </li>
 </ol>
 <h3 id="新增方法"><a href="#新增方法" class="headerlink" title="新增方法"></a>新增方法</h3><ol start="0">
 <li><p>Array.from</p>
 <p> 用于将两类对象转为真正的数组：类数组的对象（array-like object）和可迭代（iterable）的对象（包括 ES6 新增的数据结构 Set 和 Map）。</p>
- <figure class="highlight clean"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> arrayLike = &#123;</span><br><span class="line">    <span class="string">'0'</span>: <span class="string">'a'</span>,</span><br><span class="line">    <span class="string">'1'</span>: <span class="string">'b'</span>,</span><br><span class="line">    <span class="string">'2'</span>: <span class="string">'c'</span>,</span><br><span class="line">    length: <span class="number">3</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ES5 的写法</span></span><br><span class="line"><span class="keyword">let</span> array1 = [].slice.call(arrayLike)</span><br><span class="line"></span><br><span class="line"><span class="comment">// ES6 的写法</span></span><br><span class="line"><span class="keyword">let</span> array2 = Array.<span class="keyword">from</span>(arrayLike);</span><br><span class="line"><span class="comment">// 注：无法使用展开操作符转为数组</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> arrayLike = &#123;</span><br><span class="line">    <span class="string">'0'</span>: <span class="string">'a'</span>,</span><br><span class="line">    <span class="string">'1'</span>: <span class="string">'b'</span>,</span><br><span class="line">    <span class="string">'2'</span>: <span class="string">'c'</span>,</span><br><span class="line">    length: <span class="number">3</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ES5 的写法</span></span><br><span class="line"><span class="keyword">let</span> array1 = [].slice.call(arrayLike)</span><br><span class="line"></span><br><span class="line"><span class="comment">// ES6 的写法</span></span><br><span class="line"><span class="keyword">let</span> array2 = <span class="built_in">Array</span>.from(arrayLike);</span><br><span class="line"><span class="comment">// 注：无法使用展开操作符转为数组</span></span><br></pre></td></tr></table></figure>
+
 </li>
 </ol>
 

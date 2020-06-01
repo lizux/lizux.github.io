@@ -92,7 +92,7 @@
 <meta property="og:site_name" content="Lizux">
 <meta property="og:description" content="字符串模板字符串模板字符串（template string）是增强版的字符串，用反引号（`）标识。它可以当作普通字符串使用，也可以用来定义多行字符串，或者在字符串中嵌入变量。 // 普通字符串let strA = `In JavaScript &apos;\n&apos; is a line-feed.`// 多行字符串，所有的空格和缩进都会被保留在输出中let strB =  `In JavaScript this">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-11T02:25:03.536Z">
+<meta property="og:updated_time" content="2020-05-30T13:19:05.164Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ES6 阅读心得之三：字符串">
 <meta name="twitter:description" content="字符串模板字符串模板字符串（template string）是增强版的字符串，用反引号（`）标识。它可以当作普通字符串使用，也可以用来定义多行字符串，或者在字符串中嵌入变量。 // 普通字符串let strA = `In JavaScript &apos;\n&apos; is a line-feed.`// 多行字符串，所有的空格和缩进都会被保留在输出中let strB =  `In JavaScript this">
@@ -291,8 +291,8 @@
                 <i class="fa fa-calendar-check-o"></i>
               </span>
               <span class="post-meta-item-text">更新于</span>
-              <time title="更新于" itemprop="dateModified" datetime="2019-05-11T10:25:03+08:00">
-                2019-05-11
+              <time title="更新于" itemprop="dateModified" datetime="2020-05-30T21:19:05+08:00">
+                2020-05-30
               </time>
             
           </span>
@@ -324,30 +324,32 @@
 
       
         <h2 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h2><h3 id="模板字符串"><a href="#模板字符串" class="headerlink" title="模板字符串"></a>模板字符串</h3><p>模板字符串（template string）是增强版的字符串，用反引号（`）标识。它可以当作普通字符串使用，也可以用来定义多行字符串，或者在字符串中嵌入变量。</p>
-<figure class="highlight cs"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 普通字符串</span></span><br><span class="line"><span class="keyword">let</span> strA = `In JavaScript <span class="string">'\n'</span> <span class="keyword">is</span> a line-feed.`</span><br><span class="line"></span><br><span class="line"><span class="comment">// 多行字符串，所有的空格和缩进都会被保留在输出中</span></span><br><span class="line"><span class="keyword">let</span> strB =  `In JavaScript <span class="keyword">this</span> <span class="keyword">is</span></span><br><span class="line"> not legal.`</span><br><span class="line"></span><br><span class="line"><span class="comment">// 字符串中嵌入变量</span></span><br><span class="line"><span class="keyword">let</span> name = <span class="string">"Bob"</span>;</span><br><span class="line"><span class="keyword">let</span> strC = `Hello $&#123;name&#125;`</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 普通字符串</span></span><br><span class="line"><span class="keyword">let</span> strA = <span class="string">`In JavaScript '\n' is a line-feed.`</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 多行字符串，所有的空格和缩进都会被保留在输出中</span></span><br><span class="line"><span class="keyword">let</span> strB =  <span class="string">`In JavaScript this is</span></span><br><span class="line"><span class="string"> not legal.`</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 字符串中嵌入变量</span></span><br><span class="line"><span class="keyword">let</span> name = <span class="string">"Bob"</span>;</span><br><span class="line"><span class="keyword">let</span> strC = <span class="string">`Hello <span class="subst">$&#123;name&#125;</span>`</span></span><br></pre></td></tr></table></figure>
+
 <h3 id="迭代器接口"><a href="#迭代器接口" class="headerlink" title="迭代器接口"></a>迭代器接口</h3><p>ES6 为字符串添加了迭代器接口，使得字符串可以被 for…of 循环遍历。</p>
-<pre><code><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> codePoint <span class="keyword">of</span> <span class="string">'show'</span>) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(codePoint)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</code></pre><h3 id="新增方法"><a href="#新增方法" class="headerlink" title="新增方法"></a>新增方法</h3><ol start="0">
+<pre><code><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> codePoint <span class="keyword">of</span> <span class="string">'show'</span>) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(codePoint)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></code></pre><h3 id="新增方法"><a href="#新增方法" class="headerlink" title="新增方法"></a>新增方法</h3><ol start="0">
 <li><p>includes</p>
 <p> 传统上，JavaScript 只有 indexOf 方法，可以用来确定一个字符串是否包含在另一个字符串中</p>
- <figure class="highlight ceylon"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> s = <span class="string">'Hello world!'</span>;</span><br><span class="line"></span><br><span class="line">s.indexOf(<span class="string">'Hello'</span>) <span class="comment">// 0</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> s = <span class="string">'Hello world!'</span>;</span><br><span class="line"></span><br><span class="line">s.indexOf(<span class="string">'Hello'</span>) <span class="comment">// 0</span></span><br></pre></td></tr></table></figure>
+
 <p> includes 直接返回布尔值，表示是否找到参数字符串</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">let</span> s = <span class="string">'Hello world!'</span>;</span><br><span class="line">s.startsWith(<span class="string">'Hello'</span>) // <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> s = <span class="string">'Hello world!'</span>;</span><br><span class="line">s.startsWith(<span class="string">'Hello'</span>) <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>startsWith</p>
 <p> 返回布尔值，表示参数字符串是否在原字符串的头部</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">let</span> s = <span class="string">'Hello world!'</span>;</span><br><span class="line">s.startsWith(<span class="string">'Hello'</span>) // <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> s = <span class="string">'Hello world!'</span>;</span><br><span class="line">s.startsWith(<span class="string">'Hello'</span>) <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>endsWith</p>
 <p> 返回布尔值，表示参数字符串是否在原字符串的尾部</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">let</span> s = <span class="string">'Hello world!'</span>;</span><br><span class="line">endsWith(<span class="string">'!'</span>) // <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> s = <span class="string">'Hello world!'</span>;</span><br><span class="line">endsWith(<span class="string">'!'</span>) <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>repeat<br> 返回一个新字符串，表示将原字符串重复 n 次</p>
- <figure class="highlight gcode"><table><tr><td class="code"><pre><span class="line"><span class="string">'hello'</span>.<span class="keyword">repeat</span><span class="comment">(2)</span> <span class="comment">// "hellohello"</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="string">'hello'</span>.repeat(<span class="number">2</span>) <span class="comment">// "hellohello"</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>padStart/padEnd</p>
 <p> ES2017 引入了字符串补全长度的功能。如果某个字符串不够指定长度，会在头部或尾部补全。padStart() 用于头部补全，padEnd() 用于尾部补全。<br> 如果省略第二个参数，默认使用空格补全长度。</p>
- <figure class="highlight awk"><table><tr><td class="code"><pre><span class="line"><span class="string">'x'</span>.padStart(<span class="number">4</span>, <span class="string">'ab'</span>) <span class="regexp">//</span> <span class="string">'abax'</span></span><br><span class="line"></span><br><span class="line"><span class="string">'x'</span>.padEnd(<span class="number">4</span>, <span class="string">'ab'</span>) <span class="regexp">//</span> <span class="string">'xaba'</span></span><br><span class="line"><span class="string">'x'</span>.padEnd(<span class="number">4</span>) <span class="regexp">//</span> <span class="string">'x   '</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="string">'x'</span>.padStart(<span class="number">4</span>, <span class="string">'ab'</span>) <span class="comment">// 'abax'</span></span><br><span class="line"></span><br><span class="line"><span class="string">'x'</span>.padEnd(<span class="number">4</span>, <span class="string">'ab'</span>) <span class="comment">// 'xaba'</span></span><br><span class="line"><span class="string">'x'</span>.padEnd(<span class="number">4</span>) <span class="comment">// 'x   '</span></span><br></pre></td></tr></table></figure>
+
 </li>
 </ol>
 
