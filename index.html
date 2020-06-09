@@ -1925,7 +1925,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/17/42.for-async/">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/17/42.loop-async/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="可口可乐">
@@ -1950,7 +1950,7 @@
             
               
                 
-                <a class="post-title-link" href="/2019/04/17/42.for-async/" itemprop="url">
+                <a class="post-title-link" href="/2019/04/17/42.loop-async/" itemprop="url">
                   当迭代 iterate 碰到异步 async/await
                 </a>
               
@@ -1979,8 +1979,8 @@
                 <i class="fa fa-calendar-check-o"></i>
               </span>
               <span class="post-meta-item-text">更新于</span>
-              <time title="更新于" itemprop="dateModified" datetime="2019-04-18T16:02:38+08:00">
-                2019-04-18
+              <time title="更新于" itemprop="dateModified" datetime="2020-06-09T14:44:07+08:00">
+                2020-06-09
               </time>
             
           </span>
@@ -2035,27 +2035,34 @@
 <p>可以 break；对于数组，会把数字键名作为字符串处理。<br>和 for-of 的区别：for…in 循环，获得目标的键名。for…of 循环，获得目标的键值。另外 for…of 迭代数组时只返回具有数字索引的属性。</p>
 </blockquote>
  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> key <span class="keyword">in</span> person) &#123;</span><br><span class="line">    <span class="keyword">if</span> (person.hasOwnProperty(key)) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(key);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 </li>
 </ol>
 <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>上述这些迭代方法正常使用不再赘述，但是当和异步 async/await 结合起来的话有些点需要注意。</p>
 <p>如下代码：期望每隔1秒按序输出数字，最后输出 end</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getArray</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fetch</span>(<span class="params">num</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">        setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">            resolve(num);</span><br><span class="line">        &#125;, <span class="number">1000</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> arr = getArray();</span><br><span class="line">    arr.forEach(<span class="keyword">async</span> item =&gt; &#123;</span><br><span class="line">        <span class="keyword">const</span> result = <span class="keyword">await</span> fetch(item);</span><br><span class="line">        <span class="built_in">console</span>.log(result);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'end'</span>);</span><br><span class="line">&#125;</span><br><span class="line">test()</span><br></pre></td></tr></table></figure>
+
 <p>结果先输出”end”，过了1秒后，一次性输出 1, 2, 3</p>
 <h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>因为 forEach 回调是并发执行，它并不关心回调函数的返回值，所以这里 forEach 只是执行了 3 个会返回 Promise 的函数。async/await 语句仅仅影响回调的匿名函数内部执行，将其变为异步。</p>
 <h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><h3 id="方案一-改造-forEach"><a href="#方案一-改造-forEach" class="headerlink" title="方案一 改造 forEach"></a>方案一 改造 forEach</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">asyncForEach</span>(<span class="params">array, callback</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> index = <span class="number">0</span>; index &lt; array.length; index++) &#123;</span><br><span class="line">        <span class="keyword">await</span> callback(array[index], index, array);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> arr = getArray();</span><br><span class="line">    asyncForEach(arr, <span class="keyword">async</span> item =&gt; &#123;</span><br><span class="line">        <span class="keyword">const</span> result = <span class="keyword">await</span> fetch(item);</span><br><span class="line">        <span class="built_in">console</span>.log(result);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'end'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>方案一特点是，先输出”end”，然后按顺序间隔输出数字。因为改造函数仅仅是避免了并发执行回调，但是没有把整个迭代变为异步<br>可以接着再改造，支持完美场景：<br><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">asyncForEach</span>(<span class="params">array, callback, callbackAll</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> index = <span class="number">0</span>; index &lt; array.length; index++) &#123;</span><br><span class="line">        <span class="keyword">await</span> callback(array[index], index, array);</span><br><span class="line">    &#125;</span><br><span class="line">    callbackAll &amp;&amp; callbackAll();</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> arr = getArray();</span><br><span class="line">    asyncForEach(arr, <span class="keyword">async</span> item =&gt; &#123;</span><br><span class="line">        <span class="keyword">const</span> result = <span class="keyword">await</span> fetch(item);</span><br><span class="line">        <span class="built_in">console</span>.log(result);</span><br><span class="line">    &#125;, () =&gt; &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'end'</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="方案二-使用-map"><a href="#方案二-使用-map" class="headerlink" title="方案二 使用 map"></a>方案二 使用 map</h3><p>map 对 Promise 支持也不错，可以配合 Promise.all 使用</p>
+
+<p>方案一特点是，先输出”end”，然后按顺序间隔输出数字。因为改造函数仅仅是避免了并发执行回调，但是没有把整个迭代变为异步<br>可以接着再改造，支持完美场景：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">asyncForEach</span>(<span class="params">array, callback, callbackAll</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> index = <span class="number">0</span>; index &lt; array.length; index++) &#123;</span><br><span class="line">        <span class="keyword">await</span> callback(array[index], index, array);</span><br><span class="line">    &#125;</span><br><span class="line">    callbackAll &amp;&amp; callbackAll();</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> arr = getArray();</span><br><span class="line">    asyncForEach(arr, <span class="keyword">async</span> item =&gt; &#123;</span><br><span class="line">        <span class="keyword">const</span> result = <span class="keyword">await</span> fetch(item);</span><br><span class="line">        <span class="built_in">console</span>.log(result);</span><br><span class="line">    &#125;, () =&gt; &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'end'</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="方案二-使用-map-方法"><a href="#方案二-使用-map-方法" class="headerlink" title="方案二 使用 map 方法"></a>方案二 使用 map 方法</h3><p>map 对 Promise 支持也不错，可以配合 Promise.all 使用</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> arr = getArray();</span><br><span class="line">    <span class="keyword">await</span> <span class="built_in">Promise</span>.all(</span><br><span class="line">        arr.map(<span class="keyword">async</span> item =&gt; &#123;</span><br><span class="line">            <span class="keyword">const</span> result = <span class="keyword">await</span> fetch(item);</span><br><span class="line">            <span class="built_in">console</span>.log(result);</span><br><span class="line">        &#125;)</span><br><span class="line">    );</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'end'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>方案二的特点是，过了1秒后，一次性输出 1, 2, 3，但是 “end” 输出是最后面。说明 map 还是并发执行回调，只是用 Promise.all 把整个迭代变为异步</p>
 <h3 id="方案三-使用-for…of"><a href="#方案三-使用-for…of" class="headerlink" title="方案三  使用 for…of"></a>方案三  使用 for…of</h3><p>for…of 是迭代，支持继发执行。for…of 迭代对象时，先调用迭代对象的迭代器方法，该方法返回一个迭代器对象；然后调用该迭代器对象上的 next 方法。</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> arr = getArray();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> item <span class="keyword">of</span> arr) &#123;</span><br><span class="line">        <span class="keyword">const</span> result = <span class="keyword">await</span> fetch(item);</span><br><span class="line">        <span class="built_in">console</span>.log(result);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'end'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>方案三特点是，整个语句都是按序执行，包括 “end” 输出也是在最后面。</p>
 <h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>综合看，方案三最完美，符合要求；方案一改造后也不错，就是略显繁琐，方案二仅满足部分要求，在特定场景下也有其使用价值。</p>
 <h2 id="另注"><a href="#另注" class="headerlink" title="另注"></a>另注</h2><ul>
-<li>循环(loop) - 最基础的概念, 在满足条件的情况下，重复执行同一段代码。比如，while语句。</li>
-<li>迭代(iterate) - 按顺序访问线性结构中的每一项。比如，for语句。</li>
-<li>遍历(traversal) - 按规则访问非线性（树形）结构中的每一项，而且每个项都只访问一次。</li>
-<li>递归(recursion) - 在函数内调用自身, 将复杂情况逐步转化成基本情况。比如，著名的斐波纳契数列。</li>
+<li>循环(loop) - 最基础的概念, 所有重复的行为。比如，while 语句。大部分的迭代、遍历、递归，都是循环。</li>
+<li>迭代(iterate) - 按顺序访问线性结构中的每一项。比如，forEach 语句。</li>
+<li>遍历(traversal) - 按规则访问非线性（树形）结构中的每一项，而且每个项都只访问一次。比如，遍历 DOM 树。</li>
+<li>递归(recursion) - 根据一种(几种)基本情况定义的算法，其他复杂情况都可以被逐步还原为基本情况。在编程中表现为在函数定义内重复调用自身。比如，著名的斐波纳契数列。</li>
 </ul>
 <blockquote>
 <p>迭代是遍历的子集，遍历是循环的子集。遍历树形数据需要用到递归</p>
