@@ -92,7 +92,7 @@
 <meta property="og:site_name" content="Lizux">
 <meta property="og:description" content="let 和 const 命令重要区别 实现了块级作用域  ES5 只有全局作用域和函数作用域（with、try/catch 例外），ES6 新增 let、const 命令可以实现块级作用域  // 实现循环遍历数组，然后延迟一秒后打印每个元素索引值var arr = [0, 1, 2, 3];for (var i = 0; i &amp;lt; arr.length; i++) &amp;#123;  setTi">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-05-30T13:20:06.389Z">
+<meta property="og:updated_time" content="2020-10-19T07:33:10.211Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ES6 阅读心得之一：let 和 const 命令">
 <meta name="twitter:description" content="let 和 const 命令重要区别 实现了块级作用域  ES5 只有全局作用域和函数作用域（with、try/catch 例外），ES6 新增 let、const 命令可以实现块级作用域  // 实现循环遍历数组，然后延迟一秒后打印每个元素索引值var arr = [0, 1, 2, 3];for (var i = 0; i &amp;lt; arr.length; i++) &amp;#123;  setTi">
@@ -291,8 +291,8 @@
                 <i class="fa fa-calendar-check-o"></i>
               </span>
               <span class="post-meta-item-text">更新于</span>
-              <time title="更新于" itemprop="dateModified" datetime="2020-05-30T21:20:06+08:00">
-                2020-05-30
+              <time title="更新于" itemprop="dateModified" datetime="2020-10-19T15:33:10+08:00">
+                2020-10-19
               </time>
             
           </span>
@@ -340,7 +340,7 @@
 </li>
 <li><p>不允许重复表明</p>
 <p> let不允许在相同作用域内，重复声明同一个变量。</p>
- <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">func</span>(<span class="params">arg</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> a = <span class="number">10</span>;</span><br><span class="line">  <span class="keyword">var</span> a = <span class="number">1</span>; <span class="comment">// Wrong</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> arg; <span class="comment">// Wrong</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> arg; <span class="comment">// Ok</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">func</span>(<span class="params">arg</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> a = <span class="number">10</span>;</span><br><span class="line">  <span class="keyword">let</span> a = <span class="number">1</span>; <span class="comment">// Wrong</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> arg; <span class="comment">// Wrong</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> arg; <span class="comment">// Ok</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 </li>
 </ol>

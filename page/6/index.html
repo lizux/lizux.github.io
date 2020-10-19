@@ -334,12 +334,12 @@
 </blockquote>
 <h3 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h3><blockquote>
 <p>一个快速、简单、强大的博客程序，类似于 Wordpress，基于 Node.js 构建，支持 Markdown 语法</p>
+</blockquote>
 <ul>
 <li>快速——一键发布到 Github</li>
 <li>简单——比 Jekyll 的命令简洁</li>
 <li>强大——和 Wordpress 一样强大</li>
 </ul>
-</blockquote>
 <h2 id="安装（Win-环境）"><a href="#安装（Win-环境）" class="headerlink" title="安装（Win 环境）"></a>安装（Win 环境）</h2><ol start="0">
 <li><p>本机安装 Node.js 和 Git<br> <a href="https://nodejs.org/" target="_blank" rel="noopener">Node.js 官网</a>  <a href="https://git-scm.com/" target="_blank" rel="noopener">Git 官网</a></p>
 </li>
@@ -348,11 +348,13 @@
 </li>
 <li><p>创建文件夹<br> 在本地创建项目文件夹，文件夹内启动 cmd 命令行</p>
  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo init</span><br></pre></td></tr></table></figure>
+
 <p> 记得初始化后，按照提示，使用 npm 命令安装依赖包</p>
  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>启动 Hexo<br> 执行下列命令，然后就可以访问 localhost:4000 查看了</p>
  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo g <span class="comment">#发布页面</span></span><br><span class="line">hexo s <span class="comment">#启动服务</span></span><br></pre></td></tr></table></figure>
+
 </li>
 </ol>
 <h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><ol start="0">
@@ -360,6 +362,7 @@
 </li>
 <li><p>配置部署<br> 进入项目文件夹，打开 _config.yml 文件，编辑下列项目，谨记冒号后要有空格，否则发布时报错</p>
  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">title: <span class="comment">#网站标题</span></span><br><span class="line">subtitle: <span class="comment">#网站副标题</span></span><br><span class="line">description: <span class="comment">#网站描述</span></span><br><span class="line">author:  <span class="comment">#网站作者，在下方显示</span></span><br><span class="line">language: <span class="comment">#网站默认语言，某些 theme 需要</span></span><br></pre></td></tr></table></figure>
+
 <p> 找到 deploy 字段，添加如下代码来关联 Github，记得其后每行首退格，否则发布时报错</p>
  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repo: https://github.com/用户名/用户名.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
 </li>
@@ -368,6 +371,7 @@
 </li>
 <li><p>生成并部署到 Github Pages，你可以通过 <em>自己的用户名</em>.github.io 访问</p>
  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo d -g</span><br></pre></td></tr></table></figure>
+
 </li>
 </ol>
 <h2 id="备注"><a href="#备注" class="headerlink" title="备注"></a>备注</h2><p>由于重装系统并升级 Git 到 2.6，导致发布文章时 hexo d -g 报错，需要更改 https 为 ssh 提交方式：</p>
@@ -377,6 +381,7 @@
 </li>
 <li><p>生成密钥<br>在 Git Bash 里键入</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -b 4096 -C <span class="string">"xxx@xxx.com"</span></span><br></pre></td></tr></table></figure>
+
 <p> 按照默认一路回车，最后在提示文件存储路径下（C:\Users***.ssh）找到两个文件 id_rsa 和 id_rsa.pub ，用文本编辑器打开 .pub 文件，拷贝其中的内容</p>
 </li>
 <li><p>保存密钥<br>在登录状态下，点击 Github 右上角的下拉框，点选 Settings，然后点击左侧导航栏的 SSH keys，然后点”Add SSH Key”，Title 可依据自己喜好取名，Key 的部分直接粘贴刚才拷贝的部分。</p>
@@ -386,8 +391,10 @@
 </li>
 <li><p>修改 _config.yml 文件</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">repo: https://github.com/xxx/xxx.github.io.git</span><br></pre></td></tr></table></figure>
+
 <p> 改为：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">repo: git@github.com:xxx/xxx.github.io.git</span><br></pre></td></tr></table></figure>
+
 </li>
 </ol>
 <h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><ul>
@@ -408,6 +415,7 @@
 </li>
 <li><p>生成并部署</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo d -g</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <p>更多参考 <a href="http://hexo.io/docs/index.html" target="_blank" rel="noopener">hexo 官网</a></p>

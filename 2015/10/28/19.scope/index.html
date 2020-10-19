@@ -330,28 +330,33 @@
 <li>子作用域访问一个对象的属性时，会优先查找自身存在该对象否，不存在接着沿着原型链往上查找父作用域，直到全局作用域为止，这时还找不到就会返回 undefined。</li>
 <li>子作用域对对象的属性进行赋值时，则会优先查找自身存在该对象否，不存在接着沿着原型链往上查找父作用域，直到全局作用域为止，这时还找不到对象就会报错，因为无法对 undefined 的属性赋值；假如找到了该对象，就会就会对其属性直接赋值，所以可以修改父作用域的对象属性。</li>
 </ul>
-<h2 id="AngularJS-中的原型继承"><a href="#AngularJS-中的原型继承" class="headerlink" title="AngularJS 中的原型继承"></a>AngularJS 中的原型继承</h2><p>AngularJS 中，子作用域一般都会通过 JavaScript 原型继承机制继承其父作用域的属性和方法。<br>这样，当我们对原始类型属性进行双向数据绑定时，会出现一些意想不到的问题，尤其是使用了 ng-if、ng-repeat、 ng-switch、ng-view 和 ng-include 创建了子作用域以后。因为 AngularJS 不会把数据写到你期望的父作用域属性中去，而是直接在子作用域创建同名属性并写入数据。<br>例如：<br><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-controller</span>=<span class="string">"OuterCtrl"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">span</span>&gt;</span>&#123;&#123;a&#125;&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-controller</span>=<span class="string">"InnerCtrl"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">span</span>&gt;</span>&#123;&#123;a&#125;&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">button</span> <span class="attr">ng-click</span>=<span class="string">"a=a+1"</span>&gt;</span>a++<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="AngularJS-中的原型继承"><a href="#AngularJS-中的原型继承" class="headerlink" title="AngularJS 中的原型继承"></a>AngularJS 中的原型继承</h2><p>AngularJS 中，子作用域一般都会通过 JavaScript 原型继承机制继承其父作用域的属性和方法。<br>这样，当我们对原始类型属性进行双向数据绑定时，会出现一些意想不到的问题，尤其是使用了 ng-if、ng-repeat、 ng-switch、ng-view 和 ng-include 创建了子作用域以后。因为 AngularJS 不会把数据写到你期望的父作用域属性中去，而是直接在子作用域创建同名属性并写入数据。<br>例如：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-controller</span>=<span class="string">"OuterCtrl"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">span</span>&gt;</span>&#123;&#123;a&#125;&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-controller</span>=<span class="string">"InnerCtrl"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">span</span>&gt;</span>&#123;&#123;a&#125;&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">button</span> <span class="attr">ng-click</span>=<span class="string">"a=a+1"</span>&gt;</span>a++<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">OuterCtrl</span>(<span class="params">$scope</span>) </span>&#123;</span><br><span class="line">    $scope.a = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>当点击按钮后，InnerCtrl.a 会变成 2，而 OuterCtrl.a 还是 1。<br>整个事件流程如下：没有点击按钮前，InnerCtrl 本身并没有 a 属性，它的值来自于 OuterCtrl 域，点击按钮后，由于原型继承机制的原因，此时相当于在 InnerCtrl 作用域创建了 a 属性并写入值，这就会产生困扰。</p>
 <p>避免这个问题的技巧就是在 ng-model 中总使用点（.）语法，使用对象的属性来解决问题。</p>
-<p>比如：<br><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">ng-model</span>=<span class="string">"someObj.someProp"</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>优于：<br><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">ng-model</span>=<span class="string">"someProp"</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>如果你一定要直接使用原始类型属性，有两种办法：</p>
-<ol start="0">
-<li>在子作用域中使用 $parent.属性名，这样可以直接修改父作用域的属性。</li>
-<li>在父作用域中定义函数，子作用域通过原型继承调用函数把值传递给父作用域（这种方式极少使用）。 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// in the parent scope</span></span><br><span class="line">$scope.setProp = <span class="function"><span class="keyword">function</span>(<span class="params">value</span>) </span>&#123;</span><br><span class="line">    $scope.someProp = value;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// in the child scope</span></span><br><span class="line">$scope.setProp(someValue);</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
+<p>比如：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">ng-model</span>=<span class="string">"someObj.someProp"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>优于：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">ng-model</span>=<span class="string">"someProp"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果你一定要直接使用原始类型属性，有两种办法：<br>0. 在子作用域中使用 $parent.属性名，这样可以直接修改父作用域的属性。<br>0. 在父作用域中定义函数，子作用域通过原型继承调用函数把值传递给父作用域（这种方式极少使用）。<br>    <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// in the parent scope</span></span><br><span class="line">$scope.setProp = <span class="function"><span class="keyword">function</span>(<span class="params">value</span>) </span>&#123;</span><br><span class="line">    $scope.someProp = value;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// in the child scope</span></span><br><span class="line">$scope.setProp(someValue);</span><br></pre></td></tr></table></figure></p>
 <h2 id="在父scope中调用子scope的函数或方法"><a href="#在父scope中调用子scope的函数或方法" class="headerlink" title="在父scope中调用子scope的函数或方法"></a>在父scope中调用子scope的函数或方法</h2><ol start="0">
 <li><p>常规方法，使用了原型继承中第4点来实现的<br> 父scope:</p>
  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$scope.action = &#123;&#125;;</span><br></pre></td></tr></table></figure>
+
 <p> 子scope:</p>
  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$scope.action.view = <span class="function"><span class="keyword">function</span>(<span class="params">param</span>) </span>&#123;</span><br><span class="line">    someFunction();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>也可以使用 $broadcast 方法<br> 父scope:</p>
  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$scope.action = <span class="function"><span class="keyword">function</span>(<span class="params">param</span>) </span>&#123;</span><br><span class="line">    $scope.$broadcast(<span class="string">'someAction'</span>, param);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p> 子scope:</p>
  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$scope.$on(<span class="string">'someAction'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">scope, param</span>) </span>&#123;</span><br><span class="line">    someFunction();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
 </li>
 </ol>
 

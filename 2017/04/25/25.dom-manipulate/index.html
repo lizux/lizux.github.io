@@ -326,20 +326,28 @@
         <p>我们知道，html 页面的根元素有 window 对象、document 对象（包括 document.documentElement、document.body 两个根节点）。对其进行常规操作时，由于事件的不同，导致获取根节点有些差异。</p>
 <h2 id="获取尺寸"><a href="#获取尺寸" class="headerlink" title="获取尺寸"></a>获取尺寸</h2><p>原生：</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">window</span>.innerHeight = <span class="built_in">document</span>.body.clientHeight; <span class="comment">// 视口尺寸</span></span><br><span class="line"><span class="built_in">document</span>.body.scrollHeight; <span class="comment">// 页面尺寸</span></span><br></pre></td></tr></table></figure>
+
 <p>jQuery：</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$(<span class="built_in">window</span>).height(); <span class="comment">// 视口尺寸</span></span><br><span class="line">$(<span class="built_in">document</span>).height(); <span class="comment">// 页面尺寸</span></span><br></pre></td></tr></table></figure>
+
 <h2 id="获取滚动值"><a href="#获取滚动值" class="headerlink" title="获取滚动值"></a>获取滚动值</h2><p>原生：</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">document</span>.documentElement.scrollTop || <span class="built_in">document</span>.body.scrollTop;</span><br></pre></td></tr></table></figure>
+
 <p>jQuery：</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$(<span class="built_in">window</span>).scrollTop() = $(<span class="string">'html, body'</span>).scrollTop();</span><br></pre></td></tr></table></figure>
+
 <h2 id="添加事件"><a href="#添加事件" class="headerlink" title="添加事件"></a>添加事件</h2><p>原生：</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">'scroll'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;, <span class="literal">false</span>);</span><br><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">'resize'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;, <span class="literal">false</span>);</span><br><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">'load'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;, <span class="literal">false</span>);</span><br><span class="line"><span class="built_in">document</span>.addEventListener(<span class="string">'DOMContentLoaded'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;, <span class="literal">false</span>);</span><br><span class="line"><span class="built_in">document</span>.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;, <span class="literal">false</span>);</span><br><span class="line"><span class="built_in">document</span>.addEventListener(<span class="string">'focus'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
+
 <p>jQuery：</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$(<span class="built_in">window</span>).on(<span class="string">'scroll'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;);</span><br><span class="line">$(<span class="built_in">window</span>).on(<span class="string">'resize'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;);</span><br><span class="line">$(<span class="built_in">window</span>).on(<span class="string">'load'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;);</span><br><span class="line">$(<span class="built_in">document</span>).on(<span class="string">'ready'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;);</span><br><span class="line">$(<span class="built_in">document</span>).on(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;);</span><br><span class="line">$(<span class="built_in">document</span>).on(<span class="string">'focus'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;);</span><br></pre></td></tr></table></figure>
+
 <h2 id="页面滚动"><a href="#页面滚动" class="headerlink" title="页面滚动"></a>页面滚动</h2><p>原生：</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">window</span>.scrollTo(<span class="number">0</span>, <span class="number">100</span>);</span><br><span class="line">element.scrollIntoView();</span><br></pre></td></tr></table></figure>
+
 <p>jQuery：</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$(<span class="built_in">window</span>).scrollTop(<span class="number">100</span>);</span><br><span class="line">$(<span class="string">'html, body'</span>).animate(&#123;<span class="attr">scrollTop</span>: <span class="number">100</span>&#125;); <span class="comment">// 带缓冲效果</span></span><br></pre></td></tr></table></figure>
+
 
       
     </div>

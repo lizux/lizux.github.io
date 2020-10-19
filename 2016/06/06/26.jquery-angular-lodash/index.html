@@ -331,85 +331,83 @@
 <thead>
 <tr>
 <th></th>
-<th style="text-align:left">原生</th>
-<th style="text-align:left">jquery</th>
-<th style="text-align:left">angular</th>
-<th style="text-align:left">lodash</th>
+<th align="left">原生</th>
+<th align="left">jquery</th>
+<th align="left">angular</th>
+<th align="left">lodash</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>for 循环</td>
-<td style="text-align:left">forEach(item,index)</td>
-<td style="text-align:left">each(index,item)</td>
-<td style="text-align:left">forEach(item,index)</td>
-<td style="text-align:left">forEach(item,index)</td>
+<td align="left">forEach(item,index)</td>
+<td align="left">each(index,item)</td>
+<td align="left">forEach(item,index)</td>
+<td align="left">forEach(item,index)</td>
 </tr>
 <tr>
 <td>map 循环</td>
-<td style="text-align:left">map(item,index)</td>
-<td style="text-align:left">map(item,index)</td>
-<td style="text-align:left">map(item,index)</td>
-<td style="text-align:left">map(item,index)</td>
+<td align="left">map(item,index)</td>
+<td align="left">map(item,index)</td>
+<td align="left">map(item,index)</td>
+<td align="left">map(item,index)</td>
 </tr>
 <tr>
 <td>复制对象</td>
-<td style="text-align:left">Object.assign({},target) <sup>ES6</sup><br>{…target}<sup>babel-stage-3</sup></td>
-<td style="text-align:left">extend({},target)</td>
-<td style="text-align:left"></td>
-<td style="text-align:left">clone()</td>
+<td align="left">Object.assign({},target) <sup>ES6</sup><br>{…target}<sup>babel-stage-3</sup></td>
+<td align="left">extend({},target)</td>
+<td align="left"></td>
+<td align="left">clone()</td>
 </tr>
 <tr>
 <td>深度复制</td>
-<td style="text-align:left"></td>
-<td style="text-align:left">extend(true,{},target)</td>
-<td style="text-align:left">copy()</td>
-<td style="text-align:left">cloneDeep()</td>
+<td align="left"></td>
+<td align="left">extend(true,{},target)</td>
+<td align="left">copy()</td>
+<td align="left">cloneDeep()</td>
 </tr>
 <tr>
 <td>合并对象</td>
-<td style="text-align:left">Object.assign(target,o1,o2)<sup>ES6</sup><br>{…o1, …o2}<sup>babel-stage-3</sup></td>
-<td style="text-align:left">extend(target,o1,o2)</td>
-<td style="text-align:left">extend(target,o1,o2)</td>
-<td style="text-align:left">assign(target,o1,o2)</td>
+<td align="left">Object.assign(target,o1,o2)<sup>ES6</sup><br>{…o1, …o2}<sup>babel-stage-3</sup></td>
+<td align="left">extend(target,o1,o2)</td>
+<td align="left">extend(target,o1,o2)</td>
+<td align="left">assign(target,o1,o2)</td>
 </tr>
 <tr>
 <td>深度合并</td>
-<td style="text-align:left"></td>
-<td style="text-align:left">extend(true,target,o1,o2)</td>
-<td style="text-align:left">merge(target,o1,o2)</td>
-<td style="text-align:left">merge(target,o1,o2)</td>
+<td align="left"></td>
+<td align="left">extend(true,target,o1,o2)</td>
+<td align="left">merge(target,o1,o2)</td>
+<td align="left">merge(target,o1,o2)</td>
 </tr>
 <tr>
 <td>相等判断</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left">equals(o1,o2)</td>
-<td style="text-align:left">isEqual(o1,o2)</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">equals(o1,o2)</td>
+<td align="left">isEqual(o1,o2)</td>
 </tr>
 <tr>
 <td>空值判断</td>
-<td style="text-align:left"></td>
-<td style="text-align:left">isEmptyObject()</td>
-<td style="text-align:left"></td>
-<td style="text-align:left">isEmpty()</td>
+<td align="left"></td>
+<td align="left">isEmptyObject()</td>
+<td align="left"></td>
+<td align="left">isEmpty()</td>
 </tr>
 <tr>
 <td>类型判断</td>
-<td style="text-align:left">Array.isArray()</td>
-<td style="text-align:left">isArray、isNumeric、isFunction</td>
-<td style="text-align:left">isArray、isNumber、isString，isDate、isFunction、isObject</td>
-<td style="text-align:left">isArray、isNumber、isString，isDate、isFunction、isObject</td>
+<td align="left">Array.isArray()</td>
+<td align="left">isArray、isNumeric、isFunction</td>
+<td align="left">isArray、isNumber、isString，isDate、isFunction、isObject</td>
+<td align="left">isArray、isNumber、isString，isDate、isFunction、isObject</td>
 </tr>
 <tr>
 <td>定义判断</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left">isDefined()、isUndefined()</td>
-<td style="text-align:left">isUndefined()</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">isDefined()、isUndefined()</td>
+<td align="left">isUndefined()</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <blockquote>
 <p>注：原生的 forEach() 、map() 仅能操作数组，对象无效。<br>    对于类数组的元素可以使用 [].slice.call(obj) 对其进行转换。<br>    对于普通对象可以使用 Object.keys() 列出自有属性，然后对其操作。<br>注：jQuery 的 clone() 仅能操作 dom 元素，对象无效。</p>
 </blockquote>

@@ -84,18 +84,18 @@
 
 
 
-<meta name="description" content="CSS 浏览器兼容性列表，可以根据不同浏览器的表现写出针对性的语句以解决不统一不兼容的问题。这些规则都是我根据多年的工作实践总结、并验证过的。希望随着现代浏览器的发展以及 IE9+ 浏览器市场份额的增长，这份表的作用越来越小。  注：规则 = 选择器 {声明 = 属性：值}  rules = selector {declaration = property:value}      IE6 IE7">
+<meta name="description" content="CSS 浏览器兼容性列表，可以根据不同浏览器的表现写出针对性的语句以解决不统一不兼容的问题。这些规则都是我根据多年的工作实践总结、并验证过的。希望随着现代浏览器的发展以及 IE9+ 浏览器市场份额的增长，这份表的作用越来越小。  注：规则 = 选择器 {声明 = 属性：值}  rules = selector {declaration = property:value}   |IE6|IE7|IE">
 <meta name="keywords" content="CSS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CSS Filters(过滤器) 兼容性列表">
 <meta property="og:url" content="http://yoursite.com/2015/09/28/13.css/index.html">
 <meta property="og:site_name" content="Lizux">
-<meta property="og:description" content="CSS 浏览器兼容性列表，可以根据不同浏览器的表现写出针对性的语句以解决不统一不兼容的问题。这些规则都是我根据多年的工作实践总结、并验证过的。希望随着现代浏览器的发展以及 IE9+ 浏览器市场份额的增长，这份表的作用越来越小。  注：规则 = 选择器 {声明 = 属性：值}  rules = selector {declaration = property:value}      IE6 IE7">
+<meta property="og:description" content="CSS 浏览器兼容性列表，可以根据不同浏览器的表现写出针对性的语句以解决不统一不兼容的问题。这些规则都是我根据多年的工作实践总结、并验证过的。希望随着现代浏览器的发展以及 IE9+ 浏览器市场份额的增长，这份表的作用越来越小。  注：规则 = 选择器 {声明 = 属性：值}  rules = selector {declaration = property:value}   |IE6|IE7|IE">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-07-20T05:12:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CSS Filters(过滤器) 兼容性列表">
-<meta name="twitter:description" content="CSS 浏览器兼容性列表，可以根据不同浏览器的表现写出针对性的语句以解决不统一不兼容的问题。这些规则都是我根据多年的工作实践总结、并验证过的。希望随着现代浏览器的发展以及 IE9+ 浏览器市场份额的增长，这份表的作用越来越小。  注：规则 = 选择器 {声明 = 属性：值}  rules = selector {declaration = property:value}      IE6 IE7">
+<meta name="twitter:description" content="CSS 浏览器兼容性列表，可以根据不同浏览器的表现写出针对性的语句以解决不统一不兼容的问题。这些规则都是我根据多年的工作实践总结、并验证过的。希望随着现代浏览器的发展以及 IE9+ 浏览器市场份额的增长，这份表的作用越来越小。  注：规则 = 选择器 {声明 = 属性：值}  rules = selector {declaration = property:value}   |IE6|IE7|IE">
 
 
 
@@ -327,247 +327,26 @@
 <blockquote>
 <p>注：规则 = 选择器 {声明 = 属性：值}<br>  rules = selector {declaration = property:value}</p>
 </blockquote>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>IE6</th>
-<th>IE7</th>
-<th>IE8</th>
-<th>IE9/10</th>
-<th>IE11</th>
-<th>Firefox</th>
-<th>Chrome</th>
-<th>Opera12-</th>
-<th>Safari</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>_<span>property:value</span></td>
-<td>√</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>* html <span>rules</span></td>
-<td>√</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>*+html <span>rules</span></td>
-<td>&nbsp;</td>
-<td>√</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>*<span>property:value</span><sup>1</sup></td>
-<td>√</td>
-<td>√</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>html* <span>rules</span></td>
-<td>√</td>
-<td>√</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>√</td>
-</tr>
-<tr>
-<td><span>property:value</span>\9</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td><span>property:value</span>\0</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td><span>property:value</span>\0/</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>√</td>
-<td>○<sup>6</sup></td>
-<td>○<sup>6</sup></td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td><span>property:value</span> !important</td>
-<td>○<sup>2</sup></td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-</tr>
-<tr>
-<td><span>property</span> /**/<span>:value</span></td>
-<td>&nbsp;</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-</tr>
-<tr>
-<td>*+body <span>rules</span></td>
-<td>&nbsp;</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-</tr>
-<tr>
-<td>:root <span>rules</span><sup>3</sup></td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-</tr>
-<tr>
-<td>body:last-child <span>rules</span></td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-</tr>
-<tr>
-<td>@media all and (min-width:0px) {<span>rules</span>}</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>√</td>
-<td>√</td>
-<td>√<sup>4</sup></td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-</tr>
-<tr>
-<td>@media all and (-webkit-min-device-pixel-ratio:0) {<span>rules</span>}</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>√</td>
-<td>&nbsp;</td>
-<td>√</td>
-</tr>
-<tr>
-<td>html*~/**/body <span>rules</span></td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>√</td>
-</tr>
-<tr>
-<td><span>selector</span>,x:-moz-any-link {<span>property:value</span>}</td>
-<td>&nbsp;</td>
-<td>√</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>√</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td><span>selector</span>,x:-moz-any-link,x:default {<span>property:value</span>}</td>
-<td>&nbsp;</td>
-<td>√</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>√<sup>5</sup></td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-</tbody>
-</table>
+<p> |IE6|IE7|IE8|IE9/10|IE11|Firefox|Chrome|Opera12-|Safari<br>—|—|—<br>_<span>property:value</span>|√|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;</p>
 <ul>
-<li>注 [1]：此处的 * 号其实也可以是. 号、&gt; 号、+ 号和 #号。由于它们都不属于 CSS2.1 规范合法属性名的一部分，所以不能通过 W3C 验证 <br></li>
-<li>注 [2]：IE6 对 !important 的支持比较怪异，它首先在同一规则中，按声明的先后顺序计算优先级，然后在不同规则中认为使用 !important 的声明优先级最大。 <br></li>
-<li>注 [3]：该规则有优先级，其低于类（class）选择符，高于类型（标签）选择符 <br></li>
-<li>注 [4]：FF3 不支持，FF3.5+ 支持 <br></li>
-<li>注 [5]：FF2 不支持，FF3+ 支持 <br></li>
-<li>注 [6]：不支持 background 属性 </li>
+<li><p>html <span>rules</span>|√|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;</p>
+</li>
+<li><p>+html <span>rules</span>|&nbsp;|√|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;</p>
+</li>
+<li><p><span>property:value</span><sup>1</sup>|√|√|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;<br>html* <span>rules</span>|√|√|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|√<br><span>property:value</span>\9|√|√|√|√|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;<br><span>property:value</span>\0|&nbsp;|&nbsp;|√|√|√|&nbsp;|&nbsp;|&nbsp;|&nbsp;<br><span>property:value</span>\0/|&nbsp;|&nbsp;|√|○<sup>6</sup>|○<sup>6</sup>|&nbsp;|&nbsp;|&nbsp;|&nbsp;<br><span>property:value</span> !important|○<sup>2</sup>|√|√|√|√|√|√|√|√<br><span>property</span> /<strong>/<span>:value</span>|&nbsp;|√|√|√|√|√|√|√|√<br>*+body <span>rules</span>|&nbsp;|√|√|√|√|√|√|√|√<br>:root <span>rules</span><sup>3</sup>|&nbsp;|&nbsp;|&nbsp;|√|√|√|√|√|√<br>body:last-child <span>rules</span>|&nbsp;|&nbsp;|&nbsp;|√|√|√|√|√|√<br>@media all and (min-width:0px) {<span>rules</span>}|&nbsp;|&nbsp;|&nbsp;|√|√|√<sup>4</sup>|√|√|√<br>@media all and (-webkit-min-device-pixel-ratio:0) {<span>rules</span>}|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|√|&nbsp;|√<br>html*~/</strong>/body <span>rules</span>|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|√<br><span>selector</span>,x:-moz-any-link {<span>property:value</span>}|&nbsp;|√|&nbsp;|&nbsp;|&nbsp;|√|&nbsp;|&nbsp;|&nbsp;<br><span>selector</span>,x:-moz-any-link,x:default {<span>property:value</span>}|&nbsp;|√|&nbsp;|&nbsp;|&nbsp;|√<sup>5</sup>|&nbsp;|&nbsp;|&nbsp;</p>
+</li>
+<li><p>注 [1]：此处的 * 号其实也可以是. 号、&gt; 号、+ 号和 #号。由于它们都不属于 CSS2.1 规范合法属性名的一部分，所以不能通过 W3C 验证 <br></p>
+</li>
+<li><p>注 [2]：IE6 对 !important 的支持比较怪异，它首先在同一规则中，按声明的先后顺序计算优先级，然后在不同规则中认为使用 !important 的声明优先级最大。 <br></p>
+</li>
+<li><p>注 [3]：该规则有优先级，其低于类（class）选择符，高于类型（标签）选择符 <br></p>
+</li>
+<li><p>注 [4]：FF3 不支持，FF3.5+ 支持 <br></p>
+</li>
+<li><p>注 [5]：FF2 不支持，FF3+ 支持 <br></p>
+</li>
+<li><p>注 [6]：不支持 background 属性 </p></li><p></p>
+
 </ul>
 
       

@@ -84,18 +84,18 @@
 
 
 
-<meta name="description" content="忽略已经提交到 git 版本库的文件的后续追踪git update-index --assume-unchanged filepath url 地址末尾加不加”/“很重要，很多 bug 都是因此而起，而且很难发现Webpack devServer 使用 反向代理 解决 api 跨域问题时proxy: &amp;#123;	&apos;/api/*&apos;: &apos;http://192.168.1.100:5000&apos;&amp;#125">
+<meta name="description" content="忽略已经提交到 git 版本库的文件的后续追踪git update-index --assume-unchanged filepath  url 地址末尾加不加”/“很重要，很多 bug 都是因此而起，而且很难发现Webpack devServer 使用 反向代理 解决 api 跨域问题时proxy: &amp;#123;	&apos;/api/*&apos;: &apos;http://192.168.1.100:5000&apos;&amp;#12">
 <meta name="keywords" content="JavaScript,nginx,Webpack,Atom">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Web 前端开发杂技">
 <meta property="og:url" content="http://yoursite.com/2016/12/16/32.misc-tips/index.html">
 <meta property="og:site_name" content="Lizux">
-<meta property="og:description" content="忽略已经提交到 git 版本库的文件的后续追踪git update-index --assume-unchanged filepath url 地址末尾加不加”/“很重要，很多 bug 都是因此而起，而且很难发现Webpack devServer 使用 反向代理 解决 api 跨域问题时proxy: &amp;#123;	&apos;/api/*&apos;: &apos;http://192.168.1.100:5000&apos;&amp;#125">
+<meta property="og:description" content="忽略已经提交到 git 版本库的文件的后续追踪git update-index --assume-unchanged filepath  url 地址末尾加不加”/“很重要，很多 bug 都是因此而起，而且很难发现Webpack devServer 使用 反向代理 解决 api 跨域问题时proxy: &amp;#123;	&apos;/api/*&apos;: &apos;http://192.168.1.100:5000&apos;&amp;#12">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-12-16T06:48:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Web 前端开发杂技">
-<meta name="twitter:description" content="忽略已经提交到 git 版本库的文件的后续追踪git update-index --assume-unchanged filepath url 地址末尾加不加”/“很重要，很多 bug 都是因此而起，而且很难发现Webpack devServer 使用 反向代理 解决 api 跨域问题时proxy: &amp;#123;	&apos;/api/*&apos;: &apos;http://192.168.1.100:5000&apos;&amp;#125">
+<meta name="twitter:description" content="忽略已经提交到 git 版本库的文件的后续追踪git update-index --assume-unchanged filepath  url 地址末尾加不加”/“很重要，很多 bug 都是因此而起，而且很难发现Webpack devServer 使用 反向代理 解决 api 跨域问题时proxy: &amp;#123;	&apos;/api/*&apos;: &apos;http://192.168.1.100:5000&apos;&amp;#12">
 
 
 
@@ -324,10 +324,14 @@
 
       
         <h2 id="忽略已经提交到-git-版本库的文件的后续追踪"><a href="#忽略已经提交到-git-版本库的文件的后续追踪" class="headerlink" title="忽略已经提交到 git 版本库的文件的后续追踪"></a>忽略已经提交到 git 版本库的文件的后续追踪</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">update</span>-<span class="keyword">index</span> <span class="comment">--assume-unchanged filepath</span></span><br></pre></td></tr></table></figure>
+
 <h2 id="url-地址末尾加不加”-“很重要，很多-bug-都是因此而起，而且很难发现"><a href="#url-地址末尾加不加”-“很重要，很多-bug-都是因此而起，而且很难发现" class="headerlink" title="url 地址末尾加不加”/“很重要，很多 bug 都是因此而起，而且很难发现"></a>url 地址末尾加不加”/“很重要，很多 bug 都是因此而起，而且很难发现</h2><h2 id="Webpack-devServer-使用-反向代理-解决-api-跨域问题时"><a href="#Webpack-devServer-使用-反向代理-解决-api-跨域问题时" class="headerlink" title="Webpack devServer 使用 反向代理 解决 api 跨域问题时"></a>Webpack devServer 使用 反向代理 解决 api 跨域问题时</h2><figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">proxy: &#123;</span><br><span class="line">	'/api/*': 'http://192.168.1.100:<span class="number">5000</span>'</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>当 api 使用了 https 协议时，需要特别设置如下，不然会返回 500 错误</p>
 <figure class="highlight less"><table><tr><td class="code"><pre><span class="line"><span class="attribute">proxy</span>: &#123;</span><br><span class="line">	<span class="string">'/api/*'</span>: &#123;</span><br><span class="line">		<span class="attribute">target</span>: <span class="string">'https://192.168.1.100:5000'</span>,</span><br><span class="line">		<span class="attribute">changeOrigin</span>: true</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h2 id="nginx-忽略访问-favicon-ico-文件的错误日志，以避免干扰："><a href="#nginx-忽略访问-favicon-ico-文件的错误日志，以避免干扰：" class="headerlink" title="nginx 忽略访问 favicon.ico 文件的错误日志，以避免干扰："></a>nginx 忽略访问 favicon.ico 文件的错误日志，以避免干扰：</h2><figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">location</span> = /favicon.ico &#123;</span><br><span class="line">	<span class="attribute">log_not_found</span> <span class="literal">off</span>;</span><br><span class="line">	<span class="attribute">access_log</span> <span class="literal">off</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
       
     </div>

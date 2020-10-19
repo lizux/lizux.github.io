@@ -324,12 +324,18 @@
 
       
         <h2 id="Git-重命名远程分支名"><a href="#Git-重命名远程分支名" class="headerlink" title="Git 重命名远程分支名"></a>Git 重命名远程分支名</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git branch -m old_branch new_branch         # Rename branch locally</span><br><span class="line">git push origin :old_branch                 # Delete the old branch</span><br><span class="line">git push --set-upstream origin new_branch   # Push the new branch, set local branch to track the new remote</span><br></pre></td></tr></table></figure>
+
 <h2 id="删除在本地有但在远程库中已经不存在的分支"><a href="#删除在本地有但在远程库中已经不存在的分支" class="headerlink" title="删除在本地有但在远程库中已经不存在的分支"></a>删除在本地有但在远程库中已经不存在的分支</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git remote prune origin</span><br></pre></td></tr></table></figure>
+
 <h2 id="Git-复制远程分支到新分支"><a href="#Git-复制远程分支到新分支" class="headerlink" title="Git 复制远程分支到新分支"></a>Git 复制远程分支到新分支</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git checkout -b new_branch old_branch</span><br></pre></td></tr></table></figure>
+
 <h2 id="取消已经-push-的行为（强制-push）"><a href="#取消已经-push-的行为（强制-push）" class="headerlink" title="取消已经 push 的行为（强制 push）"></a>取消已经 push 的行为（强制 push）</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 本地仓库回退到某一版本</span><br><span class="line">git reset -hard xxxx</span><br><span class="line"></span><br><span class="line"># 强制 PUSH，此时远程分支已经恢复成指定的 commit 了</span><br><span class="line">git push origin &lt;分支名&gt; --force</span><br></pre></td></tr></table></figure>
+
 <h2 id="忽略已经提交到-git-版本库的文件的后续追踪-仅支持文件，目录无效"><a href="#忽略已经提交到-git-版本库的文件的后续追踪-仅支持文件，目录无效" class="headerlink" title="忽略已经提交到 git 版本库的文件的后续追踪(仅支持文件，目录无效)"></a>忽略已经提交到 git 版本库的文件的后续追踪(仅支持文件，目录无效)</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git update-index --assume-unchanged index.html</span><br><span class="line">git update-index --no-assume-unchanged index.html</span><br></pre></td></tr></table></figure>
+
 <h2 id="SourceTree-切换分支后报错：No-submodule-mapping-found-for-path-‘SampleProject’-in-gitmodules"><a href="#SourceTree-切换分支后报错：No-submodule-mapping-found-for-path-‘SampleProject’-in-gitmodules" class="headerlink" title="SourceTree 切换分支后报错：No submodule mapping found for path ‘SampleProject’ in .gitmodules"></a>SourceTree 切换分支后报错：No submodule mapping found for path ‘SampleProject’ in .gitmodules</h2><p>原因是某些操作导致 SampleProject 目录下包含 .git 文件夹，所以 SourceTree 把该文件夹看作 git submodule，但是真实情况并非如此，可以用以下命令行修复：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git rm -r SampleProject --cached</span><br><span class="line">git commit -m &quot;clean up folders&quot;</span><br></pre></td></tr></table></figure>
+
 <h2 id="Git-获取和提交代码时仅操作指定子目录"><a href="#Git-获取和提交代码时仅操作指定子目录" class="headerlink" title="Git 获取和提交代码时仅操作指定子目录"></a>Git 获取和提交代码时仅操作指定子目录</h2><p>使用 sparse-checkout，这是 1.7 版本后新增的特性</p>
 <ol start="0">
 <li><p>本地创建新目录并进入 cmd 模式</p>
@@ -340,14 +346,19 @@
 </li>
 <li><p>进入 <code>.git/info/sparse-checkout</code> 文件，没有就创建<br>添加指定子目录名，没有引号</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;some/dir/&quot;</span><br><span class="line">&quot;another/sub/tree&quot;</span><br></pre></td></tr></table></figure>
+
 </li>
 </ol>
-<h2 id="使用-TortoiseGit-获取和提交代码时不用每次填写用户名和密码"><a href="#使用-TortoiseGit-获取和提交代码时不用每次填写用户名和密码" class="headerlink" title="使用 TortoiseGit 获取和提交代码时不用每次填写用户名和密码"></a>使用 TortoiseGit 获取和提交代码时不用每次填写用户名和密码</h2><p>进入 <code>.git/config</code> 文件，添加以下字段<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[credential]</span><br><span class="line">    helper = store</span><br></pre></td></tr></table></figure></p>
+<h2 id="使用-TortoiseGit-获取和提交代码时不用每次填写用户名和密码"><a href="#使用-TortoiseGit-获取和提交代码时不用每次填写用户名和密码" class="headerlink" title="使用 TortoiseGit 获取和提交代码时不用每次填写用户名和密码"></a>使用 TortoiseGit 获取和提交代码时不用每次填写用户名和密码</h2><p>进入 <code>.git/config</code> 文件，添加以下字段</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[credential]</span><br><span class="line">    helper = store</span><br></pre></td></tr></table></figure>
+
 <p>然后第一次填写后就会保存下来，以后就不用填写了。</p>
 <blockquote>
 <p>注：明文保存在 C:\Users[username].git-credentials 文件中</p>
 </blockquote>
-<h2 id="在-hexo-发布时，会提示烦人信息"><a href="#在-hexo-发布时，会提示烦人信息" class="headerlink" title="在 hexo 发布时，会提示烦人信息"></a>在 hexo 发布时，会提示烦人信息</h2><p>用 hexo deploy 时，会出现提示信息 warning: LF will be replaced by CRLF，虽然不影响使用，但看起来挺乱糟糟的。<br>若想不提示，可以切换到 hexo 根目录，执行如下命令：<br><figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">git<span class="built_in"> config </span>--global core.autocrlf <span class="literal">false</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="在-hexo-发布时，会提示烦人信息"><a href="#在-hexo-发布时，会提示烦人信息" class="headerlink" title="在 hexo 发布时，会提示烦人信息"></a>在 hexo 发布时，会提示烦人信息</h2><p>用 hexo deploy 时，会出现提示信息 warning: LF will be replaced by CRLF，虽然不影响使用，但看起来挺乱糟糟的。<br>若想不提示，可以切换到 hexo 根目录，执行如下命令：</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">git<span class="built_in"> config </span>--global core.autocrlf <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
 
       
     </div>

@@ -84,18 +84,18 @@
 
 
 
-<meta name="description" content="响应式图片设计在整个网站的开发中，图片的处理是一个无法绕开或忽略的问题。因为，图片要在各种设备上平滑过渡显示，它们将会碰到的问题有：  优化在不同设备下的观看体验（不同分辨率使用不同布局） 避免浪费带宽（不同分辨率调用不同图片）  第一个问题可以用 CSS 媒体查询解决。而第二个问题，如果是背景图片，也可以用媒体查询；但是对 HTML 里面的 img 标签就无能为力了。这时，&amp;lt;img&amp;gt;">
+<meta name="description" content="响应式图片设计在整个网站的开发中，图片的处理是一个无法绕开或忽略的问题。因为，图片要在各种设备上平滑过渡显示，它们将会碰到的问题有：0. 优化在不同设备下的观看体验（不同分辨率使用不同布局）0. 避免浪费带宽（不同分辨率调用不同图片） 第一个问题可以用 CSS 媒体查询解决。而第二个问题，如果是背景图片，也可以用媒体查询；但是对 HTML 里面的 img 标签就无能为力了。这时，&amp;lt;img&amp;g">
 <meta name="keywords" content="CSS,HTML">
 <meta property="og:type" content="article">
 <meta property="og:title" content="响应式图片设计及 srcset 属性探索">
 <meta property="og:url" content="http://yoursite.com/2019/03/05/41.srcset/index.html">
 <meta property="og:site_name" content="Lizux">
-<meta property="og:description" content="响应式图片设计在整个网站的开发中，图片的处理是一个无法绕开或忽略的问题。因为，图片要在各种设备上平滑过渡显示，它们将会碰到的问题有：  优化在不同设备下的观看体验（不同分辨率使用不同布局） 避免浪费带宽（不同分辨率调用不同图片）  第一个问题可以用 CSS 媒体查询解决。而第二个问题，如果是背景图片，也可以用媒体查询；但是对 HTML 里面的 img 标签就无能为力了。这时，&amp;lt;img&amp;gt;">
+<meta property="og:description" content="响应式图片设计在整个网站的开发中，图片的处理是一个无法绕开或忽略的问题。因为，图片要在各种设备上平滑过渡显示，它们将会碰到的问题有：0. 优化在不同设备下的观看体验（不同分辨率使用不同布局）0. 避免浪费带宽（不同分辨率调用不同图片） 第一个问题可以用 CSS 媒体查询解决。而第二个问题，如果是背景图片，也可以用媒体查询；但是对 HTML 里面的 img 标签就无能为力了。这时，&amp;lt;img&amp;g">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-03-05T08:17:04.835Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="响应式图片设计及 srcset 属性探索">
-<meta name="twitter:description" content="响应式图片设计在整个网站的开发中，图片的处理是一个无法绕开或忽略的问题。因为，图片要在各种设备上平滑过渡显示，它们将会碰到的问题有：  优化在不同设备下的观看体验（不同分辨率使用不同布局） 避免浪费带宽（不同分辨率调用不同图片）  第一个问题可以用 CSS 媒体查询解决。而第二个问题，如果是背景图片，也可以用媒体查询；但是对 HTML 里面的 img 标签就无能为力了。这时，&amp;lt;img&amp;gt;">
+<meta name="twitter:description" content="响应式图片设计在整个网站的开发中，图片的处理是一个无法绕开或忽略的问题。因为，图片要在各种设备上平滑过渡显示，它们将会碰到的问题有：0. 优化在不同设备下的观看体验（不同分辨率使用不同布局）0. 避免浪费带宽（不同分辨率调用不同图片） 第一个问题可以用 CSS 媒体查询解决。而第二个问题，如果是背景图片，也可以用媒体查询；但是对 HTML 里面的 img 标签就无能为力了。这时，&amp;lt;img&amp;g">
 
 
 
@@ -323,19 +323,11 @@
       
 
       
-        <h2 id="响应式图片设计"><a href="#响应式图片设计" class="headerlink" title="响应式图片设计"></a>响应式图片设计</h2><p>在整个网站的开发中，图片的处理是一个无法绕开或忽略的问题。因为，图片要在各种设备上平滑过渡显示，<br>它们将会碰到的问题有：</p>
-<ol start="0">
-<li>优化在不同设备下的观看体验（不同分辨率使用不同布局）</li>
-<li>避免浪费带宽（不同分辨率调用不同图片）</li>
-</ol>
+        <h2 id="响应式图片设计"><a href="#响应式图片设计" class="headerlink" title="响应式图片设计"></a>响应式图片设计</h2><p>在整个网站的开发中，图片的处理是一个无法绕开或忽略的问题。因为，图片要在各种设备上平滑过渡显示，<br>它们将会碰到的问题有：<br>0. 优化在不同设备下的观看体验（不同分辨率使用不同布局）<br>0. 避免浪费带宽（不同分辨率调用不同图片）</p>
 <p>第一个问题可以用 CSS 媒体查询解决。而第二个问题，如果是背景图片，也可以用媒体查询；但是对 HTML 里面的 img 标签就无能为力了。这时，<code>&lt;img&gt;</code> 元素的 srcset 属性就派上用场了。</p>
 <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"images/demo.jpg"</span> <span class="attr">srcset</span>=<span class="string">"</span></span></span><br><span class="line"><span class="tag"><span class="string">images/demo_s.jpg 480w,</span></span></span><br><span class="line"><span class="tag"><span class="string">images/demo_m.jpg 1024w,</span></span></span><br><span class="line"><span class="tag"><span class="string">images/demo_l.jpg 1280w,</span></span></span><br><span class="line"><span class="tag"><span class="string">images/demo_xl.jpg 1440w,</span></span></span><br><span class="line"><span class="tag"><span class="string">images/demo_xxl.jpg 1920w,</span></span></span><br><span class="line"><span class="tag"><span class="string">images/demo_xxxl.jpg 5120w</span></span></span><br><span class="line"><span class="tag"><span class="string">"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="格式："><a href="#格式：" class="headerlink" title="格式："></a>格式：</h3><p>srcset 格式为每条规则包含:</p>
-<ol start="0">
-<li>一个图片文件名</li>
-<li>空格</li>
-<li>图像宽度</li>
-</ol>
+
+<h3 id="格式："><a href="#格式：" class="headerlink" title="格式："></a>格式：</h3><p>srcset 格式为每条规则包含:<br>0. 一个图片文件名<br>0. 空格<br>0. 图像宽度</p>
 <p>规则间以逗号分隔</p>
 <blockquote>
 <p>注： srcset 生效时，自动忽略 src 属性</p>
