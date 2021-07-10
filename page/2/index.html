@@ -240,6 +240,217 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/18/43.vue-practice/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="可口可乐">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Lizux">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Lizux" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2019/04/18/43.vue-practice/" itemprop="url">
+                  Vue 实践
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-18T00:00:00+08:00">
+                2019-04-18
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              <span class="post-meta-item-text">更新于</span>
+              <time title="更新于" itemprop="dateModified" datetime="2020-10-19T15:33:28+08:00">
+                2020-10-19
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Vue规范"><a href="#Vue规范" class="headerlink" title="Vue规范"></a>Vue规范</h2><h3 id="组件属性"><a href="#组件属性" class="headerlink" title="组件属性"></a>组件属性</h3><figure class="highlight armasm"><table><tr><td class="code"><pre><span class="line"><span class="symbol">name</span></span><br><span class="line"><span class="symbol">components</span></span><br><span class="line"><span class="symbol">model</span></span><br><span class="line"><span class="symbol">data</span></span><br><span class="line"><span class="symbol">props</span></span><br><span class="line"><span class="symbol">computed</span></span><br><span class="line"><span class="symbol">watch</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">beforeCreate</span></span><br><span class="line"><span class="keyword">created</span></span><br><span class="line"><span class="keyword">beforeMount</span></span><br><span class="line"><span class="keyword">mounted</span></span><br><span class="line"><span class="keyword">beforeUpdate</span></span><br><span class="line"><span class="keyword">updated</span></span><br><span class="line"><span class="keyword">beforeDestroy</span></span><br><span class="line"><span class="keyword">destroyed</span></span><br><span class="line"><span class="keyword"></span></span><br><span class="line"><span class="keyword">methods</span></span><br><span class="line"><span class="keyword">template</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="标签属性"><a href="#标签属性" class="headerlink" title="标签属性"></a>标签属性</h3><figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">is</span></span><br><span class="line">v-<span class="keyword">for</span></span><br><span class="line">v-<span class="keyword">if</span></span><br><span class="line">v-<span class="keyword">else</span>-<span class="keyword">if</span></span><br><span class="line">v-<span class="keyword">else</span></span><br><span class="line">v-show</span><br><span class="line">v-once</span><br><span class="line"><span class="built_in">id</span></span><br><span class="line"><span class="keyword">ref</span></span><br><span class="line">key</span><br><span class="line">slot</span><br><span class="line">v-bind</span><br><span class="line">v-model</span><br><span class="line">...其他属性</span><br><span class="line">v-<span class="keyword">on</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="命名规范"><a href="#命名规范" class="headerlink" title="命名规范"></a>命名规范</h3><figure class="highlight delphi"><table><tr><td class="code"><pre><span class="line"><span class="string">'current'</span> + <span class="keyword">Name</span>：当前操作对象或变量</span><br><span class="line"><span class="string">'real'</span> + <span class="keyword">Name</span>：经过处理才能使用的对象或变量</span><br></pre></td></tr></table></figure>
+
+<p>列表：</p>
+<figure class="highlight delphi"><table><tr><td class="code"><pre><span class="line"><span class="keyword">name</span> + <span class="string">'List'</span>：用于直接定义的静态列表</span><br><span class="line"><span class="keyword">name</span> + <span class="string">'Data'</span>：用于接口返回的数据列表</span><br><span class="line"><span class="keyword">name</span> + <span class="string">'s'</span>   ：用于组件的属性，比较简练</span><br></pre></td></tr></table></figure>
+
+<h2 id="Vue-技巧"><a href="#Vue-技巧" class="headerlink" title="Vue 技巧"></a>Vue 技巧</h2><h3 id="Vue-cli-打包出的-app-js-在-safari-下刷新也获取不到最新版本（也不是上个版本，奇怪的顺序）"><a href="#Vue-cli-打包出的-app-js-在-safari-下刷新也获取不到最新版本（也不是上个版本，奇怪的顺序）" class="headerlink" title="Vue-cli 打包出的 app.js 在 safari 下刷新也获取不到最新版本（也不是上个版本，奇怪的顺序）"></a>Vue-cli 打包出的 app.js 在 safari 下刷新也获取不到最新版本（也不是上个版本，奇怪的顺序）</h3><p>解决方案：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">chainWebpack: <span class="function"><span class="params">config</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (process.env.NODE_ENV === <span class="string">'development'</span>) &#123;</span><br><span class="line">    config</span><br><span class="line">        .output</span><br><span class="line">        .filename(<span class="string">'[name].[hash].js'</span>)</span><br><span class="line">        .end()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 或</span></span><br><span class="line">devServer: &#123;</span><br><span class="line">    watchOptions: &#123;</span><br><span class="line">        poll: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="设置别名，简化导入组件的路径"><a href="#设置别名，简化导入组件的路径" class="headerlink" title="设置别名，简化导入组件的路径"></a>设置别名，简化导入组件的路径</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">- <span class="keyword">import</span> HiForm <span class="keyword">from</span> <span class="string">'components/hiform'</span>;</span><br><span class="line">- <span class="keyword">import</span> &#123;requiredInput, requiredSelect&#125; <span class="keyword">from</span> <span class="string">'components/constant'</span>;</span><br><span class="line"></span><br><span class="line">+ <span class="keyword">import</span> HiForm <span class="keyword">from</span> <span class="string">'@/hiform'</span>;</span><br><span class="line">+ <span class="keyword">import</span> &#123;requiredInput, requiredSelect&#125; <span class="keyword">from</span> <span class="string">'@/constant'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line">alias: &#123;</span><br><span class="line">    <span class="string">'@'</span>: path.join(APP_PATH, <span class="string">'components'</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="在-vue-里当图片采用背景图片显示方案时，需要在-url-里面加入引号避免路径包含空格时造成无法显示图片的-bug"><a href="#在-vue-里当图片采用背景图片显示方案时，需要在-url-里面加入引号避免路径包含空格时造成无法显示图片的-bug" class="headerlink" title="在 vue 里当图片采用背景图片显示方案时，需要在 url 里面加入引号避免路径包含空格时造成无法显示图片的 bug"></a>在 vue 里当图片采用背景图片显示方案时，需要在 url 里面加入引号避免路径包含空格时造成无法显示图片的 bug</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> src = <span class="string">'http://sample.com/show me.jpg'</span>;</span><br><span class="line">- :style=<span class="string">"&#123;'background-image':`url($&#123;src&#125;)`&#125;"</span></span><br><span class="line">+ :style=<span class="string">"&#123;'background-image':`url('$&#123;src&#125;')`&#125;"</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="因为-vue-的-data-初始化时不能嵌套定义（一个对象的属性值指向另外一个值），所以有类似需求用字符串来指定属性名，同时还能解决延迟加载的数据问题"><a href="#因为-vue-的-data-初始化时不能嵌套定义（一个对象的属性值指向另外一个值），所以有类似需求用字符串来指定属性名，同时还能解决延迟加载的数据问题" class="headerlink" title="因为 vue 的 data 初始化时不能嵌套定义（一个对象的属性值指向另外一个值），所以有类似需求用字符串来指定属性名，同时还能解决延迟加载的数据问题"></a>因为 vue 的 data 初始化时不能嵌套定义（一个对象的属性值指向另外一个值），所以有类似需求用字符串来指定属性名，同时还能解决延迟加载的数据问题</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">data: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        toggleList: [</span><br><span class="line">            &#123;</span><br><span class="line">                label: <span class="string">'API'</span>,</span><br><span class="line">                key: <span class="string">'api'</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                label: <span class="string">'Server'</span>,</span><br><span class="line">                key: <span class="string">'server'</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                label: <span class="string">'Permission'</span>,</span><br><span class="line">                key: <span class="string">'permission'</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                label: <span class="string">'Git'</span>,</span><br><span class="line">                key: <span class="string">'git_repo'</span></span><br><span class="line">            &#125;</span><br><span class="line">        ],</span><br><span class="line">        risk: &#123;</span><br><span class="line">            label: <span class="string">'Risk Free'</span>,</span><br><span class="line">            key: <span class="string">'risk_free'</span>,</span><br><span class="line">            type: <span class="string">'radio'</span>,</span><br><span class="line">            values: <span class="string">'toggleList'</span>,</span><br><span class="line">            valueMode: <span class="string">'readonly'</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用时：</span></span><br><span class="line"><span class="keyword">this</span>.riskValues = <span class="keyword">this</span>[<span class="keyword">this</span>.risk.values]</span><br></pre></td></tr></table></figure>
+
+<h3 id="vue-的-v-for-语句会把内部-this-指向全局变量（一般为-undefined）；而非当前-vm-实例的问题：重新绑定-this"><a href="#vue-的-v-for-语句会把内部-this-指向全局变量（一般为-undefined）；而非当前-vm-实例的问题：重新绑定-this" class="headerlink" title="vue 的 v-for 语句会把内部 this 指向全局变量（一般为 undefined）；而非当前 vm 实例的问题：重新绑定 this"></a>vue 的 v-for 语句会把内部 this 指向全局变量（一般为 undefined）；而非当前 vm 实例的问题：重新绑定 this</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;el-tabs v-model=<span class="string">"activeTab"</span>&gt;</span><br><span class="line">    &lt;el-tab-pane v-<span class="keyword">for</span>=<span class="string">"tabScope in tabList"</span> :key=<span class="string">"tabScope.key"</span> :label=<span class="string">"tabScope.label"</span> :name=<span class="string">"tabScope.key"</span>&gt;</span><br><span class="line">-        <span class="xml"><span class="tag">&lt;<span class="name">hi-form</span> <span class="attr">:fields</span>=<span class="string">"currentFields"</span> <span class="attr">:model</span>=<span class="string">"realAppDetail"</span> <span class="attr">:rules</span>=<span class="string">"ruleList"</span> <span class="attr">:self</span>=<span class="string">"this"</span>&gt;</span><span class="tag">&lt;/<span class="name">hi-form</span>&gt;</span></span></span><br><span class="line">+        &lt;hi-form :fields="currentFields" :model="realAppDetail" :rules="ruleList" :self="_self"&gt;&lt;/hi-form&gt;</span><br><span class="line">    &lt;/el-tab-pane&gt;</span><br><span class="line">&lt;/el-tabs&gt;</span><br><span class="line"></span><br><span class="line">created() &#123;</span><br><span class="line">    this._self = this;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="自定义组件复用后会有缓存问题：添加-key-值，避免翻页后缓存造成不渲染的问题"><a href="#自定义组件复用后会有缓存问题：添加-key-值，避免翻页后缓存造成不渲染的问题" class="headerlink" title="自定义组件复用后会有缓存问题：添加 key 值，避免翻页后缓存造成不渲染的问题"></a>自定义组件复用后会有缓存问题：添加 key 值，避免翻页后缓存造成不渲染的问题</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;el-table-column label=<span class="string">"Title"</span>&gt;</span><br><span class="line">    &lt;template slot-scope=<span class="string">"scope"</span>&gt;</span><br><span class="line">-        <span class="xml"><span class="tag">&lt;<span class="name">record-title</span> <span class="attr">:detail-data</span>=<span class="string">"scope.row"</span>&gt;</span><span class="tag">&lt;/<span class="name">record-title</span>&gt;</span></span></span><br><span class="line">+        &lt;record-title :detail-data="scope.row" :key="scope.row.id"&gt;&lt;/record-title&gt;</span><br><span class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">template</span>&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;/<span class="name">el-table-column</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="路由链接尽量通过-name-来设置而非直接对-url-硬编码"><a href="#路由链接尽量通过-name-来设置而非直接对-url-硬编码" class="headerlink" title="路由链接尽量通过 name 来设置而非直接对 url 硬编码"></a>路由链接尽量通过 name 来设置而非直接对 url 硬编码</h3><figure class="highlight html"><table><tr><td class="code"><pre><span class="line">- <span class="tag">&lt;<span class="name">router-link</span> <span class="attr">:to</span>=<span class="string">"`/global/cloud_services/$&#123;scope.row.id&#125;`"</span>&gt;</span>链接<span class="tag">&lt;/<span class="name">router-link</span>&gt;</span></span><br><span class="line"></span><br><span class="line">+ <span class="tag">&lt;<span class="name">router-link</span> <span class="attr">:to</span>=<span class="string">"&#123;name: 'cloudDetail', params: &#123;cloudID: scope.row.id&#125;&#125;"</span>&gt;</span>链接<span class="tag">&lt;/<span class="name">router-link</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    path: <span class="string">':cloudID'</span>,</span><br><span class="line">    name: <span class="string">'cloudDetail'</span>,</span><br><span class="line">    component: CloudDetail</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="路由链接会提前预解析，导致-vue-router-的警告“missing-param-for-named-route”，加-v-if-判断修复"><a href="#路由链接会提前预解析，导致-vue-router-的警告“missing-param-for-named-route”，加-v-if-判断修复" class="headerlink" title="路由链接会提前预解析，导致 vue-router 的警告“missing param for named route”，加 v-if 判断修复"></a>路由链接会提前预解析，导致 vue-router 的警告“missing param for named route”，加 v-if 判断修复</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;router-link v-<span class="keyword">if</span>=<span class="string">"cloudID"</span> :to=<span class="string">"&#123;name: 'cloudDetail'&#125;"</span>&gt;</span><br><span class="line">    Member</span><br><span class="line">&lt;<span class="regexp">/router-link&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="路由组件通过特殊设置来对参数解耦"><a href="#路由组件通过特殊设置来对参数解耦" class="headerlink" title="路由组件通过特殊设置来对参数解耦"></a>路由组件通过特殊设置来对参数解耦</h3><p>原始的路由设置：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// vue-router</span></span><br><span class="line">&#123;</span><br><span class="line">    path: <span class="string">':cloudID'</span>,</span><br><span class="line">    component: CloudDetail</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// cloudDetail</span></span><br><span class="line">data: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        currentCloud: <span class="keyword">this</span>.$route.params.cloudID</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>修改后的路由设置：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// vue-router</span></span><br><span class="line">&#123;</span><br><span class="line">    path: <span class="string">':cloudID'</span>,</span><br><span class="line">    component: CloudDetail,</span><br><span class="line">    props: <span class="literal">true</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// cloudDetail</span></span><br><span class="line">props: &#123;</span><br><span class="line">    userID: &#123;</span><br><span class="line">        type: <span class="built_in">String</span>,</span><br><span class="line">        required: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>更复杂的用法（props 传递更多参数）：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// vue-router</span></span><br><span class="line">&#123;</span><br><span class="line">    path: <span class="string">':cloudID'</span>,</span><br><span class="line">    component: CloudDetail,</span><br><span class="line">    props: <span class="function"><span class="params">route</span> =&gt;</span> (&#123;</span><br><span class="line">        cloudID: route.params.cloudID,</span><br><span class="line">        resourceType: <span class="string">'company'</span></span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="对于-vue-router，在使用-beforeRouteLeave-导航守卫时，注意有坑！"><a href="#对于-vue-router，在使用-beforeRouteLeave-导航守卫时，注意有坑！" class="headerlink" title="对于 vue-router，在使用 beforeRouteLeave 导航守卫时，注意有坑！"></a>对于 vue-router，在使用 beforeRouteLeave 导航守卫时，注意有坑！</h3><p>问题描述：假如使用了确认离开对话框，在等待确认时，对 $router.back() 或者 $router.go() 等方法仍会改变浏览器的 location url，即使目标组件未渲染<br>解决方法：加入 next(false)</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">beforeRouteLeave(to, <span class="keyword">from</span>, next) &#123;</span><br><span class="line">    next(<span class="literal">false</span>); <span class="comment">//必须加，否则在通过 goBack 触发等待确认时，url 已经改变为目标地址</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">window</span>.confirm(<span class="string">'Do you really want to leave?'</span>)) &#123;</span><br><span class="line">        next();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;,</span><br><span class="line">methods: &#123;</span><br><span class="line">    goBack() &#123;</span><br><span class="line">        <span class="keyword">this</span>.$router.back();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="组件提炼为公共组件后会有缓存问题：通过-router-加-key-避免复用组件不刷新的问题，会有副作用：内部组件不会缓存会重复刷新，改用-watch-方法实现"><a href="#组件提炼为公共组件后会有缓存问题：通过-router-加-key-避免复用组件不刷新的问题，会有副作用：内部组件不会缓存会重复刷新，改用-watch-方法实现" class="headerlink" title="组件提炼为公共组件后会有缓存问题：通过 router 加 key 避免复用组件不刷新的问题，会有副作用：内部组件不会缓存会重复刷新，改用 watch 方法实现"></a>组件提炼为公共组件后会有缓存问题：通过 router 加 key 避免复用组件不刷新的问题，会有副作用：内部组件不会缓存会重复刷新，改用 watch 方法实现</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">- <span class="xml"><span class="tag">&lt;<span class="name">router-view</span> <span class="attr">:key</span>=<span class="string">"$route.path"</span>&gt;</span><span class="tag">&lt;/<span class="name">router-view</span>&gt;</span></span></span><br><span class="line">+ &lt;router-view&gt;&lt;/router-view&gt;</span><br><span class="line"></span><br><span class="line">+   watch: &#123;</span><br><span class="line">        resourceType: function(newValue) &#123;</span><br><span class="line">            this.init();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用-keepAlive-缓存组件后，假如内部有嵌套路由，则不能同时开启多个子路由组件的-meta-keepAlive-属性，需要对嵌套的-router-view-再次包裹-keepAlive（可以使用-include-指定要缓存的组件）"><a href="#使用-keepAlive-缓存组件后，假如内部有嵌套路由，则不能同时开启多个子路由组件的-meta-keepAlive-属性，需要对嵌套的-router-view-再次包裹-keepAlive（可以使用-include-指定要缓存的组件）" class="headerlink" title="使用 keepAlive 缓存组件后，假如内部有嵌套路由，则不能同时开启多个子路由组件的 meta.keepAlive 属性，需要对嵌套的 router-view 再次包裹 keepAlive（可以使用 include 指定要缓存的组件）"></a>使用 keepAlive 缓存组件后，假如内部有嵌套路由，则不能同时开启多个子路由组件的 meta.keepAlive 属性，需要对嵌套的 router-view 再次包裹 keepAlive（可以使用 include 指定要缓存的组件）</h3><figure class="highlight stata"><table><tr><td class="code"><pre><span class="line">&lt;<span class="keyword">keep</span>-alive <span class="keyword">include</span>=<span class="string">"MeetingSummary,MeetingDetail"</span>&gt;&lt;router-<span class="keyword">view</span>&gt;&lt;/router-<span class="keyword">view</span>&gt;&lt;/<span class="keyword">keep</span>-alive&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用-keepAlive-缓存组件后，由于组件一直在缓存中，所以其-watch-方法会一直调用，假如观察的是-route-参数，会频繁触发，注意性能优化！"><a href="#使用-keepAlive-缓存组件后，由于组件一直在缓存中，所以其-watch-方法会一直调用，假如观察的是-route-参数，会频繁触发，注意性能优化！" class="headerlink" title="使用 keepAlive 缓存组件后，由于组件一直在缓存中，所以其 watch 方法会一直调用，假如观察的是 route 参数，会频繁触发，注意性能优化！"></a>使用 keepAlive 缓存组件后，由于组件一直在缓存中，所以其 watch 方法会一直调用，假如观察的是 route 参数，会频繁触发，注意性能优化！</h3><h3 id="vue-router-的-beforeRouteUpdate-事件不会在-keepAlive-包裹组件里面触发"><a href="#vue-router-的-beforeRouteUpdate-事件不会在-keepAlive-包裹组件里面触发" class="headerlink" title="vue-router 的 beforeRouteUpdate 事件不会在 keepAlive 包裹组件里面触发"></a>vue-router 的 beforeRouteUpdate 事件不会在 keepAlive 包裹组件里面触发</h3><p>解决方法：可以使用 beforeRouteEnter 或 watch 解决（ <a href="https://github.com/vuejs/vue-router/issues/1875" target="_blank" rel="noopener">参考1</a> <a href="https://github.com/vuejs/vue-router/issues/2255" target="_blank" rel="noopener">参考2</a>）</p>
+<h2 id="Element-UI-技巧"><a href="#Element-UI-技巧" class="headerlink" title="Element UI 技巧"></a>Element UI 技巧</h2><h3 id="Carousel-图片轮播组件自定义"><a href="#Carousel-图片轮播组件自定义" class="headerlink" title="Carousel 图片轮播组件自定义"></a>Carousel 图片轮播组件自定义</h3><p>假如需要在浏览区外部显示箭头按钮，可以采用隐藏原生箭头，自定义箭头图标，并且调用原生的 prev/next 方法即可</p>
+<h3 id="修复-Carousel-图片轮播组件在容器缩放时，暴露相邻图片的-bug"><a href="#修复-Carousel-图片轮播组件在容器缩放时，暴露相邻图片的-bug" class="headerlink" title="修复 Carousel 图片轮播组件在容器缩放时，暴露相邻图片的 bug"></a>修复 Carousel 图片轮播组件在容器缩放时，暴露相邻图片的 bug</h3><p>解决方法：缩放开始时隐藏相关元素，结束后复原</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">hasClass</span>(<span class="params">elem, name</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> elem.className.split(<span class="string">' '</span>).indexOf(name) &gt; <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> carousel = <span class="built_in">document</span>.getElementsByClassName(<span class="string">'el-carousel__item'</span>);</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> item <span class="keyword">of</span> carousel) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!hasClass(item, <span class="string">'is-active'</span>)) &#123;</span><br><span class="line">        item.style.visibility = <span class="string">'hidden'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> item <span class="keyword">of</span> carousel) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!hasClass(item, <span class="string">'is-active'</span>)) &#123;</span><br><span class="line">            item.style.visibility = <span class="string">'visible'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;, <span class="number">1000</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用-tab-组件时要优化性能，避免重复渲染"><a href="#使用-tab-组件时要优化性能，避免重复渲染" class="headerlink" title="使用 tab 组件时要优化性能，避免重复渲染"></a>使用 tab 组件时要优化性能，避免重复渲染</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;el-tab-pane v-<span class="keyword">for</span>=<span class="string">"tabScope in tabList"</span> :key=<span class="string">"tabScope.key"</span> :label=<span class="string">"tabScope.label"</span> :name=<span class="string">"tabScope.key"</span>&gt;</span><br><span class="line">-   <span class="xml"><span class="tag">&lt;<span class="name">hi-form</span> <span class="attr">:fields</span>=<span class="string">"currentFields[activeTab] || []"</span> <span class="attr">:model</span>=<span class="string">"realAppDetail"</span> <span class="attr">:rules</span>=<span class="string">"ruleList"</span> <span class="attr">:self</span>=<span class="string">"_self"</span>&gt;</span><span class="tag">&lt;/<span class="name">hi-form</span>&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;/<span class="name">el-tab-pane</span>&gt;</span></span></span><br><span class="line">+   &lt;hi-form :fields="currentFields[activeTab] || []" :model="realAppDetail" :rules="ruleList" :self="_self"&gt;&lt;/hi-form&gt;</span><br><span class="line">&lt;/el-tab-pane&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="表单初始值的问题"><a href="#表单初始值的问题" class="headerlink" title="表单初始值的问题:"></a>表单初始值的问题:</h3><p>multiselect、 file 类型必须设置初始值为空数组，否则报错<br>checkbox 初始值必须为空数组，否则无法实现多选</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">domains: [],</span><br><span class="line">google_account_name: []</span><br></pre></td></tr></table></figure>
+
+<h3 id="表单静态渲染项也得加-prop-属性，否则校验程序不生效；同时还得设置-rules-属性"><a href="#表单静态渲染项也得加-prop-属性，否则校验程序不生效；同时还得设置-rules-属性" class="headerlink" title="表单静态渲染项也得加 prop 属性，否则校验程序不生效；同时还得设置 rules 属性"></a>表单静态渲染项也得加 prop 属性，否则校验程序不生效；同时还得设置 rules 属性</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">- <span class="xml"><span class="tag">&lt;<span class="name">el-form-item</span> <span class="attr">:label</span>=<span class="string">"field.label"</span> <span class="attr">class</span>=<span class="string">"static-form-item"</span>&gt;</span></span></span><br><span class="line">+ &lt;el-form-item :label="field.label" :prop="field.key" :rules="[]" class="static-form-item"&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="去除表单原生的-required-属性，避免重复校验"><a href="#去除表单原生的-required-属性，避免重复校验" class="headerlink" title="去除表单原生的 required 属性，避免重复校验"></a>去除表单原生的 required 属性，避免重复校验</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">- <span class="xml"><span class="tag">&lt;<span class="name">el-form-item</span> <span class="attr">label</span>=<span class="string">"Role"</span> <span class="attr">prop</span>=<span class="string">"role_name"</span> <span class="attr">required</span>&gt;</span></span></span><br><span class="line">+ &lt;el-form-item label="Role" prop="role_name"&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="表单控件在某些场景下，仅需要实现-label-显示必填标识，但是又不需要提示校验信息的话（在父级-label-包含多个无label-的表单元素的情况：校验信息一般通过子元素来显示）"><a href="#表单控件在某些场景下，仅需要实现-label-显示必填标识，但是又不需要提示校验信息的话（在父级-label-包含多个无label-的表单元素的情况：校验信息一般通过子元素来显示）" class="headerlink" title="表单控件在某些场景下，仅需要实现 label 显示必填标识，但是又不需要提示校验信息的话（在父级 label 包含多个无label 的表单元素的情况：校验信息一般通过子元素来显示）"></a>表单控件在某些场景下，仅需要实现 label 显示必填标识，但是又不需要提示校验信息的话（在父级 label 包含多个无label 的表单元素的情况：校验信息一般通过子元素来显示）</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;el-form-item label=<span class="string">"父级"</span> prop=<span class="string">"parent"</span> :show-message=<span class="string">"false"</span>&gt;</span><br><span class="line">    &lt;el-col :span=<span class="string">"11"</span>&gt;</span><br><span class="line">        &lt;el-form-item prop=<span class="string">"children1"</span>&gt;</span><br><span class="line">        &lt;<span class="regexp">/el-form-item&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/</span>el-col&gt;</span><br><span class="line">    &lt;el-col :span=<span class="string">"2"</span>&gt;&amp;nbsp;<span class="xml"><span class="tag">&lt;/<span class="name">el-col</span>&gt;</span></span></span><br><span class="line">    &lt;el-col :span="11"&gt;</span><br><span class="line">        &lt;el-form-item prop="children2"&gt;</span><br><span class="line">        &lt;/el-form-item&gt;</span><br><span class="line">    &lt;/el-col&gt;</span><br><span class="line">&lt;/el-form-item&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="upload-组件的事件冗余问题"><a href="#upload-组件的事件冗余问题" class="headerlink" title="upload 组件的事件冗余问题"></a>upload 组件的事件冗余问题</h3><p>当使用 before-upload 添加上传校验时，假如校验未通过会触发 on-remove 事件，造成事件冗余。可以在 on-remove 钩子函数中使用 file 的状态判断</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">onRemove(file) &#123;</span><br><span class="line">    <span class="keyword">if</span> (file &amp;&amp; file.status === <span class="string">'success'</span>) &#123;</span><br><span class="line">        <span class="comment">// remove file</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="upload-组件实现限制大小"><a href="#upload-组件实现限制大小" class="headerlink" title="upload 组件实现限制大小"></a>upload 组件实现限制大小</h3><p>目标：要在选择文件而非提交表单时实现限制大小功能<br>过程：因为没有 <code>before-change</code> 钩子函数，所以只能用 <code>on-change</code> 事件，在检测到文件超过限制时，调用 <code>clearFiles()</code> 方法</p>
+<blockquote>
+<p>注：在 v-for 循环中 upload 组件的 ref 会变成一个数组，而不是单个对象，即使该 ref 值是唯一值，所以需要特别处理 [0] 才能访问</p>
+</blockquote>
+<h3 id="upload-组件实现返回信息在-file-list-中显示"><a href="#upload-组件实现返回信息在-file-list-中显示" class="headerlink" title="upload 组件实现返回信息在 file list 中显示"></a>upload 组件实现返回信息在 file list 中显示</h3><figure class="highlight xquery"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> fileList =<span class="built_in"> document</span>.getElementsByClassName(</span><br><span class="line">    <span class="string">'el-upload-list'</span></span><br><span class="line">)[<span class="number">0</span>];</span><br><span class="line"><span class="keyword">if</span> (fileList) &#123;</span><br><span class="line">    <span class="keyword">let</span> lists = fileList.getElementsByTagName(<span class="string">'li'</span>);</span><br><span class="line">    <span class="keyword">let</span> clone = [].slice.call(lists);</span><br><span class="line">    clone.forEach(<span class="type">item</span> =&gt; &#123;</span><br><span class="line">        <span class="keyword">let</span> anchor = <span class="type">item</span>.getElementsByClassName(</span><br><span class="line">            <span class="string">'el-upload-list__item-name'</span></span><br><span class="line">        )[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">if</span> (anchor) &#123;</span><br><span class="line">            <span class="keyword">let</span> title = anchor.innerText;</span><br><span class="line">            <span class="keyword">let</span> errormsg = result.upload_error[title];</span><br><span class="line">            <span class="keyword">let</span> successmsg = result.upload_success[title];</span><br><span class="line">            <span class="keyword">if</span> (errormsg) &#123;</span><br><span class="line">                <span class="keyword">let</span> txt =<span class="built_in"> document</span>.createTextNode(errormsg);</span><br><span class="line">                <span class="keyword">let</span> errorInfo =<span class="built_in"> document</span>.createElement(</span><br><span class="line">                    <span class="string">'span'</span></span><br><span class="line">                );</span><br><span class="line">                errorInfo.appendChild(txt);</span><br><span class="line">                this.<span class="variable">$util</span>.superClass(</span><br><span class="line">                    errorInfo,</span><br><span class="line">                    <span class="string">'add'</span>,</span><br><span class="line">                    <span class="string">'alert'</span></span><br><span class="line">                );</span><br><span class="line">                this.<span class="variable">$util</span>.insertAfter(errorInfo, anchor);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (successmsg) &#123;</span><br><span class="line">                this.<span class="variable">$util</span>.superClass(</span><br><span class="line">                    <span class="type">item</span>,</span><br><span class="line">                    <span class="string">'add'</span>,</span><br><span class="line">                    <span class="string">'is-success'</span></span><br><span class="line">                );</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="input-组件支持回车事件"><a href="#input-组件支持回车事件" class="headerlink" title="input 组件支持回车事件"></a>input 组件支持回车事件</h3><p>Element 的 input 组件没有实现 keyup 事件，所以要监听回车事件必须使用 <code>@keyup.native.enter=&#39;&#39;</code> 形式</p>
+<h3 id="multiselect-组件被禁用的选项不能被移除"><a href="#multiselect-组件被禁用的选项不能被移除" class="headerlink" title="multiselect 组件被禁用的选项不能被移除"></a>multiselect 组件被禁用的选项不能被移除</h3><figure class="highlight cs"><table><tr><td class="code"><pre><span class="line">&lt;el-<span class="keyword">select</span> v-model=<span class="string">"formData[field.key]"</span> multiple @<span class="keyword">remove</span>-tag=<span class="string">"handleRemoveTag(field)"</span>&gt;</span><br><span class="line">handleRemoveTag(field) &#123;</span><br><span class="line">    <span class="keyword">let</span> oldValue = <span class="keyword">this</span>.cloneData[field.key];</span><br><span class="line">    <span class="keyword">let</span> options = <span class="keyword">this</span>.handleArrayData(field.values);</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">lock</span> = [];</span><br><span class="line">    options.forEach(item =&gt; &#123;</span><br><span class="line">        <span class="keyword">if</span> (oldValue.indexOf(item.key) &gt; <span class="number">-1</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.isUnselect(field, item)) &#123;</span><br><span class="line">                <span class="keyword">lock</span>.push(item.key);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">lock</span>.length) &#123;</span><br><span class="line">        <span class="keyword">let</span> <span class="keyword">value</span> = <span class="keyword">this</span>.formData[field.key];</span><br><span class="line">        <span class="keyword">this</span>.formData[field.key] = <span class="keyword">this</span>.$util.unique([</span><br><span class="line">            ...<span class="keyword">lock</span>,</span><br><span class="line">            ...<span class="keyword">value</span></span><br><span class="line">        ]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="date-组件实现日期范围限制"><a href="#date-组件实现日期范围限制" class="headerlink" title="date 组件实现日期范围限制"></a>date 组件实现日期范围限制</h3><figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">&lt;el-date-picker type=<span class="string">"date"</span> v-model=<span class="string">"formData[field.key]"</span> <span class="symbol">:picker-options=<span class="string">"dateLimit"</span>&gt;&lt;/el-date-picker&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="symbol">data:</span> function() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="symbol">dateLimit:</span> &#123;</span><br><span class="line">            <span class="symbol">disabledDate:</span> time =&gt; &#123;</span><br><span class="line">                let min = this.minDate;</span><br><span class="line">                <span class="keyword">if</span> (min &amp;&amp; time &lt; new Date(min)) &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (time &gt; Date.now()) &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="在-element-的-event-事件中增加自定义参数"><a href="#在-element-的-event-事件中增加自定义参数" class="headerlink" title="在 element 的 event 事件中增加自定义参数"></a>在 element 的 event 事件中增加自定义参数</h3><p>如果你直接在方法中写，他就会将原生内置的参数覆盖！</p>
+<p>但是你可以在自定义参数之前加入 <code>$event</code> 这个变量，然后再传其他值，这样的话事件的内置回调参数就会保留了。</p>
+<p>例如：</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">&lt;el-select <span class="attribute">v-model</span>=<span class="string">"formData[field.key]"</span> multiple @<span class="attribute">remove-tag</span>=<span class="string">"handleRemoveTag(<span class="variable">$event</span>, field)"</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="在把-vue-向父级传参方式由-传统-改为-emit-时要注意："><a href="#在把-vue-向父级传参方式由-传统-改为-emit-时要注意：" class="headerlink" title="在把 vue 向父级传参方式由 传统 改为 $emit 时要注意："></a>在把 vue 向父级传参方式由 传统 改为 $emit 时要注意：</h3><p>传统方式：</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line">父组件：</span><br><span class="line">&lt;<span class="keyword">package</span>-detail :on-change=<span class="string">"updateResult.bind(null, scope)"</span>&gt;&lt;/<span class="keyword">package</span>-detail&gt; <span class="comment">// 使用 bind 方法按需传入父级参数</span></span><br><span class="line"></span><br><span class="line">updateResult(scope, result) &#123;</span><br><span class="line">    <span class="comment">// 在父级参数之后读入 $emit 事件参数</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">子组件：</span><br><span class="line">props:&#123;</span><br><span class="line">    <span class="comment">// 对 props 的事件预设定可以移除（因为只针对变量属性而非事件属性）</span></span><br><span class="line">    onChange: &#123;</span><br><span class="line">        <span class="class"><span class="keyword">type</span></span>: <span class="type">Function</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">this</span>.onChange(result);</span><br></pre></td></tr></table></figure>
+
+<p>$emit方式：</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">父组件：</span><br><span class="line">&lt;<span class="keyword">package</span>-detail <span class="meta">@on</span>-change=<span class="string">"updateResult(<span class="variable">$event</span>, scope)"</span>&gt;&lt;/<span class="keyword">package</span>-detail&gt; <span class="comment">// 使用 $event 传入 $emit 事件参数，然后按需传入父级参数</span></span><br><span class="line"></span><br><span class="line">updateResult(result, scope) &#123;</span><br><span class="line">    <span class="comment">// 在 $emit 事件参数之后读入父级参数</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">子组件：</span><br><span class="line"><span class="keyword">this</span>.$emit(<span class="string">'on-change'</span>, result); <span class="comment">// 调用事件的名称用 原始连字符写法 而非 驼峰式写法</span></span><br></pre></td></tr></table></figure>
+
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/17/42.loop-async/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1617,156 +1828,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/13/33.display/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="可口可乐">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/images/avatar.gif">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Lizux">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Lizux" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/03/13/33.display/" itemprop="url">
-                  CSS 之 display:inline-block 详解及实战
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-13T00:00:00+08:00">
-                2017-03-13
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              <span class="post-meta-item-text">更新于</span>
-              <time title="更新于" itemprop="dateModified" datetime="2019-11-06T10:12:28+08:00">
-                2019-11-06
-              </time>
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="什么是-inline-block"><a href="#什么是-inline-block" class="headerlink" title="什么是 inline-block"></a>什么是 inline-block</h2><p>inline-block 后的元素创建了一个行级的块容器，该元素内部（内容）被格式化成一个块级元素，同时元素本身则被格式化成一个行内元素。</p>
-<p>即：inline-block 的元素既具有 block 元素可以设置宽高的特性，同时又具有 inline 元素默认不换行的特性。当然不仅仅是这些特性，比如 inline-block 元素也可以设置 vertical-align 属性。<br>简而言之：<br>inline-block 后的元素就是一个格式化为行内元素的块容器(Block container)。</p>
-<p>另外，IE6/7 中设置 inline-block 会触发 hasLayout，从而拥有论类似于现代浏览器的 Block formatting contexts （块级格式化上下文）的特征，有点殊途同归的意味。</p>
-<p>兼容性：<br>1、现代浏览器都支持（IE8+、Firefox、Chrome、Safari）<br>2、IE6/7 中 block 元素对 inline-block 支持不完整。需要先设置为 display:inline，然后使用 zoom:1 等触发 hasLayout 才能达到类似效果。<br>3、IE6/7 中 inline 元素正常设置即可。</p>
-<h2 id="用于布局"><a href="#用于布局" class="headerlink" title="用于布局"></a>用于布局</h2><p>仅适合全部定宽的情况，无法实现某列自适应，因为元素尺寸会随着内容膨胀或者收缩，所以内容多时会变为容器宽度，自动换行。</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.wrap</span>      &#123; <span class="attribute">width</span>: <span class="number">800px</span>; <span class="attribute">margin</span>: <span class="number">0</span> auto; &#125;</span><br><span class="line"><span class="selector-class">.main</span>      &#123; <span class="attribute">display</span>: inline-block; <span class="attribute">width</span>: <span class="number">600px</span>; &#125;</span><br><span class="line"><span class="selector-class">.sidebar</span>   &#123; <span class="attribute">display</span>: inline-block; <span class="attribute">width</span>: <span class="number">200px</span>; &#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="用于做横向列表元素的水平滚动"><a href="#用于做横向列表元素的水平滚动" class="headerlink" title="用于做横向列表元素的水平滚动"></a>用于做横向列表元素的水平滚动</h2><p>要是以前做横向水平滚动，需要用 float 属性，另外列表元素还得包裹一个有明确宽度值的元素用于嵌套父元素内，用来显示滚动效果。<br>现在用 display:inline-block，不用嵌套元素，也不用指定宽度值，直接设置父元素 white-space: nowrap 即可，简单易行</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ul</span> <span class="attr">className</span>=<span class="string">"demo"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>item<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>item<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>item<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>item<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>item<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>item<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>item<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>item<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>item<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>item<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">ul</span><span class="selector-class">.demo</span> &#123;</span><br><span class="line">    <span class="attribute">overflow-x</span>: auto;</span><br><span class="line">    <span class="attribute">white-space</span>: nowrap;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">ul</span><span class="selector-class">.demo</span><span class="selector-pseudo">:after</span> &#123;</span><br><span class="line">    <span class="attribute">display</span>: table;</span><br><span class="line">    <span class="attribute">clear</span>: both;</span><br><span class="line">    <span class="attribute">content</span>: <span class="string">" "</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">ul</span><span class="selector-class">.demo</span> <span class="selector-tag">li</span> &#123;</span><br><span class="line">    <span class="attribute">display</span>: inline-block;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">200px</span>;</span><br><span class="line">    <span class="attribute">height</span>: <span class="number">50px</span>;</span><br><span class="line">    <span class="attribute">margin-right</span>: <span class="number">3px</span>;</span><br><span class="line">    <span class="attribute">background-color</span>: <span class="number">#f00</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="用于行内块元素"><a href="#用于行内块元素" class="headerlink" title="用于行内块元素"></a>用于行内块元素</h2><p>如：使用  &lt;a&gt; 标签做按钮时，需要设置按钮的大小，就可以使用 inline-block 来实现。</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:;"</span> <span class="attr">class</span>=<span class="string">"button"</span>&gt;</span>Go<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.button</span> &#123; <span class="attribute">display</span>: inline-block; <span class="attribute">width</span>: <span class="number">150px</span>; <span class="attribute">background</span>: <span class="number">#666</span>; <span class="attribute">color</span>: <span class="number">#fff</span>; <span class="attribute">text-align</span>: center; <span class="attribute">line-height</span>: <span class="number">45px</span>; &#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="后记：解决-inline-block-元素的空隙"><a href="#后记：解决-inline-block-元素的空隙" class="headerlink" title="后记：解决 inline-block 元素的空隙"></a>后记：解决 inline-block 元素的空隙</h2><p>在使用 inline-block 元素布局前，经常会遇到的“换行符/空格间隙”问题。<br>默认情况下，inline 元素之间就有空隙出现，所以结合了 inline 和 block 属性的 inline-block 属性自然也有这个特点。<br>那这些空隙是什么呢，它们是空白符！<br>在浏览器中，空白符是不会被浏览器忽略的，多个连续的空白符浏览器会自动将其合并成一个。我们编写代码时写的空格、换行符都会产生空白符。所以自然而然的，两个元素之间会有空白符。<br>空白符是浏览器正常的表现行为。因为 IE6/7 本身解析的原因，反而没有出现（仅限于 inline 元素），其他正常的浏览器都会出现这个问题（IE8+、Firefox、Chrome、Safari 等）。<br>但是用于布局的话，这个间隙是我们不希望看到的，像素级问题都需要锱珠必较</p>
-<p>解决方法一：修改 html 结构，消除元素间的空白符</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span>&gt;</span>item1<span class="tag">&lt;/<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">li</span>&gt;</span>item2<span class="tag">&lt;/<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">li</span>&gt;</span>item3<span class="tag">&lt;/<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">li</span>&gt;</span>item4<span class="tag">&lt;/<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">li</span>&gt;</span>item5<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>解决方法二：纯 CSS 方案<br>因为空白符是个字符，可以通过设置 font-size 属性控制产生的间隙大小。<br>设置父元素的字体为 0，可以解决一些问题，其他浏览器完美，但是对某些 Webkit 内核浏览器无效。因为 Chrome 禁止设置字体小于 12px。<br>可以加上 letter-spacing 属性，可以控制文字间的水平距离，支持负值，两者配合，完美解决。</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.finally</span> &#123;</span><br><span class="line">	<span class="attribute">font-size</span>: <span class="number">0</span>; <span class="comment">/* 所有浏览器 */</span></span><br><span class="line">    *word-spacing: -1px; /* IE6/7 */</span><br><span class="line">&#125;</span><br><span class="line">@<span class="keyword">media</span> screen and (-webkit-min-device-pixel-ratio:<span class="number">0</span>) &#123;</span><br><span class="line">    <span class="selector-class">.finally</span> &#123;</span><br><span class="line">        <span class="attribute">letter-spacing</span>: -<span class="number">5px</span>;<span class="comment">/* Webkit 内核浏览器, 根据不同字体字号需要做相应调整 */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.finally</span> <span class="selector-tag">li</span> &#123;</span><br><span class="line">	<span class="attribute">display</span>:inline-block;</span><br><span class="line">	<span class="attribute">font-size</span>: <span class="number">12px</span>;</span><br><span class="line">	<span class="attribute">letter-spacing</span>: normal;</span><br><span class="line">	<span class="comment">/* IE浏览器 */</span></span><br><span class="line">	<span class="attribute">zoom</span>:<span class="number">1</span>;</span><br><span class="line">	*display: inline;</span><br><span class="line">	<span class="selector-tag">word-spacing</span>: <span class="selector-tag">normal</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1810,7 +1871,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">51</span>
+              <span class="site-state-item-count">52</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1860,7 +1921,7 @@
         <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
