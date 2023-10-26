@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="修改 CSS 有四种方法：  修改元素的 style 属性 改变元素的 class 或 id 向文档中写入新的 CSS 改变整个文档的样式表一般规则：③在特殊的可访问性场合使用，④很少用到；推荐使用②，因为这个符合表现和行为分离的原则，而①在某些情况下有用：隐藏或显示元素、动画  CSS 读写内联样式 当需要读取内联样式和修改样式时使用 style 属性 style 对象对每个内联的 CSS 声明">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript 读书心得之八：CSS 修改（CSS DOM）">
+<meta property="og:url" content="http://example.com/2015/09/24/11.ecma08/index.html">
+<meta property="og:site_name" content="Lizux">
+<meta property="og:description" content="修改 CSS 有四种方法：  修改元素的 style 属性 改变元素的 class 或 id 向文档中写入新的 CSS 改变整个文档的样式表一般规则：③在特殊的可访问性场合使用，④很少用到；推荐使用②，因为这个符合表现和行为分离的原则，而①在某些情况下有用：隐藏或显示元素、动画  CSS 读写内联样式 当需要读取内联样式和修改样式时使用 style 属性 style 对象对每个内联的 CSS 声明">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-09-23T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-26T02:32:58.374Z">
+<meta property="article:author" content="可口可乐">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2015/09/24/11.ecma08/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>JavaScript 读书心得之八：CSS 修改（CSS DOM） | Lizux</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lizux</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Just go on</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2015/09/24/11.ecma08/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="可口可乐">
+      <meta itemprop="description" content="Personal Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lizux">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JavaScript 读书心得之八：CSS 修改（CSS DOM）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2015-09-24 00:00:00" itemprop="dateCreated datePublished" datetime="2015-09-24T00:00:00+08:00">2015-09-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-10-26 10:32:58" itemprop="dateModified" datetime="2023-10-26T10:32:58+08:00">2023-10-26</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>修改 CSS 有四种方法：</p>
+<ol>
+<li>修改元素的 style 属性</li>
+<li>改变元素的 class 或 id</li>
+<li>向文档中写入新的 CSS</li>
+<li>改变整个文档的样式表<br>一般规则：③在特殊的可访问性场合使用，④很少用到；推荐使用②，因为这个符合表现和行为分离的原则，而①在某些情况下有用：隐藏或显示元素、动画</li>
+</ol>
+<h2 id="CSS-读写"><a href="#CSS-读写" class="headerlink" title="CSS 读写"></a>CSS 读写</h2><h3 id="内联样式"><a href="#内联样式" class="headerlink" title="内联样式"></a>内联样式</h3><ul>
+<li>当需要读取内联样式和修改样式时使用 style 属性</li>
+<li>style 对象对每个内联的 CSS 声明都有一个对应的属性，但是它不能读取外部样式表的 CSS 属性，所以 style 属性更适合设置样式，而不是读取它们</li>
+<li>style 属性和 CSS 属性对应的规则是把 CSS 属性名移除破折号 “-”，然后相邻首字母大写，也就是 Camel 驼峰命名法。如 <code>font-size=&gt;style.fontSize</code>、<code>border-left-width=&gt;style.borderLeftWidth</code><blockquote>
+<p>  注：对于 float 属性，在 IE8- 中使用 styleFloat，在其他浏览器中使用 cssFloat<br>  注：设置复合属性时使用 cssText 属性，如 <code>elem.style.cssText = &quot;font-weight:bold; color:red;&quot;;</code><br>  注：修改 style 的属性为数值（除 0 以外）时，必须加上单位，如 “px”、“em”</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="非内联样式"><a href="#非内联样式" class="headerlink" title="非内联样式"></a>非内联样式</h3><p>当需要读取非内联样式时：</p>
+<ol>
+<li>IE 使用 <code>currentStyle</code> 属性，它可以读取应用在元素上的实际样式，另外它是只读的</li>
+<li>IE9+、现代浏览器使用 <code>window.getComputedStyle()</code> 方法<blockquote>
+<p>  注：在读取尺寸值时，总是返回 px 值，尽管原来的样式可能是 1em<br> 注：另外返回 color 值时使用 rgb(255,255,255) 这样的语法<br> 注：当样式采用简写方式（如 <code>border:1px solid #F00</code>）时，不同浏览器的返回数值会有差异<br>     如：Firefox 无法读取 border-width 的值，只能读取 border-left-width 的值</p>
+</blockquote>
+</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 读取元素 CSS 样式 by John Resig</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getStyle</span>(<span class="params">elem, name</span>)&#123;</span><br><span class="line">    <span class="keyword">if</span> (elem.<span class="property">style</span>[name]) &#123;</span><br><span class="line">        <span class="keyword">return</span> elem.<span class="property">style</span>[name];</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (elem.<span class="property">currentStyle</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> elem.<span class="property">currentStyle</span>[name];</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="variable language_">document</span>.<span class="property">defaultView</span> &amp;&amp; <span class="variable language_">document</span>.<span class="property">defaultView</span>.<span class="property">getComputedStyle</span>) &#123;</span><br><span class="line">        name = name.<span class="title function_">replace</span>(<span class="regexp">/([A-Z])/g</span>, <span class="string">&#x27;-$1&#x27;</span>);</span><br><span class="line">        name = name.<span class="title function_">toLowerCase</span>();</span><br><span class="line">        <span class="keyword">var</span> s = <span class="variable language_">document</span>.<span class="property">defaultView</span>.<span class="title function_">getComputedStyle</span>(elem, <span class="string">&#x27;&#x27;</span>);</span><br><span class="line">        <span class="keyword">return</span> s &amp;&amp; s.<span class="title function_">getPropertyValue</span>(name);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">testStyle</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> elem = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;testdiv&quot;</span>);</span><br><span class="line">    <span class="keyword">var</span> scolor = <span class="title function_">getStyle</span>(elem, <span class="string">&quot;color&quot;</span>);</span><br><span class="line">    <span class="keyword">var</span> sbwidth = <span class="title function_">getStyle</span>(elem, <span class="string">&quot;borderLeftWidth&quot;</span>);</span><br><span class="line">    <span class="keyword">var</span> sfont = <span class="title function_">getStyle</span>(elem, <span class="string">&quot;fontSize&quot;</span>);</span><br><span class="line">    <span class="keyword">var</span> smargin = <span class="title function_">getStyle</span>(elem, <span class="string">&quot;marginTop&quot;</span>);</span><br><span class="line">    <span class="keyword">var</span> swidth = <span class="title function_">getStyle</span>(elem, <span class="string">&quot;width&quot;</span>);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(scolor+<span class="string">&quot;：&quot;</span>+sbwidth+<span class="string">&quot;：&quot;</span>+sfont+<span class="string">&quot;：&quot;</span>+smargin+<span class="string">&quot;：&quot;</span>+swidth);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="CSS-模块的侦测"><a href="#CSS-模块的侦测" class="headerlink" title="CSS 模块的侦测"></a>CSS 模块的侦测</h3><p>CSS 的规格发展太快，新的模块层出不穷。不同浏览器的不同版本，对 CSS 模块的支持情况都不一样。有时候，需要知道当前浏览器是否支持某个模块，这就叫做 “CSS 模块的侦测”。<br>一个比较普遍适用的方法是，判断某个 DOM 元素的 style 对象的某个属性值是否为字符串。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typeof</span> element.<span class="property">style</span>.<span class="property">transform</span> === <span class="string">&#x27;string&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="改变-class-和-id"><a href="#改变-class-和-id" class="headerlink" title="改变 class 和 id"></a>改变 class 和 id</h2><p>通过改变元素的 class 或 id，浏览器会自动更新元素的样式，JavaScript 使用 className 来读取 class 属性</p>
+<blockquote>
+<p>注：由于 id 具有唯一性，而且还可能作为脚本的钩子，所以不建议改变它<br>注：因为元素通常已经拥有 classs 属性了，所以一般是给元素添加或移除一个 class 值，而不是直接重新设置 class 值</p>
+</blockquote>
+<p>辅助移除 class 函数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">removeClass</span>(<span class="params">elem, sClass</span>) &#123;</span><br><span class="line">    elem.<span class="property">className</span> = elem.<span class="property">className</span>.<span class="title function_">replace</span>(sClass, <span class="string">&quot;&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">testClass</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> elem = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;testdiv&quot;</span>).<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;p&quot;</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>,obj; obj=elem[i++];) &#123;</span><br><span class="line">        obj.<span class="property">onclick</span> = <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">            <span class="keyword">if</span> (superClass(<span class="variable language_">this</span>, <span class="string">&quot;has&quot;</span>, <span class="string">&quot;error&quot;</span>)) &#123;</span><br><span class="line">                superClass(<span class="variable language_">this</span>,<span class="string">&quot;remove&quot;</span>,<span class="string">&quot;error&quot;</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                superClass(<span class="variable language_">this</span>,<span class="string">&quot;add&quot;</span>,<span class="string">&quot;error&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="向文档写入-CSS"><a href="#向文档写入-CSS" class="headerlink" title="向文档写入 CSS"></a>向文档写入 CSS</h2><ul>
+<li><p>这个方法比较特别，应该只用来增强页面的可访问性：当 JavaScript 可用时，定义样式（通常是隐藏页面元素）；如果 JavaScript 不可用或对象检测失败，不应用该样式<br>  注：这种解决方案可能会影响某些可用性，但是从技术上说，对于高级的、可执行脚本的界面来说，这是最正确的隐藏元素的处理方法</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="title function_">write</span>(<span class="string">&quot;&lt;style&gt;.show&#123;color:#F00&#125;&lt;/style&gt;&quot;</span>);</span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">write</span>(<span class="string">&quot;&lt;link rel=&#x27;stylesheet&#x27; href=&#x27;style.css&#x27;&gt;&quot;</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用这个方法时，尽快应用特定的样式很重要。因为如果等待 load 事件的话，用户会看到页面闪烁或跳动（由于某些可见的元素在 onload 后隐藏或者显示）；另外在页面加载完后，执行 <code>document.write()</code>，浏览器会默认移除当前文档内容，并写入新的内容，从而破坏掉页面。所以要把 <code>document.write()</code> 放在 JavaScript 文件的顶端，并在任何函数之外</p>
+</li>
+<li><p>正确地使用这个方法，它就是很有用的可访问性工具，否则会引发一系列问题。在使用 <code>document.write()</code> 添加样式之前，需要整体考虑，并在禁用 JavaScript 的情况下测试页面</p>
+</li>
+</ul>
+<h2 id="改变整个样式表"><a href="#改变整个样式表" class="headerlink" title="改变整个样式表"></a>改变整个样式表</h2><p>只有 Windows 平台下的 IE 和 Firefox 支持改变样式表，所以这个方法也遇到了兼容性问题；另外除了某些特定情况（比如目前博客网站流行的允许用户自定义样式表），改变页面的整个样式表也没有什么意义</p>
+<p>原理：文档包含一系列样式表文件，样式表包含一系列规则，规则包含一系列样式声明，声明包含属性和对应值</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">changeStyle</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="comment">// 支持样式表编辑的首要条件是支持 document.styleSheets 节点列表，列表的索引数字按样式表文件在文档中出现的顺序排列</span></span><br><span class="line">    <span class="keyword">var</span> sheets = <span class="variable language_">document</span>.<span class="property">styleSheets</span>;</span><br><span class="line">    <span class="keyword">if</span> (!sheets || !sheets.<span class="property">length</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查找链接地址是 style.css 的对应样式表对象</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; sheets.<span class="property">length</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!sheets[i].<span class="property">href</span>) &#123;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">var</span> ssName = sheets[i].<span class="property">href</span>.<span class="title function_">substring</span>(sheets[i].<span class="property">href</span>.<span class="title function_">lastIndexOf</span>(<span class="string">&#x27;/&#x27;</span>)+<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">if</span> (ssName == <span class="string">&#x27;style.css&#x27;</span>) &#123;</span><br><span class="line">            <span class="keyword">var</span> currentSheet = sheets[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 或者直接设置文档的第一个样式表为样式表对象</span></span><br><span class="line">    <span class="keyword">var</span> currentSheet = sheets[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 读取样式表的所有规则，Firefox 使用 W3C 标准的 cssRules[]，IE 使用微软标准的 rules[]，其他现代浏览器都支持；它们除了名字不同外几乎没有差别</span></span><br><span class="line">    <span class="keyword">var</span> sheetRules = currentSheet.<span class="property">cssRules</span> || currentSheet.<span class="property">rules</span>;</span><br><span class="line">    <span class="keyword">if</span> (!sheetRules) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 每个规则都有 selectorText 属性，以字符串类型保存着规则的选择符，注：IE/Safari 返回大写字符，现代浏览器返回小写字符</span></span><br><span class="line">    <span class="keyword">var</span> sText = sheetRules[<span class="number">2</span>].<span class="property">selectorText</span>;</span><br><span class="line">    <span class="comment">// 每个规则都有 style 属性，这个和元素的 style 属性类似</span></span><br><span class="line">    <span class="keyword">var</span> sStyle = sheetRules[<span class="number">2</span>].<span class="property">style</span>.<span class="property">font</span>;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(sText+<span class="string">&quot; 的 font 样式是 &quot;</span>+sStyle);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 读取样式表的完整文本要用 cssText 属性，但是全文的（cssText1）只有 IE 支持，单个规则的（cssText2）则只有 IE9+、现代浏览器支持，单个规则并不包含选择符的（cssText3）所有浏览器都支持</span></span><br><span class="line">    <span class="comment">// 对于简写方式的样式，Firefox 返回实际值，IE/Opera 返回拆分成单个条目后的值</span></span><br><span class="line">    <span class="keyword">var</span> cssText1 = currentSheet.<span class="property">cssText</span>;</span><br><span class="line">    <span class="keyword">if</span> (currentSheet.<span class="property">cssRules</span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> cssText2 = currentSheet.<span class="property">cssRules</span>[<span class="number">0</span>].<span class="property">cssText</span>;</span><br><span class="line">        <span class="keyword">var</span> cssText3 = currentSheet.<span class="property">cssRules</span>[<span class="number">0</span>].<span class="property">style</span>.<span class="property">cssText</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (currentSheet.<span class="property">rules</span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> cssText2 = currentSheet.<span class="property">rules</span>[<span class="number">0</span>].<span class="property">cssText</span>;</span><br><span class="line">        <span class="keyword">var</span> cssText3 = currentSheet.<span class="property">rules</span>[<span class="number">0</span>].<span class="property">style</span>.<span class="property">cssText</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;IE 支持的 &quot;</span>+cssText1);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;现代浏览器支持的 &quot;</span>+cssText2);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;都支持的 &quot;</span>+cssText3);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 添加和移除规则，Firefox 使用 W3C 标准的 insertRule() 和 deleteRule() 方法，IE 使用微软标准的 addRule() 和 removeRule() 方法</span></span><br><span class="line">    <span class="comment">// 通用添加和移除样式表规则函数</span></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">addCSS</span>(<span class="params">obj, selector, declaration, index</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (obj.<span class="property">insertRule</span>) &#123;</span><br><span class="line">            obj.<span class="title function_">insertRule</span>(selector+<span class="string">&quot;&#123;&quot;</span>+declaration+<span class="string">&quot;&#125;&quot;</span>,index);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (obj.<span class="property">addRule</span>) &#123;</span><br><span class="line">            obj.<span class="title function_">addRule</span>(selector,declaration,index);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">removeCSS</span>(<span class="params">obj, index</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (obj.<span class="property">deleteRule</span>) &#123;</span><br><span class="line">            obj.<span class="title function_">deleteRule</span>(index);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (obj.<span class="property">removeRule</span>) &#123;</span><br><span class="line">            obj.<span class="title function_">removeRule</span>(index);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_">addCSS</span>(currentSheet,<span class="string">&quot;a&quot;</span>,<span class="string">&quot;color:#F00;font-weight:bold;&quot;</span>,<span class="number">10</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="隐藏或显示元素"><a href="#隐藏或显示元素" class="headerlink" title="隐藏或显示元素"></a>隐藏或显示元素</h2><ul>
+<li>使用 style 属性设置内联样式，这样可以通过 <code>style.display</code> 来读取当前元素的 display 值</li>
+<li>使用 JavaScript 设置关键的 <code>display:none</code>，而不是在 CSS 里面，这样当用户禁用脚本时，所有内容还是显示的，并可以访问</li>
+<li>页面加载完后建立标题和关联内容之间的关系</li>
+</ul>
+<p>下面的函数遍历文档的 h3，并把其后面的内容放入一个新创建的 div 隐藏起来，然后添加切换显示的脚本</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">initToggle</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> header = <span class="variable language_">document</span>.<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;h3&quot;</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; header.<span class="property">length</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">var</span> nDiv = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&quot;div&quot;</span>);</span><br><span class="line">        nDiv.<span class="property">className</span> = <span class="string">&quot;toggle&quot;</span>;</span><br><span class="line">        <span class="comment">//nDiv.style.display = &quot;none&quot;;</span></span><br><span class="line">        <span class="title function_">insertAfter</span>(nDiv,header[i]);</span><br><span class="line">        <span class="keyword">while</span> (nDiv.<span class="property">nextSibling</span> != header[i+<span class="number">1</span>]) &#123;</span><br><span class="line">            nDiv.<span class="title function_">appendChild</span>(nDiv.<span class="property">nextSibling</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        superClass(header[i],<span class="string">&quot;add&quot;</span>,<span class="string">&quot;clickable&quot;</span>);</span><br><span class="line">        header[i].<span class="property">relatedCont</span> = nDiv;</span><br><span class="line">        header[i].<span class="property">onclick</span> = toggleCont;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">toggleCont</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> currentValue = <span class="variable language_">this</span>.<span class="property">relatedCont</span>.<span class="property">style</span>.<span class="property">display</span>;</span><br><span class="line">    <span class="keyword">var</span> newValue = (currentValue == <span class="string">&quot;none&quot;</span>) ? <span class="string">&quot;&quot;</span> : <span class="string">&quot;none&quot;</span>;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">relatedCont</span>.<span class="property">style</span>.<span class="property">display</span> = newValue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="动画"><a href="#动画" class="headerlink" title="动画"></a>动画</h2><p>动画就是反复改变元素的某一样式，这也是一个改变 style 属性优于改变 class 属性的场合</p>
+<p>动画通常涉及到两个函数 setTimeout()、setInterval()，而二者选用其一的原则是：前者适合有确定起点和终点的动画，后者适合在不确定的时间内（如等待用户行为）持续进行的动画</p>
+<blockquote>
+<p>注：现在更推荐使用 CSS3 中的 transition、animation 属性来实现</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">initMotion</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> obj = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;linkList&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (!obj) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> show = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&quot;div&quot;</span>);</span><br><span class="line">    show.<span class="property">id</span> = <span class="string">&quot;slideShow&quot;</span>;</span><br><span class="line">    show.<span class="property">innerHTML</span> = <span class="string">&quot;&lt;img src=&#x27;images/topics.gif&#x27; id=&#x27;linkPic&#x27;&gt;&quot;</span>;</span><br><span class="line">    <span class="title function_">insertAfter</span>(show,obj);</span><br><span class="line">    <span class="keyword">var</span> link = obj.<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;a&quot;</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; link.<span class="property">length</span>; i++) &#123;</span><br><span class="line">        link[i].<span class="property">newId</span> = i;</span><br><span class="line">        link[i].<span class="property">onmouseover</span> = <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">            <span class="title function_">motion</span>(<span class="string">&quot;linkPic&quot;</span>,-<span class="number">100</span>*(<span class="variable language_">this</span>.<span class="property">newId</span>+<span class="number">1</span>),<span class="number">0</span>,<span class="number">10</span>);</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 通用移动元素位置函数 by Jeremy Keith</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">motion</span>(<span class="params">objId, posX, posY, interval</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> k = <span class="number">0.1</span>;</span><br><span class="line">    <span class="keyword">var</span> obj = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(objId);</span><br><span class="line">    <span class="keyword">if</span> (!obj) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (obj.<span class="property">movement</span>) &#123;</span><br><span class="line">        <span class="built_in">clearTimeout</span>(obj.<span class="property">movement</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    obj.<span class="property">style</span>.<span class="property">left</span> = obj.<span class="property">style</span>.<span class="property">left</span> || <span class="string">&quot;0px&quot;</span>;</span><br><span class="line">    obj.<span class="property">style</span>.<span class="property">top</span> = obj.<span class="property">style</span>.<span class="property">top</span> || <span class="string">&quot;0px&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> nowX = <span class="built_in">parseInt</span>(obj.<span class="property">style</span>.<span class="property">left</span>);</span><br><span class="line">    <span class="keyword">var</span> nowY = <span class="built_in">parseInt</span>(obj.<span class="property">style</span>.<span class="property">top</span>);</span><br><span class="line">    <span class="keyword">if</span> (nowX == posX &amp;&amp; nowY == posY) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (nowX &lt; posX) &#123;</span><br><span class="line">        nowX += <span class="title class_">Math</span>.<span class="title function_">ceil</span>((posX-nowX)*k);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (nowX &gt; posX) &#123;</span><br><span class="line">        nowX -= <span class="title class_">Math</span>.<span class="title function_">ceil</span>((nowX-posX)*k);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (nowY &lt; posY) &#123;</span><br><span class="line">        nowY += <span class="title class_">Math</span>.<span class="title function_">ceil</span>((posY-nowY)*k);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (nowY &gt; posY) &#123;</span><br><span class="line">        nowY -= <span class="title class_">Math</span>.<span class="title function_">ceil</span>((nowY-posY)*k);</span><br><span class="line">    &#125;</span><br><span class="line">    obj.<span class="property">style</span>.<span class="property">left</span> = nowX+<span class="string">&quot;px&quot;</span>;</span><br><span class="line">    obj.<span class="property">style</span>.<span class="property">top</span> = nowY+<span class="string">&quot;px&quot;</span>;</span><br><span class="line">    <span class="comment">// 闭包的应用</span></span><br><span class="line">    obj.<span class="property">movement</span> = <span class="built_in">setTimeout</span>(<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">        <span class="title function_">motion</span>(objId, posX, posY, interval);</span><br><span class="line">    &#125;, interval);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="元素的尺寸和位置"><a href="#元素的尺寸和位置" class="headerlink" title="元素的尺寸和位置"></a>元素的尺寸和位置</h2><h3 id="clientWidth、clientHeight-属性"><a href="#clientWidth、clientHeight-属性" class="headerlink" title="clientWidth、clientHeight 属性"></a>clientWidth、clientHeight 属性</h3><p>元素的可视尺寸（相当于 CSS 中的 content+padding 再减去 scrollbar），不包括边框 border 和滚动条 scrollbar。</p>
+<blockquote>
+<p>IE6 中该尺寸包括滚动条 scrollbar。<br>  若 CSS 中设置 box-sizing:content-box 时，设置的 width&#x2F;height 就等于 content 的尺寸。<br>  若 CSS 中没有指定元素的高度和宽度 (即自适应)，则 IE6 中显示 0，而其他浏览器则显示实际值。</p>
+</blockquote>
+<p>为了读取文档视口的尺寸，需要查询 clientWidth&#x2F;Height 时的兼容性方案：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> windowWidth = <span class="variable language_">document</span>.<span class="property">documentElement</span>.<span class="property">clientWidth</span> || <span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">clientWidth</span>;</span><br><span class="line"><span class="keyword">var</span> windowHeight = <span class="variable language_">document</span>.<span class="property">documentElement</span>.<span class="property">clientHeight</span> || <span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">clientHeight</span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>document.documentElement.clientWidth/clientHeight</code>，基本上与 <code>window.innerWidth/innerHeight</code> 同义。只有一个区别，前者不将滚动条计算在内，而后者包括了滚动条的高度和宽度。</p>
+</blockquote>
+<h3 id="offsetWidth、offsetHeight-属性"><a href="#offsetWidth、offsetHeight-属性" class="headerlink" title="offsetWidth、offsetHeight 属性"></a>offsetWidth、offsetHeight 属性</h3><p>元素的布局尺寸，包括边框和滚动条。我们在浏览器中看到的元素物理尺寸就是这个。</p>
+<blockquote>
+<p>若 CSS 中设置 box-sizing:border-box 时，设置的 width&#x2F;height 就等于 offsetWidth&#x2F;offsetHeight。</p>
+</blockquote>
+<h3 id="scrollWidth、scrollHeight-属性"><a href="#scrollWidth、scrollHeight-属性" class="headerlink" title="scrollWidth、scrollHeight 属性"></a>scrollWidth、scrollHeight 属性</h3><p>元素的实际尺寸；如果该属性大于 clientWidth&#x2F;Height，就会出现滚动条。</p>
+<h3 id="三者之间的关系"><a href="#三者之间的关系" class="headerlink" title="三者之间的关系"></a>三者之间的关系</h3><h4 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h4><pre><code>屏幕尺寸 screen.width/height
+窗口尺寸 window.outerWidth/outerHeight
+
+视口宽度 window.innerWidth
+视口高度 window.innerHeight
+// 注：由于 IE11 的滚动条自动隐藏（尺寸为 0），所以它的视口尺寸和可视尺寸是相等的
+
+可视宽度 clientWidth  = 视口宽度 - 滚动条
+可视高度 clientHeight = 视口高度 - 滚动条
+// 定义明确，与视口尺寸关联
+
+布局宽度 offsetWidth
+布局高度 offsetHeight
+// 不同浏览器、不同标签下差异较大，见下文公式辨析
+
+实际宽度 scrollWidth  = 内容宽度
+实际高度 scrollHeight = 内容高度
+// 定义明确，与内容尺寸关联（除了两个例外情况）
+
+// 注：以上对 PC端有效，对移动端而言
+    screen.width = window.outerWidth = (document.documentElement.clientWidth = window.innerWidth) / scale
+    screen.height = window.outerHeight = (document.documentElement.clientHeight = window.innerHeight) / scale
+    // scale 是视口的缩放比，取决于 &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, maximum-scale=1&quot;&gt; 中的设置值
+    // scale 取值范围最大为 1，最小为 .25。
+</code></pre>
+<h4 id="公式"><a href="#公式" class="headerlink" title="公式"></a>公式</h4><pre><code>对 &lt;html&gt; 标签（document.documentElement）来说：
+// 宽度
+    // 布局宽度 = 可视宽度 IE8+、Chrome、Firefox
+    // 布局宽度 = 视口宽度 IE6
+// 高度
+    // 布局高度 = 内容高度 Chrome、Firefox
+    // 布局高度 = 可视高度 IE8+
+    // 布局高度 = 视口高度 IE6
+    // 实际高度 = Math.max(内容高度, 可视高度) Firefox 唯一例外
+
+对 &lt;body&gt; 标签（document.body）来说：
+// 宽度
+    // 布局宽度 = 可视宽度 IE8+、Chrome、Firefox
+    // 视口宽度 = 布局宽度 = 实际宽度 = 内容宽度 IE6
+// 高度
+    // 可视高度 = 布局高度 = 实际高度 = 内容高度
+    // 实际高度 = Math.max(内容高度, 视口高度 - 滚动条) Chrome 唯一例外
+</code></pre>
+<blockquote>
+<p>注：由于 &lt;html&gt; 和 &lt;body&gt; 有了 margin、padding、border 的话，Firefox 和 IE 会产生很多不兼容问题，所以 &lt;html&gt;、&lt;body&gt; 一般都重置为 0</p>
+</blockquote>
+<h3 id="offsetLeft、offsetTop-属性"><a href="#offsetLeft、offsetTop-属性" class="headerlink" title="offsetLeft、offsetTop 属性"></a>offsetLeft、offsetTop 属性</h3><p>元素相对参考点的偏移量</p>
+<h3 id="offsetParent-属性"><a href="#offsetParent-属性" class="headerlink" title="offsetParent 属性"></a>offsetParent 属性</h3><p>指向参考点，即当前 HTML 元素的最靠近的、并且 CSS 的 position 属性不等于 static 的祖先元素。IE6 则是查找拥有 “layout” 的祖先元素。</p>
+<ul>
+<li>最终 offsetParent（即最终参考点），一般指向 &lt;body&gt; 标签；另外由于 &lt;html&gt; 和 &lt;body&gt; 标签没有 offsetParent，所以它们也没有 offsetLeft&#x2F;Top</li>
+<li>position:relative 和 absolute 的元素，IE6 按正常原则查找 offsetParent，但其最终的 offsetParent 会跳过 &lt;body&gt; 标签，直接指向 &lt;html&gt; 标签</li>
+<li>position:fixed 的元素，IE6 浏览器按正常原则查找，其他浏览器的 offsetParent 为 null。</li>
+<li>display:none 的元素，IE6 浏览器按正常原则查找，IE8 浏览器的 offsetParent 为 &lt;body&gt; 标签，其他浏览器为 null。</li>
+</ul>
+<h3 id="scrollLeft、scrollTop-属性"><a href="#scrollLeft、scrollTop-属性" class="headerlink" title="scrollLeft、scrollTop 属性"></a>scrollLeft、scrollTop 属性</h3><p>页面的滚动偏移量</p>
+<blockquote>
+<p>只有在有滚动条的元素或页面中才有值<br>  对 IE6+、Firefox、Opera 来说，<code>document.documentElement</code> 有此属性；对 Safari、Chrome 来说，则 <code>document.body</code> 有此属性</p>
+</blockquote>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 读取元素坐标（相对于页面） by John Resig</span></span><br><span class="line"> <span class="keyword">function</span> <span class="title function_">pageX</span>(<span class="params">elem</span>)&#123;</span><br><span class="line">     <span class="keyword">return</span> elem.<span class="property">offsetParent</span> ? (elem.<span class="property">offsetLeft</span> + <span class="title function_">pageX</span>(elem.<span class="property">offsetParent</span>)) : elem.<span class="property">offsetLeft</span>;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">function</span> <span class="title function_">pageY</span>(<span class="params">elem</span>)&#123;</span><br><span class="line">     <span class="keyword">return</span> elem.<span class="property">offsetParent</span> ? (elem.<span class="property">offsetTop</span> + <span class="title function_">pageY</span>(elem.<span class="property">offsetParent</span>)) : elem.<span class="property">offsetTop</span>;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="comment">// 注：现代浏览器有个原生方法 getBoundingClientRect()，可以直接获取元素相对于视口的 left、top、right、bottom、width、height（最后两项 IE8- 不支持）</span></span><br><span class="line"></span><br><span class="line"> <span class="comment">// 读取元素坐标（相对于父元素） by John Resig</span></span><br><span class="line"> <span class="keyword">function</span> <span class="title function_">parentX</span>(<span class="params">elem</span>)&#123;</span><br><span class="line">     <span class="keyword">return</span> elem.<span class="property">parentNode</span> == elem.<span class="property">offsetParent</span> ? elem.<span class="property">offsetLeft</span> : <span class="title function_">pageX</span>(elem) - <span class="title function_">pageX</span>(elem.<span class="property">parentNode</span>);</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">function</span> <span class="title function_">parentY</span>(<span class="params">elem</span>)&#123;</span><br><span class="line">     <span class="keyword">return</span> elem.<span class="property">parentNode</span> == elem.<span class="property">offsetParent</span> ? elem.<span class="property">offsetTop</span> : <span class="title function_">pageY</span>(elem) - <span class="title function_">pageY</span>(elem.<span class="property">parentNode</span>);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>&#x2F;&#x2F; 下面这个函数显示了 不同浏览器和不同设备 在读取页面元素的各种尺寸上的差异</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 读取页面及视口尺寸</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getPageSize</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> xScroll, yScroll;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">scrollHeight</span> &gt; <span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">offsetHeight</span>) &#123;</span><br><span class="line">        xScroll = <span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">scrollWidth</span>;</span><br><span class="line">        yScroll = <span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">scrollHeight</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        xScroll = <span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">offsetWidth</span>;</span><br><span class="line">        yScroll = <span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">offsetHeight</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> windowWidth, windowHeight;</span><br><span class="line">    <span class="keyword">if</span> (self.<span class="property">innerHeight</span>) &#123;</span><br><span class="line">        windowWidth = self.<span class="property">innerWidth</span>;</span><br><span class="line">        windowHeight = self.<span class="property">innerHeight</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="variable language_">document</span>.<span class="property">documentElement</span> &amp;&amp; <span class="variable language_">document</span>.<span class="property">documentElement</span>.<span class="property">clientHeight</span>) &#123;</span><br><span class="line">        windowWidth = <span class="variable language_">document</span>.<span class="property">documentElement</span>.<span class="property">clientWidth</span>;</span><br><span class="line">        windowHeight = <span class="variable language_">document</span>.<span class="property">documentElement</span>.<span class="property">clientHeight</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="variable language_">document</span>.<span class="property">body</span>) &#123;</span><br><span class="line">        windowWidth = <span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">clientWidth</span>;</span><br><span class="line">        windowHeight = <span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">clientHeight</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    pageWidth = xScroll &lt; windowWidth ? windowWidth : xScroll;</span><br><span class="line">    pageHeight = yScroll &lt; windowHeight ? windowHeight : yScroll;</span><br><span class="line">    <span class="keyword">return</span> [pageWidth, pageHeight, windowWidth, windowHeight];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">elemDimension</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> w = <span class="variable language_">window</span>.<span class="property">screen</span>.<span class="property">width</span>;</span><br><span class="line">    <span class="keyword">var</span> h = <span class="variable language_">window</span>.<span class="property">screen</span>.<span class="property">height</span>;</span><br><span class="line">    <span class="keyword">var</span> aw = <span class="variable language_">window</span>.<span class="property">screen</span>.<span class="property">availWidth</span>;</span><br><span class="line">    <span class="keyword">var</span> ah = <span class="variable language_">window</span>.<span class="property">screen</span>.<span class="property">availHeight</span>;</span><br><span class="line">    <span class="keyword">var</span> ow = <span class="variable language_">window</span>.<span class="property">outerWidth</span>;</span><br><span class="line">    <span class="keyword">var</span> oh = <span class="variable language_">window</span>.<span class="property">outerHeight</span>;</span><br><span class="line">    <span class="keyword">var</span> iw = <span class="variable language_">window</span>.<span class="property">innerWidth</span>;</span><br><span class="line">    <span class="keyword">var</span> ih = <span class="variable language_">window</span>.<span class="property">innerHeight</span>;</span><br><span class="line">    <span class="keyword">var</span> dpr = <span class="variable language_">window</span>.<span class="property">devicePixelRatio</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> str = <span class="string">&quot;&quot;</span>;</span><br><span class="line">    str += <span class="string">&quot;屏幕宽度 Window.screen.width = &quot;</span>+w;</span><br><span class="line">    str += <span class="string">&quot;&lt;br&gt; 屏幕高度 Window.screen.height = &quot;</span>+h;</span><br><span class="line">    str += <span class="string">&quot;&lt;br&gt; 屏幕有效宽度 Window.screen.availWidth = &quot;</span>+aw;</span><br><span class="line">    str += <span class="string">&quot;&lt;br&gt; 屏幕有效高度 Window.screen.availHeight = &quot;</span>+ah;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">window</span>.<span class="property">outerWidth</span>) &#123;</span><br><span class="line">        str += <span class="string">&quot;&lt;br&gt; 窗口宽度 Window.outerWidth = &quot;</span>+ow;</span><br><span class="line">        str += <span class="string">&quot;&lt;br&gt; 窗口高度 Window.outerHeight = &quot;</span>+oh;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">window</span>.<span class="property">innerWidth</span>) &#123;</span><br><span class="line">        str += <span class="string">&quot;&lt;br&gt; 视口宽度 Window.innerWidth = &quot;</span>+iw;</span><br><span class="line">        str += <span class="string">&quot;&lt;br&gt; 视口高度 Window.innerHeight = &quot;</span>+ih;</span><br><span class="line">    &#125;</span><br><span class="line">    str += <span class="string">&quot;&lt;br&gt; 设备像素比 Window.devicePixelRatio = &quot;</span>+dpr;</span><br><span class="line">    str += <span class="string">&quot;\n&lt;br&gt; 页面宽度 = &quot;</span>+<span class="title function_">getPageSize</span>()[<span class="number">0</span>];</span><br><span class="line">    str += <span class="string">&quot;\n&lt;br&gt; 页面高度 = &quot;</span>+<span class="title function_">getPageSize</span>()[<span class="number">1</span>];</span><br><span class="line">    str += <span class="string">&quot;\n&lt;br&gt; 可视宽度 = &quot;</span>+<span class="title function_">getPageSize</span>()[<span class="number">2</span>];</span><br><span class="line">    str += <span class="string">&quot;\n&lt;br&gt; 可视高度 = &quot;</span>+<span class="title function_">getPageSize</span>()[<span class="number">3</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">document</span>.<span class="property">documentElement</span>) &#123;</span><br><span class="line">        str += <span class="string">&quot;&lt;br&gt;&lt;br&gt; 可视宽度 document.documentElement.clientWidth = &quot;</span>+<span class="variable language_">document</span>.<span class="property">documentElement</span>.<span class="property">clientWidth</span>;</span><br><span class="line">        str += <span class="string">&quot;&lt;br&gt; 可视高度 document.documentElement.clientHeight = &quot;</span>+<span class="variable language_">document</span>.<span class="property">documentElement</span>.<span class="property">clientHeight</span>;</span><br><span class="line">        str += <span class="string">&quot;&lt;br&gt; 布局宽度 document.documentElement.offsetWidth = &quot;</span>+<span class="variable language_">document</span>.<span class="property">documentElement</span>.<span class="property">offsetWidth</span>;</span><br><span class="line">        str += <span class="string">&quot;&lt;br&gt; 布局高度 document.documentElement.offsetHeight = &quot;</span>+<span class="variable language_">document</span>.<span class="property">documentElement</span>.<span class="property">offsetHeight</span>;</span><br><span class="line">        str += <span class="string">&quot;&lt;br&gt; 实际宽度 document.documentElement.scrollWidth = &quot;</span>+<span class="variable language_">document</span>.<span class="property">documentElement</span>.<span class="property">scrollWidth</span>;</span><br><span class="line">        str += <span class="string">&quot;&lt;br&gt; 实际高度 document.documentElement.scrollHeight = &quot;</span>+<span class="variable language_">document</span>.<span class="property">documentElement</span>.<span class="property">scrollHeight</span>;</span><br><span class="line">        str += <span class="string">&quot;&lt;br&gt; 水平滚动 document.documentElement.scrollLeft = &quot;</span>+<span class="variable language_">document</span>.<span class="property">documentElement</span>.<span class="property">scrollLeft</span>;</span><br><span class="line">        str += <span class="string">&quot;&lt;br&gt; 垂直滚动 document.documentElement.scrollTop = &quot;</span>+<span class="variable language_">document</span>.<span class="property">documentElement</span>.<span class="property">scrollTop</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">document</span>.<span class="property">body</span>) &#123;</span><br><span class="line">        str += <span class="string">&quot;&lt;br&gt;&lt;br&gt; 可视宽度 document.body.clientWidth = &quot;</span>+<span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">clientWidth</span>;</span><br><span class="line">        str += <span class="string">&quot;&lt;br&gt; 可视高度 document.body.clientHeight = &quot;</span>+<span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">clientHeight</span>;</span><br><span class="line">        str += <span class="string">&quot;&lt;br&gt; 布局宽度 document.body.offsetWidth = &quot;</span>+<span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">offsetWidth</span>;</span><br><span class="line">        str += <span class="string">&quot;&lt;br&gt; 布局高度 document.body.offsetHeight = &quot;</span>+<span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">offsetHeight</span>;</span><br><span class="line">        str += <span class="string">&quot;&lt;br&gt; 实际宽度 document.body.scrollWidth = &quot;</span>+<span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">scrollWidth</span>;</span><br><span class="line">        str += <span class="string">&quot;&lt;br&gt; 实际高度 document.body.scrollHeight = &quot;</span>+<span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">scrollHeight</span>;</span><br><span class="line">        str += <span class="string">&quot;&lt;br&gt;&lt;br&gt;CSS 宽度 document.body.style.width = &quot;</span>+<span class="title function_">getStyle</span>(<span class="variable language_">document</span>.<span class="property">body</span>,<span class="string">&quot;width&quot;</span>);</span><br><span class="line">        str += <span class="string">&quot;&lt;br&gt;CSS 高度 document.body.style.height = &quot;</span>+<span class="title function_">getStyle</span>(<span class="variable language_">document</span>.<span class="property">body</span>,<span class="string">&quot;height&quot;</span>);</span><br><span class="line">        str += <span class="string">&quot;&lt;br&gt; 水平滚动 document.body.scrollLeft = &quot;</span>+<span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">scrollLeft</span>;</span><br><span class="line">        str += <span class="string">&quot;&lt;br&gt; 垂直滚动 document.body.scrollTop = &quot;</span>+<span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">scrollTop</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">innerHTML</span> = str;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2015/09/23/10.ecma07/" rel="prev" title="JavaScript 读书心得之七：文档对象模型（DOM）">
+      <i class="fa fa-chevron-left"></i> JavaScript 读书心得之七：文档对象模型（DOM）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2015/09/25/12.ecma09/" rel="next" title="JavaScript 读书心得之九：数据检索（XMLHttpRequest）">
+      JavaScript 读书心得之九：数据检索（XMLHttpRequest） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS-%E8%AF%BB%E5%86%99"><span class="nav-number">1.</span> <span class="nav-text">CSS 读写</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E8%81%94%E6%A0%B7%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">内联样式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E5%86%85%E8%81%94%E6%A0%B7%E5%BC%8F"><span class="nav-number">1.2.</span> <span class="nav-text">非内联样式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSS-%E6%A8%A1%E5%9D%97%E7%9A%84%E4%BE%A6%E6%B5%8B"><span class="nav-number">1.3.</span> <span class="nav-text">CSS 模块的侦测</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%B9%E5%8F%98-class-%E5%92%8C-id"><span class="nav-number">2.</span> <span class="nav-text">改变 class 和 id</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%91%E6%96%87%E6%A1%A3%E5%86%99%E5%85%A5-CSS"><span class="nav-number">3.</span> <span class="nav-text">向文档写入 CSS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%B9%E5%8F%98%E6%95%B4%E4%B8%AA%E6%A0%B7%E5%BC%8F%E8%A1%A8"><span class="nav-number">4.</span> <span class="nav-text">改变整个样式表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%90%E8%97%8F%E6%88%96%E6%98%BE%E7%A4%BA%E5%85%83%E7%B4%A0"><span class="nav-number">5.</span> <span class="nav-text">隐藏或显示元素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E7%94%BB"><span class="nav-number">6.</span> <span class="nav-text">动画</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%83%E7%B4%A0%E7%9A%84%E5%B0%BA%E5%AF%B8%E5%92%8C%E4%BD%8D%E7%BD%AE"><span class="nav-number">7.</span> <span class="nav-text">元素的尺寸和位置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#clientWidth%E3%80%81clientHeight-%E5%B1%9E%E6%80%A7"><span class="nav-number">7.1.</span> <span class="nav-text">clientWidth、clientHeight 属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#offsetWidth%E3%80%81offsetHeight-%E5%B1%9E%E6%80%A7"><span class="nav-number">7.2.</span> <span class="nav-text">offsetWidth、offsetHeight 属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#scrollWidth%E3%80%81scrollHeight-%E5%B1%9E%E6%80%A7"><span class="nav-number">7.3.</span> <span class="nav-text">scrollWidth、scrollHeight 属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E8%80%85%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">7.4.</span> <span class="nav-text">三者之间的关系</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">7.4.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%AC%E5%BC%8F"><span class="nav-number">7.4.2.</span> <span class="nav-text">公式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#offsetLeft%E3%80%81offsetTop-%E5%B1%9E%E6%80%A7"><span class="nav-number">7.5.</span> <span class="nav-text">offsetLeft、offsetTop 属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#offsetParent-%E5%B1%9E%E6%80%A7"><span class="nav-number">7.6.</span> <span class="nav-text">offsetParent 属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#scrollLeft%E3%80%81scrollTop-%E5%B1%9E%E6%80%A7"><span class="nav-number">7.7.</span> <span class="nav-text">scrollLeft、scrollTop 属性</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">可口可乐</p>
+  <div class="site-description" itemprop="description">Personal Blog</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">可口可乐</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

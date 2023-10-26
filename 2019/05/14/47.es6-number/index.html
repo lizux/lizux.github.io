@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="数值二进制和八进制ES6 提供了二进制和八进制数值的新的写法，分别用前缀0b（或0B）和0o（或0O）表示。 120b111 &#x3D;&#x3D;&#x3D; 7 &#x2F;&#x2F; true0o10 &#x3D;&#x3D;&#x3D; 8 &#x2F;&#x2F; true  新增方法 Number.isFinite  用来检查一个数值是否为有限的（finite），即不是Infinity  12345Number.isFinite(15); &#x2F;&#x2F; trueNumber.isFini">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ES6 阅读心得之四：数值">
+<meta property="og:url" content="http://example.com/2019/05/14/47.es6-number/index.html">
+<meta property="og:site_name" content="Lizux">
+<meta property="og:description" content="数值二进制和八进制ES6 提供了二进制和八进制数值的新的写法，分别用前缀0b（或0B）和0o（或0O）表示。 120b111 &#x3D;&#x3D;&#x3D; 7 &#x2F;&#x2F; true0o10 &#x3D;&#x3D;&#x3D; 8 &#x2F;&#x2F; true  新增方法 Number.isFinite  用来检查一个数值是否为有限的（finite），即不是Infinity  12345Number.isFinite(15); &#x2F;&#x2F; trueNumber.isFini">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-05-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-26T02:32:58.385Z">
+<meta property="article:author" content="可口可乐">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="ES6">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2019/05/14/47.es6-number/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ES6 阅读心得之四：数值 | Lizux</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lizux</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Just go on</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2019/05/14/47.es6-number/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="可口可乐">
+      <meta itemprop="description" content="Personal Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lizux">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ES6 阅读心得之四：数值
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-05-14 00:00:00" itemprop="dateCreated datePublished" datetime="2019-05-14T00:00:00+08:00">2019-05-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-10-26 10:32:58" itemprop="dateModified" datetime="2023-10-26T10:32:58+08:00">2023-10-26</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="数值"><a href="#数值" class="headerlink" title="数值"></a>数值</h2><h3 id="二进制和八进制"><a href="#二进制和八进制" class="headerlink" title="二进制和八进制"></a>二进制和八进制</h3><p>ES6 提供了二进制和八进制数值的新的写法，分别用前缀0b（或0B）和0o（或0O）表示。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0b111</span> === <span class="number">7</span> <span class="comment">// true</span></span><br><span class="line"><span class="number">0o10</span> === <span class="number">8</span> <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="新增方法"><a href="#新增方法" class="headerlink" title="新增方法"></a>新增方法</h3><ol start="0">
+<li><p>Number.isFinite</p>
+<p> 用来检查一个数值是否为有限的（finite），即不是Infinity</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Number</span>.<span class="built_in">isFinite</span>(<span class="number">15</span>); <span class="comment">// true</span></span><br><span class="line"><span class="title class_">Number</span>.<span class="built_in">isFinite</span>(<span class="string">&#x27;15&#x27;</span>); <span class="comment">// false</span></span><br><span class="line"><span class="title class_">Number</span>.<span class="built_in">isFinite</span>(<span class="title class_">NaN</span>); <span class="comment">// false</span></span><br><span class="line"><span class="title class_">Number</span>.<span class="built_in">isFinite</span>(<span class="title class_">Infinity</span>); <span class="comment">// false</span></span><br><span class="line"><span class="title class_">Number</span>.<span class="built_in">isFinite</span>(-<span class="title class_">Infinity</span>); <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<p> 与传统的全局方法isFinite()的区别在于，传统方法先调用Number()将非数值的值转为数值，再进行判断，而新方法只对数值有效</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">isFinite</span>(<span class="string">&#x27;15&#x27;</span>) <span class="comment">// true</span></span><br></pre></td></tr></table></figure></li>
+<li><p>Number.isNaN</p>
+<p> 用来检查一个值是否为NaN</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Number</span>.<span class="built_in">isNaN</span>(<span class="title class_">NaN</span>) <span class="comment">// true</span></span><br><span class="line"><span class="title class_">Number</span>.<span class="built_in">isNaN</span>(<span class="string">&#x27;NaN&#x27;</span>) <span class="comment">// false</span></span><br><span class="line"><span class="title class_">Number</span>.<span class="built_in">isNaN</span>(<span class="number">9</span>/<span class="number">0</span>) <span class="comment">// false</span></span><br><span class="line"><span class="title class_">Number</span>.<span class="built_in">isNaN</span>(<span class="number">9</span>/<span class="title class_">NaN</span>) <span class="comment">// true</span></span><br><span class="line"><span class="title class_">Number</span>.<span class="built_in">isNaN</span>(<span class="string">&#x27;true&#x27;</span>/<span class="number">0</span>) <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<p> 与传统的全局方法isNaN()的区别在于，传统方法先调用Number()将非数值的值转为数值，再进行判断，而新方法只对数值有效</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">isNaN</span>(<span class="string">&#x27;NaN&#x27;</span>) <span class="comment">// true</span></span><br></pre></td></tr></table></figure></li>
+<li><p>Number.isInteger</p>
+<p> 用来判断一个数值是否为整数</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Number</span>.<span class="title function_">isInteger</span>(<span class="number">25</span>) <span class="comment">// true</span></span><br><span class="line"><span class="title class_">Number</span>.<span class="title function_">isInteger</span>(<span class="number">25.1</span>) <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>JavaScript 内部，整数和浮点数采用的是同样的储存方法，所以 25 和 25.0 被视为同一个值。</p>
+</blockquote>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Number</span>.<span class="title function_">isInteger</span>(<span class="number">25.0</span>) <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>由于 JavaScript 采用64位双精度格式存储，数值精度最多可以达到 53 个二进制位（1 个隐藏位与 52 个有效位）。如果精度超过这个限度，第54位及后面的位就会被丢弃，Number.isInteger 可能会误判。</p>
+</blockquote>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Number</span>.<span class="title function_">isInteger</span>(<span class="number">3.0000000000000002</span>) <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>数值的极限值<br> Number.EPSILON 是 JavaScript 能够表示的最小精度。误差如果小于这个值，就可以认为不存在误差了。<br> Number.MAX_SAFE_INTEGER 和 Number.MIN_SAFE_INTEGER 这两个常量，用来表示安全整数范围的上下限。因为 JavaScript 能够准确表示的整数范围在 -2^53 到 2^53 之间（不含两个端点），超过这个范围，无法精确表示这个值。</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Number</span>.<span class="property">EPSILON</span> === <span class="title class_">Math</span>.<span class="title function_">pow</span>(<span class="number">2</span>, -<span class="number">52</span>)</span><br><span class="line"><span class="title class_">Number</span>.<span class="property">MAX_SAFE_INTEGER</span> === <span class="title class_">Math</span>.<span class="title function_">pow</span>(<span class="number">2</span>, <span class="number">53</span>) - <span class="number">1</span></span><br><span class="line"><span class="title class_">Number</span>.<span class="property">MIN_SAFE_INTEGER</span> === -<span class="title class_">Number</span>.<span class="property">MAX_SAFE_INTEGER</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="Math-新增方法"><a href="#Math-新增方法" class="headerlink" title="Math 新增方法"></a>Math 新增方法</h3><ol start="0">
+<li><p>Math.trunc</p>
+<p> 用于去除一个数的小数部分，返回整数部分。</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Math</span>.<span class="title function_">trunc</span>(<span class="number">4.9</span>) <span class="comment">// 4</span></span><br><span class="line"><span class="title class_">Math</span>.<span class="title function_">trunc</span>(-<span class="number">4.9</span>) <span class="comment">// -4</span></span><br><span class="line"><span class="title class_">Math</span>.<span class="title function_">trunc</span>(-<span class="number">0.1234</span>) <span class="comment">// -0</span></span><br></pre></td></tr></table></figure></li>
+<li><p>Math.sign</p>
+<p> 用来判断一个数到底是正数、负数、还是零。对于非数值，会先将其转换为数值。</p>
+<p> 它会返回五种值：</p>
+<ol start="0">
+<li>参数为正数，返回 1</li>
+<li>参数为负数，返回 -1</li>
+<li>参数为 0，返回 0</li>
+<li>参数为-0，返回 -0</li>
+<li>其他值，返回 NaN</li>
+</ol>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Math</span>.<span class="title function_">sign</span>(-<span class="number">5</span>) <span class="comment">// -1</span></span><br><span class="line"><span class="title class_">Math</span>.<span class="title function_">sign</span>(<span class="number">5</span>) <span class="comment">// 1</span></span><br><span class="line"><span class="title class_">Math</span>.<span class="title function_">sign</span>(<span class="number">0</span>) <span class="comment">// 0</span></span><br><span class="line"><span class="title class_">Math</span>.<span class="title function_">sign</span>(-<span class="number">0</span>) <span class="comment">// -0</span></span><br><span class="line"><span class="title class_">Math</span>.<span class="title function_">sign</span>(<span class="title class_">NaN</span>) <span class="comment">// NaN</span></span><br><span class="line"></span><br><span class="line"><span class="title class_">Math</span>.<span class="title function_">sign</span>(<span class="string">&#x27;9&#x27;</span>)  <span class="comment">// 1</span></span><br><span class="line"><span class="title class_">Math</span>.<span class="title function_">sign</span>(<span class="literal">true</span>)  <span class="comment">// 1</span></span><br><span class="line"><span class="title class_">Math</span>.<span class="title function_">sign</span>(<span class="literal">false</span>)  <span class="comment">// 0</span></span><br><span class="line"><span class="title class_">Math</span>.<span class="title function_">sign</span>(<span class="literal">null</span>)  <span class="comment">// 0</span></span><br><span class="line"><span class="title class_">Math</span>.<span class="title function_">sign</span>(<span class="string">&#x27;&#x27;</span>)  <span class="comment">// 0</span></span><br><span class="line"><span class="title class_">Math</span>.<span class="title function_">sign</span>()  <span class="comment">// NaN</span></span><br><span class="line"><span class="title class_">Math</span>.<span class="title function_">sign</span>(<span class="string">&#x27;foo&#x27;</span>)  <span class="comment">// NaN</span></span><br><span class="line"><span class="title class_">Math</span>.<span class="title function_">sign</span>(<span class="literal">undefined</span>)  <span class="comment">// NaN</span></span><br></pre></td></tr></table></figure></li>
+<li><p>Math.cbrt</p>
+<p> 用于计算一个数的立方根。</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Math</span>.<span class="title function_">cbrt</span>(-<span class="number">1</span>) <span class="comment">// -1</span></span><br><span class="line"><span class="title class_">Math</span>.<span class="title function_">cbrt</span>(<span class="number">0</span>)  <span class="comment">// 0</span></span><br><span class="line"><span class="title class_">Math</span>.<span class="title function_">cbrt</span>(<span class="number">8</span>)  <span class="comment">// 2</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="新增运算符"><a href="#新增运算符" class="headerlink" title="新增运算符"></a>新增运算符</h3><p>指数运算符（**），其特点是右结合，而不是常见的左结合。多个指数运算符连用时，是从最右边开始计算的。</p>
+<pre><code><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2</span> ** <span class="number">2</span> <span class="comment">// 4</span></span><br><span class="line"><span class="number">2</span> ** <span class="number">3</span> ** <span class="number">2</span> === <span class="number">2</span> ** (<span class="number">3</span> ** <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+</code></pre>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/ES6/" rel="tag"># ES6</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/05/13/46.es6-string/" rel="prev" title="ES6 阅读心得之三：字符串">
+      <i class="fa fa-chevron-left"></i> ES6 阅读心得之三：字符串
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/05/15/48.es6-function/" rel="next" title="ES6 阅读心得之五：函数">
+      ES6 阅读心得之五：函数 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%80%BC"><span class="nav-number">1.</span> <span class="nav-text">数值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8C%E5%85%AB%E8%BF%9B%E5%88%B6"><span class="nav-number">1.1.</span> <span class="nav-text">二进制和八进制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B0%E5%A2%9E%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.</span> <span class="nav-text">新增方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Math-%E6%96%B0%E5%A2%9E%E6%96%B9%E6%B3%95"><span class="nav-number">1.3.</span> <span class="nav-text">Math 新增方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B0%E5%A2%9E%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">1.4.</span> <span class="nav-text">新增运算符</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">可口可乐</p>
+  <div class="site-description" itemprop="description">Personal Blog</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">可口可乐</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

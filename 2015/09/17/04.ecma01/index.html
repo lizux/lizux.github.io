@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="序本文是笔者在阅读学习 JavaScript 书籍过程中的一些心得总结和想法，记录以方便日后检索。参考书籍包括但不限于以下目录：  《JavaScript高级程序设计》 《ppk谈JavaScript》 《JavaScript DOM编程艺术》 《精通JavaScript》 by jQuery 作者 《JavaScript语言精粹》 by JSON、JSLint 作者 《JavaScript权威指">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript 读书心得之一：前言">
+<meta property="og:url" content="http://example.com/2015/09/17/04.ecma01/index.html">
+<meta property="og:site_name" content="Lizux">
+<meta property="og:description" content="序本文是笔者在阅读学习 JavaScript 书籍过程中的一些心得总结和想法，记录以方便日后检索。参考书籍包括但不限于以下目录：  《JavaScript高级程序设计》 《ppk谈JavaScript》 《JavaScript DOM编程艺术》 《精通JavaScript》 by jQuery 作者 《JavaScript语言精粹》 by JSON、JSLint 作者 《JavaScript权威指">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-09-16T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-26T02:32:58.372Z">
+<meta property="article:author" content="可口可乐">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2015/09/17/04.ecma01/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>JavaScript 读书心得之一：前言 | Lizux</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lizux</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Just go on</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2015/09/17/04.ecma01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="可口可乐">
+      <meta itemprop="description" content="Personal Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lizux">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JavaScript 读书心得之一：前言
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2015-09-17 00:00:00" itemprop="dateCreated datePublished" datetime="2015-09-17T00:00:00+08:00">2015-09-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-10-26 10:32:58" itemprop="dateModified" datetime="2023-10-26T10:32:58+08:00">2023-10-26</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="序"><a href="#序" class="headerlink" title="序"></a>序</h2><p>本文是笔者在阅读学习 JavaScript 书籍过程中的一些心得总结和想法，记录以方便日后检索。<br>参考书籍包括但不限于以下目录：</p>
+<ul>
+<li>《JavaScript高级程序设计》</li>
+<li>《ppk谈JavaScript》</li>
+<li>《JavaScript DOM编程艺术》</li>
+<li>《精通JavaScript》 by jQuery 作者</li>
+<li>《JavaScript语言精粹》 by JSON、JSLint 作者</li>
+<li>《JavaScript权威指南(第5版)》</li>
+<li><a target="_blank" rel="noopener" href="http://javascript.ruanyifeng.com/">《JavaScript 标准参考教程（alpha）》</a> by 阮一峰</li>
+</ul>
+<p>一个面向对象的语言具备四种能力：封装、聚集、继承、多态，JavaScript 并不是一个严格意义上的面向对象的语言</p>
+<p>JavaScript 包括核心（ECMA）、BOM（WHAT-WG）、事件（W3C）、DOM（W3C）、CSS 修改（W3C）、数据检索（XMLHttpRequest，微软）</p>
+<p>JavaScript 属于解释型语言，直接由客户端来解释执行，而 Java 属于编译型语言，需要事先用 Compiler 编译成可执行文件</p>
+<h2 id="DOM-编程原则："><a href="#DOM-编程原则：" class="headerlink" title="DOM 编程原则："></a>DOM 编程原则：</h2><ul>
+<li>分离式 &#x2F; 无侵入 JavaScript（Unobtrusive JavaScript）<ol start="0">
+<li>即易实现性，对开发者来说，脚本应该是 unobtrusive 的，只需要在文档中包含脚本文件，然后加上一个 class 或 id 来做钩子（Hook）以便触发（Trigger）脚本即可。</li>
+<li>向 CSS 学习，结构和行为分离，表现和行为分离；同时不影响用在同一文档的其他脚本，而且还易于后期维护（包括不懂 JavaScript 的人员）。</li>
+</ol>
+</li>
+<li>循序渐进 &#x2F; 渐进增强（Progressive Enhancement）<ol start="0">
+<li>即可用性，对用户来说，脚本应该是 unobtrusive 的，它只是增加了一个应用层，以提高用户访问网站时的使用体验而不是干扰他们。</li>
+<li>首先用 HTML 来实现网站的基本内容，然后使用脚本来逐步增强网站的功能和应用，同时要对使用的方法和对象做检测，这样即使当浏览器部分或全部不支持 JavaScript 的时候不会出错。</li>
+</ol>
+</li>
+<li>预留退路 &#x2F; 平稳退化（Graceful Degradation）<ol start="0">
+<li>即可访问性，对网站来说，脚本应该是 unobtrusive 的，网站的基本内容不能基于脚本来实现。</li>
+<li>浏览器不支持或禁用 JavaScript 的时候，网页应该依然是可阅读和可理解的，即使不可避免的损失了一些可用性。</li>
+</ol>
+</li>
+</ul>
+<p>前端开发应该支持的现代浏览器：IE9+、FireFox、Chrome、Safari、Opera，而对其他浏览器要预留退路，提供基础 JavaScript 的功能和内容</p>
+<blockquote>
+<p>注：浏览器使用的内核（渲染引擎）：IE（Trident，基于 Mosaic）、Edge（EdgeHTML，基于 Trident 和 Webkit）、FireFox&#x2F;Mozilla&#x2F;Netscape（Gecko）、Opera（Presto&#x2F;Webkit）、Safari&#x2F;Chrome（Webkit，基于 KHTML）</p>
+</blockquote>
+<h2 id="JavaScript-运行机制浅探"><a href="#JavaScript-运行机制浅探" class="headerlink" title="JavaScript 运行机制浅探"></a><a target="_blank" rel="noopener" href="http://blog.csdn.net/chen_zw/article/details/18502937">JavaScript 运行机制浅探</a></h2><p>如果一个文档流中包含多个 script 代码段（用 &lt;script&gt; 标签分隔），运行顺序是：<br>0. 读入第一个代码段<br>0. 做语法分析，有错则报语法错误（比如括号不匹配等），并跳转到 step5<br>0. 对 var 变量和 function 定义做 “预解析”（永远不会报错的，因为只解析正确的声明），但需要注意的是此时处理的函数只是声明式函数，而且变量也只是进行了声明但未进行初始化以及赋值。<br>   JavaScript 引擎的工作方式是：先解析代码，获取所有被声明的变量，然后再一行一行地运行。造成的结果，就是所有的变量的声明语句，都会被提升到代码的头部，这就叫做变量提升（Hoisting）。<br>0. 执行代码段，有错则报错（比如变量未定义）<br>0. 如果还有下一个代码段，则读入下一个代码段，重复 step2<br>0. 结束</p>
+<blockquote>
+<p>注：step3 中，所谓的 “预解析”，其实是在 step2 的语法分析阶段完成，并存储在语法树中。当执行到函数实例时，会将内部变量表 varDecls 和内嵌函数表 funcDecls 从语法树中复制到执行环境的 scriptObject 上。<br>注：step4 中，未定义变量意味着在 scriptObject 的变量表中找不到，Javascript 引擎会沿着 scriptObject 的 upvalue 往上寻找，如果都没找到，对于写操作 i &#x3D; 1; 最后就会等价为 window.i &#x3D; 1; 给 Window 对象新增了一个属性。对于读操作，如果一直追溯到全局执行环境的 scriptObject 上都找不到，就会产生运行期错误。</p>
+</blockquote>
+<h2 id="概念解释"><a href="#概念解释" class="headerlink" title="概念解释"></a>概念解释</h2><ul>
+<li><p>JavaScript 解析：就是通过语法分析和预解析构造合法的语法分析树。</p>
+</li>
+<li><p>JavaScript 执行：执行具体的某个function，JS引擎在执行每个函数实例时，都会创建一个执行环境（ExecutionContext）和活动对象（activeObject）（它们属于宿主对象，与函数实例的生命周期保持一致）</p>
+</li>
+<li><p>语法分析树（SyntaxTree）：可以直观地表示出这段代码的相关信息，具体的实现就是JS引擎创建了一些表，用来记录每个方法内的变量集（variables），方法集（functions）和作用域（scope）等。</p>
+</li>
+<li><p>执行环境（ExecutionContext）：可理解为一个记录当前执行的方法【外部描述信息】的对象，记录所执行方法的类型，名称，参数和活动对象（activeObject）。</p>
+</li>
+<li><p>活动对象（activeObject）：可理解为一个记录当前执行的方法【内部执行信息】的对象，记录内部变量集（variables）、内嵌函数集（functions）、实参（arguments）、作用域链（scopeChain）等执行所需信息，其中内部变量集（variables）、内嵌函数集（functions）是直接从第一步建立的语法分析树复制过来的。</p>
+</li>
+<li><p>词法作用域：变量的作用域是在定义时决定而不是执行时决定，也就是说词法作用域取决于源码，通过静态分析就能确定，因此词法作用域也叫做静态作用域。</p>
+<p>  作用域有两种常见的模型，一种叫做词法作用域（Lexical Scope），一种叫做动态作用域（Dynamic Scope）。而 javascript 采取的便是词法作用域。Javascript并不具有动态作用域，它只有词法作用域，简单明了。但是，它的 eval()、with、this 机制某种程度上很像动态作用域，使用上要特别注意。</p>
+</li>
+<li><p>作用域链：词法作用域的实现机制就是作用域链（scopeChain）。作用域链是一套按名称查找（Name Lookup）的机制，首先在当前执行环境的 ActiveObject 中寻找，没找到，则顺着作用域链到父 ActiveObject 中寻找，一直找到全局调用对象（Global Object）。</p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2015/09/11/01.hello-world/" rel="prev" title="使用 Github Pages 和 Hexo 快速搭建个人博客">
+      <i class="fa fa-chevron-left"></i> 使用 Github Pages 和 Hexo 快速搭建个人博客
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2015/09/18/05.ecma02/" rel="next" title="JavaScript 读书心得之二：核心（一）">
+      JavaScript 读书心得之二：核心（一） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%8F"><span class="nav-number">1.</span> <span class="nav-text">序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DOM-%E7%BC%96%E7%A8%8B%E5%8E%9F%E5%88%99%EF%BC%9A"><span class="nav-number">2.</span> <span class="nav-text">DOM 编程原则：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript-%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6%E6%B5%85%E6%8E%A2"><span class="nav-number">3.</span> <span class="nav-text">JavaScript 运行机制浅探</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5%E8%A7%A3%E9%87%8A"><span class="nav-number">4.</span> <span class="nav-text">概念解释</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">可口可乐</p>
+  <div class="site-description" itemprop="description">Personal Blog</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">可口可乐</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

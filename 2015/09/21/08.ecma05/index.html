@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="概述这是核心和 DOM 的中间过渡层，指 JavaScript 的客户端实现，而这个客户端就是 JavaScript 的宿主对象，通常是针对 Web 浏览器，所以称之为 BOM（浏览器对象模型）。BOM 的核心是 Window 对象，JavaScript 的很多对象及其属性、方法并不是 DOM 的一部分，而是定义在了 Window 对象上。标准化方面，核心是 ECMA 标准，DOM 是 W3C 标">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript 读书心得之五：浏览器对象模型（BOM）">
+<meta property="og:url" content="http://example.com/2015/09/21/08.ecma05/index.html">
+<meta property="og:site_name" content="Lizux">
+<meta property="og:description" content="概述这是核心和 DOM 的中间过渡层，指 JavaScript 的客户端实现，而这个客户端就是 JavaScript 的宿主对象，通常是针对 Web 浏览器，所以称之为 BOM（浏览器对象模型）。BOM 的核心是 Window 对象，JavaScript 的很多对象及其属性、方法并不是 DOM 的一部分，而是定义在了 Window 对象上。标准化方面，核心是 ECMA 标准，DOM 是 W3C 标">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-09-20T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-26T02:32:58.373Z">
+<meta property="article:author" content="可口可乐">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2015/09/21/08.ecma05/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>JavaScript 读书心得之五：浏览器对象模型（BOM） | Lizux</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lizux</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Just go on</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2015/09/21/08.ecma05/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="可口可乐">
+      <meta itemprop="description" content="Personal Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lizux">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JavaScript 读书心得之五：浏览器对象模型（BOM）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2015-09-21 00:00:00" itemprop="dateCreated datePublished" datetime="2015-09-21T00:00:00+08:00">2015-09-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-10-26 10:32:58" itemprop="dateModified" datetime="2023-10-26T10:32:58+08:00">2023-10-26</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>这是核心和 DOM 的中间过渡层，指 JavaScript 的客户端实现，而这个客户端就是 JavaScript 的宿主对象，通常是针对 Web 浏览器，所以称之为 BOM（浏览器对象模型）。<br>BOM 的核心是 Window 对象，JavaScript 的很多对象及其属性、方法并不是 DOM 的一部分，而是定义在了 Window 对象上。<br>标准化方面，核心是 ECMA 标准，DOM 是 W3C 标准，而 BOM 还没有一个事实标准，目前 <a target="_blank" rel="noopener" href="http://www.whatwg.org/">WHAT-WG（Web 超文本应用技术工作组）</a> 正在制定一个规范。不过 BOM 的大部分重要特性都是 Netscape3 事实标准的一部分，可以被所有浏览器支持。</p>
+<h2 id="Window-对象"><a href="#Window-对象" class="headerlink" title="Window 对象"></a>Window 对象</h2><p>Window 对象是一个全局对象，它包含了脚本中的所有全局对象及其属性、方法；它还代表了浏览器窗口（viewport，简称视口），因此拥有一些属性、方法对其进行操作；它还包含了重要的 Document 对象，这是 DOM 的基础。</p>
+<p>当页面释放（unload）时，Window 对象中的所有对象及其属性、方法被彻底移除，但它本身没有被销毁，指向它的引用依然有效；另外还有一个 closed 属性也保留。这是一个非常重要的特性，可以让脚本进行跨浏览器通信。</p>
+<p>每个 Window 对象都是独立的，包括它里面的对象及其属性、方法。</p>
+<p>Window 对象还有一个等效的对象 self，即 <code>window.open() 相当于 self.open()、window.name 相当于 self.name</code>。</p>
+<h3 id="window-open-方法"><a href="#window-open-方法" class="headerlink" title="window.open() 方法"></a>window.open() 方法</h3><ul>
+<li>name 属性用于为链接的 target 属性做引导，另外 window.open() 方法的第二个参数就是 name 属性</li>
+<li>opener 属性用于弹出窗口，指向打开它的主窗口；即使弹出窗口加载了新的页面，它的 opener 属性还保存着指向</li>
+<li>closed 属性用于表示窗口是否被关闭；页面释放时，所有对象被移除，这是唯一保留的属性</li>
+<li>window.close() 方法可以关闭窗口；用户打开的窗口关闭时会让用户确认操作，而脚本打开的窗口可以直接关闭</li>
+<li><a target="_blank" rel="noopener" href="http://www.quirksmode.org/js/popup.html">弹出窗口特性列表</a><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> popWindow;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">popup</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="comment">// popWindow 为指向弹出窗口对象的变量，popWindow.name 为 “google”，popWindow.opener 为弹出窗口的主窗口</span></span><br><span class="line">    popWindow = <span class="variable language_">window</span>.<span class="title function_">open</span>(<span class="string">&quot;images/test1.html&quot;</span>, <span class="string">&quot;google&quot;</span>, <span class="string">&quot;width=500,height=400&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="跨浏览器通信"><a href="#跨浏览器通信" class="headerlink" title="跨浏览器通信"></a>跨浏览器通信</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">communicate</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> openpop = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;openpop&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (!openpop) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    openpop.<span class="property">onclick</span> = <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">popup</span>();</span><br><span class="line">        <span class="comment">//popWindow.alert(&quot;让弹出窗口进行动作&quot;);</span></span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">var</span> newpop = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;newpop&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (!newpop) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    newpop.<span class="property">onclick</span> = <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">        <span class="keyword">var</span> child = popWindow.<span class="property">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;click&quot;</span>);</span><br><span class="line">        child.<span class="property">innerHTML</span> = <span class="string">&quot;haha，虽然弹出窗口加载了新内容，但是它的内容还是能被改变&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">var</span> closepop = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;closepop&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (!closepop) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    closepop.<span class="property">onclick</span> = <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">        popWindow.<span class="title function_">close</span>();</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>主窗口释放时指向弹出窗口的变量 popWindow 会破坏，所以要让弹出窗口重新恢复 popWindow 对其的指向</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">winExit</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="comment">// 检测弹出窗口存在与否</span></span><br><span class="line">    <span class="keyword">if</span> (popWindow) &#123;</span><br><span class="line">        popWindow.<span class="title function_">resetParent</span>();</span><br><span class="line">        <span class="comment">//alert(&quot;已经给弹出窗口信息了&quot;);</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="导航"><a href="#导航" class="headerlink" title="导航"></a>导航</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">navigate</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="comment">// 假定当前网址为 http://user:passwd@www.example.com:4097/path/a.html?x=111#part1</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">href</span> <span class="comment">// &quot;http://user:passwd@www.example.com:4097/path/a.html?x=111#part1&quot;</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">protocol</span> <span class="comment">// &quot;http:&quot;</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">host</span> <span class="comment">// &quot;www.example.com:4097&quot;</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">hostname</span> <span class="comment">// &quot;www.example.com&quot;</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">port</span> <span class="comment">// &quot;4097&quot;</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">pathname</span> <span class="comment">// &quot;/path/a.html&quot;</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">search</span> <span class="comment">// &quot;?x=111&quot;</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">hash</span> <span class="comment">// &quot;#part1&quot;</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">user</span> <span class="comment">// &quot;user&quot;</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">password</span> <span class="comment">// &quot;passed&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 优先从本地缓存重新加载（默认值），相当于浏览器的 “刷新” 或 “重新载入” 按钮</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">location</span>.<span class="title function_">reload</span>()</span><br><span class="line">    <span class="comment">// 优先从服务器重新加载</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">location</span>.<span class="title function_">reload</span>(<span class="literal">true</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 跳转到另一个网址</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">location</span>.<span class="title function_">assign</span>(<span class="string">&#x27;http://www.google.com&#x27;</span>)</span><br><span class="line">    <span class="comment">// 跳转到另一个网址，但当前文档不保留在 history 对象中，即无法用后退按钮，回到当前文档</span></span><br><span class="line">    <span class="comment">// location.replace() 与 location.assign()/location.href 的区别：前者覆盖当前页面，页面历史中只有一个条目；后者相当于点击链接加载新的页面，页面历史中有两个条目</span></span><br><span class="line">    <span class="comment">// 从用户可用性的角度来说，在设置页面自动跳转时，推荐使用后者，避免用户无法使用 “后退” 按钮返回上一个页面，从而会造成类似的死循环</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">location</span>.<span class="title function_">replace</span>(<span class="string">&#x27;http://www.google.com&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将 location 对象转为字符串，等价于 window.location.href</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">location</span>.<span class="title function_">toString</span>()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 页面历史记录，forward()、back() 方法分别相当于浏览器 “前进”“后退” 按钮，go() 方法可以前进或后退多个页面</span></span><br><span class="line">    <span class="keyword">var</span> his = <span class="variable language_">window</span>.<span class="property">history</span>;</span><br><span class="line">    <span class="comment">// history.length 历史记录的数量</span></span><br><span class="line">    <span class="comment">// his.go(1) 相当于 his.forward();</span></span><br><span class="line">    <span class="comment">// his.go(-1) 相当于 his.back();</span></span><br><span class="line">    <span class="comment">// his.go(0) 相当于 刷新页面;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>location.href 在 IE6 中无效的解决方法：<a target="_blank" rel="noopener" href="http://blog.csdn.net/walksea/archive/2008/02/04/2082244.aspx">参考 1</a>、<a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/kb/190244">参考 2</a><br>有时候为了实现在页面间跳转，采用如下方法：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;javascript:;&quot;</span> <span class="attr">onclick</span>=<span class="string">&quot;wopen(&#x27;http://www.google.com/&#x27;);&quot;</span>&gt;</span>google<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">wopen</span>(<span class="params">url</span>)&#123;</span><br><span class="line">    location.<span class="property">href</span> = url;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样的语句在其他浏览器没有问题，但在 IE6 中会失效</p>
+<p>解决方法有几个：</p>
+<ol>
+<li>把 href 值换成 “#”，虽然解决了，但不完美，因为当初用 javascript:;（或者 javascript:void(0)）替换 #的初衷就是避免跳到页面顶端，现在不能重蹈覆辙</li>
+<li>在 onclick 值里添加 “return false;”，也解决了，但是如果链接多的话，需要手工添加很多代码</li>
+<li>在函数最后面添加 “window.event.returnValue &#x3D; false;”，完美解决</li>
+</ol>
+<h3 id="几何学"><a href="#几何学" class="headerlink" title="几何学"></a>几何学</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">dimension</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> w = <span class="variable language_">window</span>.<span class="property">screen</span>.<span class="property">width</span>;<span class="comment">// 屏幕宽度（硬件相关）</span></span><br><span class="line">    <span class="keyword">var</span> h = <span class="variable language_">window</span>.<span class="property">screen</span>.<span class="property">height</span>;<span class="comment">// 屏幕高度（硬件相关）</span></span><br><span class="line">    <span class="keyword">var</span> aw = <span class="variable language_">window</span>.<span class="property">screen</span>.<span class="property">availWidth</span>;<span class="comment">// 屏幕有效宽度，相当于屏幕宽度（Safari 还要减去Mac的Dock宽度--居左右时）</span></span><br><span class="line">    <span class="keyword">var</span> ah = <span class="variable language_">window</span>.<span class="property">screen</span>.<span class="property">availHeight</span>;<span class="comment">// 屏幕有效高度，相当于屏幕高度减去系统任务栏高度（Safari 还要减去Mac的Dock高度--居底时）</span></span><br><span class="line">    <span class="comment">// IE11、Firefox18+、其他现代浏览器、所有移动端浏览器都支持</span></span><br><span class="line">    <span class="keyword">var</span> dpr = <span class="variable language_">window</span>.<span class="property">devicePixelRatio</span>;<span class="comment">// 设备像素比（device pixel ratio）</span></span><br><span class="line">    <span class="comment">// IE8- 中无下面属性</span></span><br><span class="line">    <span class="keyword">var</span> ow = <span class="variable language_">window</span>.<span class="property">outerWidth</span>;<span class="comment">// 浏览器窗口宽度(包括侧边栏和边框)</span></span><br><span class="line">    <span class="keyword">var</span> oh = <span class="variable language_">window</span>.<span class="property">outerHeight</span>;<span class="comment">// 浏览器窗口高度</span></span><br><span class="line">    <span class="keyword">var</span> iw = <span class="variable language_">window</span>.<span class="property">innerWidth</span>;<span class="comment">// 浏览器视口（viewport）宽度（包括滚动条）</span></span><br><span class="line">    <span class="keyword">var</span> ih = <span class="variable language_">window</span>.<span class="property">innerHeight</span>;<span class="comment">// 浏览器视口（viewport）高度</span></span><br><span class="line">    <span class="keyword">var</span> ipx = <span class="variable language_">window</span>.<span class="property">pageXOffset</span>;<span class="comment">// 页面的水平滚动距离</span></span><br><span class="line">    <span class="keyword">var</span> ipy = <span class="variable language_">window</span>.<span class="property">pageYOffset</span>;<span class="comment">// 页面的垂直滚动距离</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置浏览器窗口尺寸的方法，to 是绝对（调整到、移动到、滚动到），by 是相对（调整了、移动了、滚动了）</span></span><br><span class="line">    <span class="comment">// 注：某些浏览器有禁用它的选项；Firefox7+、Chrome 无效；Safari多标签页时无效</span></span><br><span class="line">    <span class="comment">// 注：resizeBy() 可以解决某些浏览器 CSS 渲染问题：当 CSS 变化而不能正确渲染时，可以用 resizeBy(0,1) 来重置页面尺寸，浏览器会重新解析 CSS</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="title function_">resizeTo</span>(<span class="number">800</span>, <span class="number">600</span>);</span><br><span class="line">    <span class="comment">// 移动浏览器位置</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="title function_">moveTo</span>(<span class="number">200</span>, <span class="number">100</span>);</span><br><span class="line">    <span class="comment">// 滚动页面位置</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="title function_">scrollTo</span>(<span class="number">0</span>, <span class="number">100</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 前置和后置窗口，注：某些浏览器有禁用它的选项</span></span><br><span class="line">    <span class="comment">// blur() 让窗口失去焦点，用来后置窗口；focus() 则相反，让窗口获得焦点，用来前置窗口</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="title function_">blur</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="其他对象及方法"><a href="#其他对象及方法" class="headerlink" title="其他对象及方法"></a>其他对象及方法</h3><h4 id="navigator-对象"><a href="#navigator-对象" class="headerlink" title="navigator 对象"></a>navigator 对象</h4><p>它的一些属性表示用户浏览器的相关信息</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;浏览器信息：&quot;</span> + navigator.<span class="property">userAgent</span> + <span class="string">&quot; 浏览器平台：&quot;</span> + navigator.<span class="property">platform</span> + <span class="string">&quot; 浏览器名称：&quot;</span> + navigator.<span class="property">appName</span> + <span class="string">&quot; 浏览器版本：&quot;</span> + navigator.<span class="property">appVersion</span> + <span class="string">&quot; 浏览器插件：&quot;</span> + navigator.<span class="property">plugins</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="URL-的编码-解码方法"><a href="#URL-的编码-解码方法" class="headerlink" title="URL 的编码 &#x2F; 解码方法"></a>URL 的编码 &#x2F; 解码方法</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="built_in">decodeURI</span>() <span class="comment">// 将已编码字符串中所有能识别的转义序列转换成原字符</span></span><br><span class="line"><span class="variable language_">window</span>.<span class="built_in">decodeURIComponent</span>() <span class="comment">// 将已编码字符串中所有能识别的转义序列转换成原字符</span></span><br><span class="line"><span class="variable language_">window</span>.<span class="built_in">encodeURI</span>() <span class="comment">// 把字符串作为 URI 进行编码。 URI 中具有特殊含义的字符（比如 ：;/?:@&amp;=+$,# 这些用于分隔 URI 组件的标点符号），encodeURI() 函数是不会进行转义的。</span></span><br><span class="line"><span class="variable language_">window</span>.<span class="built_in">encodeURIComponent</span>() <span class="comment">// 把字符串作为 URI 组件进行编码。URI 中具有特殊含义的字符（：;/?:@&amp;=+$,#），都是由一个或多个十六进制的转义序列替换的。</span></span><br><span class="line"><span class="comment">// 请注意 encodeURIComponent() 函数 与 encodeURI() 函数的区别之处，前者假定它的参数是 URI 的一部分（比如协议、主机名、路径或查询字符串）。因此 encodeURIComponent() 函数将转义用于分隔 URI 各个部分的标点符号。</span></span><br></pre></td></tr></table></figure>
+<h4 id="其他方法"><a href="#其他方法" class="headerlink" title="其他方法"></a>其他方法</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">otherEvent</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="comment">// 三个弹出对话框的方法</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="title function_">alert</span>(<span class="string">&quot;这是 alert&quot;</span>);</span><br><span class="line">    <span class="keyword">var</span> c = <span class="variable language_">window</span>.<span class="title function_">confirm</span>(<span class="string">&quot;你想试试吗？&quot;</span>);</span><br><span class="line">    <span class="keyword">var</span> p = <span class="variable language_">window</span>.<span class="title function_">prompt</span>(<span class="string">&quot;你输入一个名字吧&quot;</span>);</span><br><span class="line">    <span class="title function_">alert</span>(c);</span><br><span class="line">    <span class="title function_">alert</span>(p);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 延时运行以及移除它的方法</span></span><br><span class="line">    <span class="keyword">var</span> myT1 = <span class="built_in">setTimeout</span>(<span class="string">&quot;fn1()&quot;</span>, <span class="number">2000</span>);</span><br><span class="line">    <span class="keyword">var</span> myT2 = <span class="built_in">setTimeout</span>(fn1, <span class="number">2000</span>);</span><br><span class="line">    <span class="built_in">clearTimeout</span>(myT2);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 重复运行以及移除它的方法</span></span><br><span class="line">    <span class="keyword">var</span> myI = <span class="built_in">setInterval</span>(fn2, <span class="number">1000</span>);</span><br><span class="line">    <span class="built_in">clearInterval</span>(myI);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">fn1</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="title function_">alert</span>(<span class="string">&quot;延时运行&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> itest = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">fn2</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">if</span> (itest &lt; <span class="number">10</span>) &#123;</span><br><span class="line">        itest++;</span><br><span class="line">        <span class="title function_">alert</span>(itest);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Document-对象"><a href="#Document-对象" class="headerlink" title="Document 对象"></a>Document 对象</h2><p>Document 对象是 Window 对象中最重要的对象，它代表浏览器窗口包含的 HTML 文档，就是常说的 “页面”。它包含了 DOM 的所有 HTML 元素对应的对象及其属性、方法；但是还有一些不属于 DOM 的部分，用来描述文档的一些整体信息</p>
+<h3 id="访问-Document-对象："><a href="#访问-Document-对象：" class="headerlink" title="访问 Document 对象："></a>访问 Document 对象：</h3><ul>
+<li>对于正常的网页，直接使用 document。</li>
+<li>对于 iframe 载入的网页，使用 iframe 节点的 contentDocument 属性。</li>
+<li>对 Ajax 操作返回的文档，使用 XMLHttpRequest 对象的 responseXML 属性。</li>
+<li>对于某个节点包含的文档，使用该节点的 ownerDocument 属性。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">docOther</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="comment">// activeElement 属性，返回当前文档中获得焦点的那个元素。用户通常可以使用 tab 键移动焦点，使用空格键激活焦点。</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// defaultView 属性，在浏览器中返回 Document 对象所在的 Window 对象，否则返回 null。</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">document</span>.<span class="property">defaultView</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// documentURI 属性和 URL 属性都返回当前文档的网址。相当于 Window 对象的 location.href（注：IE 不支持前者）</span></span><br><span class="line">    <span class="comment">// documentURI 属性是所有文档都具备的，URL 属性则是 HTML 文档独有的</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;URI 属性为&quot;</span> + <span class="variable language_">document</span>.<span class="property">documentURI</span> + <span class="string">&quot; URL 属性为&quot;</span> + <span class="variable language_">document</span>.<span class="property">URL</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// location 属性返回一个只读对象，提供了当前文档的 URL 信息。</span></span><br><span class="line">    <span class="comment">// document.location 属性与 window.location 属性等价，IE 曾经不允许对 document.location 赋值，建议优先使用 window.location。如果只是单纯地获取当前网址，建议使用 document.URL。</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// domain 属性，返回当前文档的域名。可以规避 JavaScript 同源策略中最严格的部分</span></span><br><span class="line">    <span class="comment">// 如：document.domain = &quot;google.com&quot;; 这样的话，help.google.com 的页面和 home.google.com 的页面就可以通信了</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// lastModified 属性，表示文档最后修改时间，注：为了避免浏览器返回的结果（字符串类型）差异，已转换为日期对象</span></span><br><span class="line">    <span class="keyword">var</span> lastUpdate = <span class="keyword">new</span> <span class="title class_">Date</span>(<span class="variable language_">document</span>.<span class="property">lastModified</span>);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(lastUpdate);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// referrer 属性，当前页面访问来源</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">document</span>.<span class="property">referrer</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// title 属性，返回当前文档的标题，该属性是可写的。</span></span><br><span class="line">    <span class="variable language_">document</span>.<span class="property">title</span> = <span class="string">&#x27;新标题&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// doctype 属性，表示文档类型，一般为 document.firstChild。</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">document</span>.<span class="property">doctype</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// characterSet 属性，返回渲染当前文档的字符集，比如 UTF-8</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">document</span>.<span class="property">characterSet</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// compatMode 属性，表示当前页面采用的渲染方式（BackCompat－非标准、CSS1Compat－标准）</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">document</span>.<span class="property">compatMode</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// readyState 属性，返回当前文档的状态，共有三种可能的值，加载 HTML 代码阶段（尚未完成解析）是 “loading”，加载外部资源阶段是 “interactive”，全部加载完成是 “complete”。</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">document</span>.<span class="property">readyState</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// designMode 属性，控制当前 document 是否可编辑。通常会打开 iframe 的 designMode 属性，将其变为一个所见即所得的编辑器。iframe_node.contentDocument.designMode = &quot;on&quot;;</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">document</span>.<span class="property">designMode</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="document-write-方法"><a href="#document-write-方法" class="headerlink" title="document.write() 方法"></a>document.write() 方法</h3><ul>
+<li>document.write() &#x2F;&#x2F; 曾经是 JavaScript 最重要的方法之一，但随着 W3C DOM 的推广，它已经过时了</li>
+<li>document.writeln() &#x2F;&#x2F; 表示写入内容后添加一个换行符，相当于 document.write(内容 +”\n”)<ul>
+<li>页面加载和解析的时候，它才能正确工作，另外写入的代码出现在它被调用的地方</li>
+</ul>
+</li>
+<li>document.open() &#x2F;&#x2F; 该方法是移除当前文档内容，同时打开新文档；document.close() 是关闭 open() 打开的文档流，并显示缓存的输出内容<ul>
+<li>open() 方法不是必需的，文档关闭（页面完全加载或使用了 close()）后，再次执行 write() 时，浏览器会隐式地调用 open() 移除当前文档内容，并写入新的内容</li>
+<li>如果文档未关闭或没有使用 open()，write() 会直接添加内容到当前文档</li>
+<li>Firefox 中，如果执行 write() 后没有使用 close()，会一直显示 “正在载入”；而且再次执行 write() 时会忽略 open()，直接添加内容到当前文档</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">debug</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">if</span> (oDebug) &#123;</span><br><span class="line">        oDebug.<span class="property">document</span>.<span class="title function_">open</span>();</span><br><span class="line">        oDebug.<span class="property">document</span>.<span class="title function_">write</span>(<span class="string">&quot;节点名称：&quot;</span> + <span class="variable language_">this</span>.<span class="property">nodeName</span> + <span class="string">&quot; 节点文本值：&quot;</span> + <span class="variable language_">this</span>.<span class="property">firstChild</span>.<span class="property">nodeValue</span> + <span class="string">&quot;&lt;br&gt;&quot;</span>);</span><br><span class="line">        oDebug.<span class="property">document</span>.<span class="title function_">close</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">initDebug</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> obj = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;linkList&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (!obj) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> link = obj.<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;a&quot;</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; link.<span class="property">length</span>; i++) &#123;</span><br><span class="line">        link[i].<span class="property">newId</span> = i;</span><br><span class="line">        link[i].<span class="property">onclick</span> = debug;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> oDebug = <span class="variable language_">window</span>.<span class="title function_">open</span>(<span class="string">&quot;&quot;</span>, <span class="string">&quot;newWin&quot;</span>, <span class="string">&quot;width=400,height=300&quot;</span>);</span><br><span class="line"><span class="variable language_">window</span>.<span class="property">onload</span> = <span class="title function_">initDebug</span>();</span><br></pre></td></tr></table></figure>
+
+<h2 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h2><p>HTTP 是一种无状态协议，所以 Web 服务器不会记住任何东西（注：TCP 是有状态协议，要求客户端和服务器交流时维持一个协议状态机，根据网络事件进行状态的转换）<br>而为了记住用户的一些访问状态和记录，Netscape 引入了 cookie，它是存储在用户电脑的小文本文件，与某个 Web 域的某个目录关联。当用户浏览器从目录中请求了页面，cookie 会随着 HTTP 请求自动发送。<br>cookie 传载的信息处理由服务器来决定，也可以用 JavaScript 来设置和检索 cookie</p>
+<h3 id="cookie-信息"><a href="#cookie-信息" class="headerlink" title="cookie 信息"></a>cookie 信息</h3><p>cookie 的实际信息存储在名 &#x2F; 值对中，名字是唯一的，如果给相同名字设置了新值，旧值就被覆盖</p>
+<ul>
+<li>expires：设置 cookie 的过期时间，过期后就会消失，不会和站点关联。默认的过期时间是浏览器关闭时。过期时间按格林尼治标准时间（GMT）设置成如下格式：Thu, 09 Aug 2007 17:16:00 GMT；也叫世界协调时间（UTC）。删除一个 cookie 的简便方法，就是设置 expires 属性等于 0。</li>
+<li>max-age：设置 cookie 的有效期，单位为秒</li>
+<li>path：设置 cookie 的有效路径（绝对），默认是页面所在的目录，path&#x3D;&#x2F; 即设置为服务器的根目录</li>
+<li>domain: 设置 cookie 的有效域（这个和 document 的 domain 作用类似）</li>
+<li>secure：设置 cookie 只能在加密协议 HTTPS 下发送到服务器。该属性只是一个开关，不需要设定值。在 HTTPS 协议下设定的 cookie，该开关自动打开。</li>
+<li>cookie 的内容由以上几个属性组成，设置语法如下（要求很精确，包括分隔参数的分号和空格以及过期时间的严格格式）：<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="property">cookie</span> = <span class="string">&quot;ppkcookie=testcookie; expires=Sat, 2 Aug 2008 20:47:11 UTC; path=/; domain=google.com&quot;</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">document</span>.<span class="property">cookie</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">readCookie</span>(<span class="string">&quot;ppkcookie&quot;</span>));</span><br></pre></td></tr></table></figure></li>
+<li>cookie 限制：浏览器对 cookie 的数量和长度有限制，但是每个浏览器的规定是不一样的。<ul>
+<li>IE6：每个域名 20 个 cookie。</li>
+<li>IE7，IE8，Firefox：每个域名 50 个 cookie</li>
+<li>Safari，Chrome：没有域名数量的限制。</li>
+</ul>
+</li>
+<li>所有 cookie 的累加长度限制为 4KB。超过这个长度的 cookie，将被忽略，不会被设置。</li>
+<li>由于 cookie 的限制，目前推荐使用 HTML5 里的新特性 Window.sessionStorage 和 Window.localStorage（WHATWG DOM Storage）</li>
+</ul>
+<h3 id="读写方法"><a href="#读写方法" class="headerlink" title="读写方法"></a>读写方法</h3><p>通用创建、读取和移除 cookie 函数 by <a target="_blank" rel="noopener" href="http://www.scottandrew.com/weblog/jsjunk#cookie">Scott Andrew</a>、<a target="_blank" rel="noopener" href="http://www.quirksmode.org/js/cookies.html">PPK</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">createCookie</span>(<span class="params">name, value, days</span>)&#123;</span><br><span class="line">    <span class="keyword">if</span> (days) &#123;</span><br><span class="line">        <span class="keyword">var</span> date = <span class="keyword">new</span> <span class="title class_">Date</span>();</span><br><span class="line">        date.<span class="title function_">setTime</span>(date.<span class="title function_">getTime</span>() + (days * <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span> * <span class="number">1000</span>));</span><br><span class="line">        <span class="keyword">var</span> expires = <span class="string">&quot;; expires=&quot;</span> + date.<span class="title function_">toGMTString</span>();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">var</span> expires = <span class="string">&quot;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable language_">document</span>.<span class="property">cookie</span> = name + <span class="string">&quot;=&quot;</span> + value + expires + <span class="string">&quot;; path=/&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">readCookie</span>(<span class="params">name</span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> nameEQ = name + <span class="string">&quot;=&quot;</span>;</span><br><span class="line">    <span class="keyword">var</span> cookies = <span class="variable language_">document</span>.<span class="property">cookie</span>.<span class="title function_">split</span>(<span class="string">&#x27;;&#x27;</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; cookies.<span class="property">length</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">var</span> coo = cookies[i];</span><br><span class="line">        <span class="keyword">while</span> (coo.<span class="title function_">charAt</span>(<span class="number">0</span>) == <span class="string">&#x27; &#x27;</span>) &#123;</span><br><span class="line">            coo = coo.<span class="title function_">substring</span>(<span class="number">1</span>, coo.<span class="property">length</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (coo.<span class="title function_">indexOf</span>(nameEQ) == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> coo.<span class="title function_">substring</span>(nameEQ.<span class="property">length</span>, coo.<span class="property">length</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">removeCookie</span>(<span class="params">name</span>)&#123;</span><br><span class="line">    <span class="title function_">createCookie</span>(name, <span class="string">&quot;&quot;</span>, -<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Web-Storage"><a href="#Web-Storage" class="headerlink" title="Web Storage"></a>Web Storage</h2><p>Web 应用的发展，使得客户端存储使用得也越来越多。最简单而且兼容性最佳的方案是 Cookie，但是作为真正的客户端存储，Cookie 则存在很多致命伤。<br>针对以上情况，HTML5 中给出了更加理想的解决方案：<br>假如你需要存储复杂的数据则可以使用 Web Database，可以像客户端程序一样使用 SQL（不过 Web Database 标准当前正陷于僵局之中，而且目前已经实现的浏览器很有限）；<br>假如你需要存储的只是简单的 key&#x2F;value 对的数据则可以使用 WHAT-WG 制定的 Web Storage。</p>
+<p>与 Cookie 相比，Web Storage 存在不少的优势，概括为以下几点：</p>
+<ol>
+<li>存储空间更大：IE8 下每个独立的存储空间为 10M，其他浏览器实现略有不同（Chrome 是 2.5MB，Firefox 和 Opera 是 5MB），但都比 Cookie 要大很多。</li>
+<li>存储内容不会发送到服务器：当设置了 Cookie 后，Cookie 的内容会随着请求一并发送的服务器，这对于本地存储的数据是一种带宽浪费。而 Web Storage 中的数据则仅仅是存在本地，不会与服务器发生任何交互。</li>
+<li>更多丰富易用的接口：Web Storage 提供了一套更为丰富的接口，使得数据操作更为简便。</li>
+<li>独立的存储空间：每个域（包括子域）有独立的存储空间，各个存储空间是完全独立的，只有同域下的网页才能读取，因此不会造成数据混乱。</li>
+</ol>
+<p>Web Storage 是 HTML5 里新引入的浏览器端数据储存机制，共包括两个对象接口。<br>sessionStorage 保存的数据用于浏览器的一次会话，当会话结束（通常是该窗口关闭），数据被清空；<br>localStorage 保存的数据长期存在，下一次访问该网站的时候，网页可以直接读取以前保存的数据。<br>除了保存期限的长短不同，这两个对象的属性和方法完全一样。</p>
+<p>通过检查 Window 对象是否包含 sessionStorage 和 localStorage 属性，可以确定浏览器是否支持这两个对象。<br>目前 IE8+、现代浏览器都支持这两个对象。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">checkStorageSupport</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// sessionStorage</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">window</span>.<span class="property">sessionStorage</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// localStorage</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">window</span>.<span class="property">localStorage</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="操作方法"><a href="#操作方法" class="headerlink" title="操作方法"></a>操作方法</h3><h4 id="存入-读取数据"><a href="#存入-读取数据" class="headerlink" title="存入 &#x2F; 读取数据"></a>存入 &#x2F; 读取数据</h4><p>sessionStorage 和 localStorage 保存的数据，都以 “键值对” 的形式存在。也就是说，每一项数据都有一个键名和对应的值。所有的数据都是以文本格式保存。<br>存入数据使用 setItem 方法。它接受两个参数，第一个是键名，第二个是保存的数据。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">sessionStorage</span>.<span class="title function_">setItem</span>(<span class="string">&#x27;key&#x27;</span>,<span class="string">&#x27;value&#x27;</span>);</span><br><span class="line"><span class="variable language_">localStorage</span>.<span class="title function_">setItem</span>(<span class="string">&#x27;key&#x27;</span>,<span class="string">&#x27;value&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>读取数据使用 getItem 方法。它只有一个参数，就是键名。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> valueSession = <span class="variable language_">sessionStorage</span>.<span class="title function_">getItem</span>(<span class="string">&#x27;key&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> valueLocal = <span class="variable language_">localStorage</span>.<span class="title function_">getItem</span>(<span class="string">&#x27;key&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="清除数据"><a href="#清除数据" class="headerlink" title="清除数据"></a>清除数据</h4><p>removeItem 方法用于清除某个键名对应的数据。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">sessionStorage</span>.<span class="title function_">removeItem</span>(<span class="string">&#x27;key&#x27;</span>);</span><br><span class="line"><span class="variable language_">localStorage</span>.<span class="title function_">removeItem</span>(<span class="string">&#x27;key&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>clear 方法用于清除所有保存的数据。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">sessionStorage</span>.<span class="title function_">clear</span>();</span><br><span class="line"><span class="variable language_">localStorage</span>.<span class="title function_">clear</span>();</span><br></pre></td></tr></table></figure>
+
+<h4 id="遍历操作"><a href="#遍历操作" class="headerlink" title="遍历操作"></a>遍历操作</h4><p>利用 length 属性和 key 方法，可以遍历所有的键。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="variable language_">localStorage</span>.<span class="property">length</span>; i++)&#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">localStorage</span>.<span class="title function_">key</span>(i));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中的 key 方法，根据位置（从 0 开始）获得键值。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">localStorage</span>.<span class="title function_">key</span>(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="storage-事件"><a href="#storage-事件" class="headerlink" title="storage 事件"></a>storage 事件</h3><p>当储存的数据发生变化时，会触发 storage 事件。我们可以指定这个事件的回调函数。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;storage&#x27;</span>, onStorageChange);</span><br></pre></td></tr></table></figure>
+<p>回调函数接受一个 event 对象作为参数。这个 event 对象的 key 属性，保存发生变化的键名。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">onStorageChange</span>(<span class="params">e</span>) &#123;</span><br><span class="line">     <span class="variable language_">console</span>.<span class="title function_">log</span>(e.<span class="property">key</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>除了 key 属性，event 对象的属性还有三个：</p>
+<ul>
+<li>oldValue：更新前的值。如果该键为新增加，则这个属性为 null。</li>
+<li>newValue：更新后的值。如果该键被删除，则这个属性为 null。</li>
+<li>url：原始触发 storage 事件的那个网页的网址。</li>
+</ul>
+<p>值得特别注意的是，该事件不在导致数据变化的当前页面触发。如果浏览器同时打开一个域名下面的多个页面，当其中的一个页面改变 sessionStorage 或 localStorage 的数据时，其他所有页面的 storage 事件会被触发，而原始页面并不触发 storage 事件。可以通过这种机制，实现多个窗口之间的通信。所有浏览器之中，只有 IE 浏览器除外，它会在所有页面触发 storage 事件。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2015/09/20/07.ecma04/" rel="prev" title="JavaScript 读书心得之四：面向对象编程（OOP）">
+      <i class="fa fa-chevron-left"></i> JavaScript 读书心得之四：面向对象编程（OOP）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2015/09/22/09.ecma06/" rel="next" title="JavaScript 读书心得之六：事件（Event）">
+      JavaScript 读书心得之六：事件（Event） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Window-%E5%AF%B9%E8%B1%A1"><span class="nav-number">2.</span> <span class="nav-text">Window 对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#window-open-%E6%96%B9%E6%B3%95"><span class="nav-number">2.1.</span> <span class="nav-text">window.open() 方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%A8%E6%B5%8F%E8%A7%88%E5%99%A8%E9%80%9A%E4%BF%A1"><span class="nav-number">2.2.</span> <span class="nav-text">跨浏览器通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E8%88%AA"><span class="nav-number">2.3.</span> <span class="nav-text">导航</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%A0%E4%BD%95%E5%AD%A6"><span class="nav-number">2.4.</span> <span class="nav-text">几何学</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%AF%B9%E8%B1%A1%E5%8F%8A%E6%96%B9%E6%B3%95"><span class="nav-number">2.5.</span> <span class="nav-text">其他对象及方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#navigator-%E5%AF%B9%E8%B1%A1"><span class="nav-number">2.5.1.</span> <span class="nav-text">navigator 对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#URL-%E7%9A%84%E7%BC%96%E7%A0%81-%E8%A7%A3%E7%A0%81%E6%96%B9%E6%B3%95"><span class="nav-number">2.5.2.</span> <span class="nav-text">URL 的编码 &#x2F; 解码方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%96%B9%E6%B3%95"><span class="nav-number">2.5.3.</span> <span class="nav-text">其他方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Document-%E5%AF%B9%E8%B1%A1"><span class="nav-number">3.</span> <span class="nav-text">Document 对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BF%E9%97%AE-Document-%E5%AF%B9%E8%B1%A1%EF%BC%9A"><span class="nav-number">3.1.</span> <span class="nav-text">访问 Document 对象：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#document-write-%E6%96%B9%E6%B3%95"><span class="nav-number">3.2.</span> <span class="nav-text">document.write() 方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cookie"><span class="nav-number">4.</span> <span class="nav-text">Cookie</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cookie-%E4%BF%A1%E6%81%AF"><span class="nav-number">4.1.</span> <span class="nav-text">cookie 信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BB%E5%86%99%E6%96%B9%E6%B3%95"><span class="nav-number">4.2.</span> <span class="nav-text">读写方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web-Storage"><span class="nav-number">5.</span> <span class="nav-text">Web Storage</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95"><span class="nav-number">5.1.</span> <span class="nav-text">操作方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%98%E5%85%A5-%E8%AF%BB%E5%8F%96%E6%95%B0%E6%8D%AE"><span class="nav-number">5.1.1.</span> <span class="nav-text">存入 &#x2F; 读取数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B8%85%E9%99%A4%E6%95%B0%E6%8D%AE"><span class="nav-number">5.1.2.</span> <span class="nav-text">清除数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%81%8D%E5%8E%86%E6%93%8D%E4%BD%9C"><span class="nav-number">5.1.3.</span> <span class="nav-text">遍历操作</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#storage-%E4%BA%8B%E4%BB%B6"><span class="nav-number">5.2.</span> <span class="nav-text">storage 事件</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">可口可乐</p>
+  <div class="site-description" itemprop="description">Personal Blog</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">可口可乐</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

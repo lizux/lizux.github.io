@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="React 是一个 用来构建 Web APP UI 的前端库，适合构建随着时间推移数据不断变化的大型应用程序，用来解决如何高效地将动态数据反映到复杂的用户界面上的问题关键词：虚拟 DOM、可复用组件、状态机、JSX最近使用 React 库包括其他第三方组件开发项目，期间遇到很多 “小坑”，记录下来，以备查询。 生命周期详解 挂载 componentWillMount -&gt; render -&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React 使用技巧">
+<meta property="og:url" content="http://example.com/2017/01/12/29.react-tips/index.html">
+<meta property="og:site_name" content="Lizux">
+<meta property="og:description" content="React 是一个 用来构建 Web APP UI 的前端库，适合构建随着时间推移数据不断变化的大型应用程序，用来解决如何高效地将动态数据反映到复杂的用户界面上的问题关键词：虚拟 DOM、可复用组件、状态机、JSX最近使用 React 库包括其他第三方组件开发项目，期间遇到很多 “小坑”，记录下来，以备查询。 生命周期详解 挂载 componentWillMount -&gt; render -&amp;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-01-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-26T02:32:58.380Z">
+<meta property="article:author" content="可口可乐">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="React">
+<meta property="article:tag" content="Material-UI">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2017/01/12/29.react-tips/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>React 使用技巧 | Lizux</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lizux</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Just go on</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2017/01/12/29.react-tips/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="可口可乐">
+      <meta itemprop="description" content="Personal Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lizux">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          React 使用技巧
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-01-12 00:00:00" itemprop="dateCreated datePublished" datetime="2017-01-12T00:00:00+08:00">2017-01-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-10-26 10:32:58" itemprop="dateModified" datetime="2023-10-26T10:32:58+08:00">2023-10-26</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>React 是一个 用来构建 Web APP UI 的前端库，适合构建随着时间推移数据不断变化的大型应用程序，用来解决如何高效地将动态数据反映到复杂的用户界面上的问题<br>关键词：虚拟 DOM、可复用组件、状态机、JSX<br>最近使用 React 库包括其他第三方组件开发项目，期间遇到很多 “小坑”，记录下来，以备查询。</p>
+<h2 id="生命周期详解"><a href="#生命周期详解" class="headerlink" title="生命周期详解"></a>生命周期详解</h2><ol start="0">
+<li>挂载 componentWillMount -&gt; render -&gt; componentDidMount</li>
+<li>更新 componentWillReceiveProps -&gt; shouldComponentUpdate -&gt; componentWillUpdate -&gt; render -&gt; componentDidUpdate</li>
+<li>卸载 componentWillUnmount</li>
+</ol>
+<blockquote>
+<p>注：官方推荐在 componentDidMount 中添加 ajax，因为这是 DOM 已经完成了初始化的渲染。在 componentWillMount 中获取也可以，但是不建议这么做，因为 DOM 还没有渲染，有些 DOM 操作会出错！</p>
+</blockquote>
+<h2 id="React-的组件（无状态）和-元素（JSX-表达式）区分"><a href="#React-的组件（无状态）和-元素（JSX-表达式）区分" class="headerlink" title="React 的组件（无状态）和 元素（JSX 表达式）区分"></a>React 的组件（无状态）和 元素（JSX 表达式）区分</h2><p>从概念上讲：组件其实是一个函数，它最终会返回一个 React元素。<br>而 React元素 是普通的对象，和浏览器的 DOM元素 不同。</p>
+<p>创建：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">let SomeComponent = () =&gt; (&lt;div&gt;组件&lt;/div&gt;)</span><br><span class="line">let SomeJsx = &lt;div&gt;元素/表达式&lt;/div&gt;;</span><br><span class="line">let AnotherJsx = list.map((item, i) =&gt; &#123;</span><br><span class="line">   return &lt;div key=&#123;i&#125;&gt;&#123;item&#125;&lt;/div&gt;;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>合并：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">AnotherJsx.push(&lt;div&gt;新增部分&lt;/div&gt;)</span><br><span class="line">let newJsx = AnotherJsx.concat(&lt;div&gt;新增部分&lt;/div&gt;)</span><br></pre></td></tr></table></figure>
+
+<p>调用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;SomeComponent/&gt;</span><br><span class="line">&#123;SomeJsx&#125;</span><br><span class="line">&#123;AnotherJsx&#125;</span><br></pre></td></tr></table></figure>
+
+<p>React 的 {} 只能包含表达式，要是包含语句需要用立即调用函数（IIFE）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;list.<span class="title function_">map</span>(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">   <span class="keyword">return</span> item;</span><br><span class="line">&#125;)&#125;</span><br><span class="line"></span><br><span class="line">&#123;(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (a &gt; <span class="number">10</span>) &#123;</span><br><span class="line">        a++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)()&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="React-代码优化"><a href="#React-代码优化" class="headerlink" title="React 代码优化"></a>React 代码优化</h2><h3 id="尽量使用三元表达式"><a href="#尽量使用三元表达式" class="headerlink" title="尽量使用三元表达式"></a>尽量使用三元表达式</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div className=&#123;(order % 2) === 0 ? &#x27;odd&#x27; : &#x27;even&#x27;&#125;/&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="尽量使用表达式代替语句"><a href="#尽量使用表达式代替语句" class="headerlink" title="尽量使用表达式代替语句"></a>尽量使用表达式代替语句</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (key) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">span</span>&gt;</span>&#123;key&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)()&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用三元表达式后：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;key ? &lt;span&gt;&#123;key&#125;&lt;/span&gt; : &#x27;&#x27;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>特别注意<br>因为 React 对于 true、false、null、undefined 等值并不渲染，所以可以用来进行条件判断后渲染组件，如上例可以进行极致精简：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;key &amp;&amp; &lt;span&gt;&#123;key&#125;&lt;/span&gt;&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注：特别注意对于数字 0 , React 仍然会渲染. 如下例，当 props.messages 为空数组时，会<br>输出 0，而不是不渲染。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;div&gt;</span><br><span class="line">  &#123;props.messages.length &amp;&amp;</span><br><span class="line">    &lt;MessageList messages=&#123;props.messages&#125; /&gt;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<p>修正也很简单，让 &amp;&amp; 符前的表达式永远为 boolean 值即可：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;div&gt;</span><br><span class="line">  &#123;props.messages.length &gt; 0 &amp;&amp;</span><br><span class="line">    &lt;MessageList messages=&#123;props.messages&#125; /&gt;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="尽量用原生的方法代替-lodash"><a href="#尽量用原生的方法代替-lodash" class="headerlink" title="尽量用原生的方法代替 lodash"></a>尽量用原生的方法代替 lodash</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">// lodash</span><br><span class="line">_.forEach(xList, (item, key) =&gt; &#123;</span><br><span class="line">    arr[key] = item.name;</span><br><span class="line">&#125;)</span><br><span class="line">// 原生</span><br><span class="line">Object.keys(xList).forEach((key, i) =&gt; &#123;</span><br><span class="line">    let item = xList[key];</span><br><span class="line">    arr[key] = item.name;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">// lodash</span><br><span class="line">_.map(xList, (item) =&gt; &#123;</span><br><span class="line">    return item.name;</span><br><span class="line">&#125;)</span><br><span class="line">// 原生</span><br><span class="line">Object.keys(xList).map((key, i) =&gt; &#123;</span><br><span class="line">    let item = xList[key];</span><br><span class="line">    return item.name;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">// lodash</span><br><span class="line">let valid = _.every(xList, (item) =&gt; &#123;</span><br><span class="line">    return item.name !== name;</span><br><span class="line">&#125;);</span><br><span class="line">// 原生</span><br><span class="line">let valid = Object.keys(xList).every((key) =&gt; &#123;</span><br><span class="line">    return xList[key].name !== name;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="React-组件"><a href="#React-组件" class="headerlink" title="React 组件"></a>React 组件</h2><h3 id="state-状态的保存"><a href="#state-状态的保存" class="headerlink" title="state 状态的保存"></a>state 状态的保存</h3><p>通过 react-router 的 location.state 属性传递的状态，在刷新页面不会丢失</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="property">props</span>.<span class="property">router</span>.<span class="title function_">push</span>(&#123;</span><br><span class="line">    <span class="attr">pathname</span>: <span class="string">&#x27;/app/&#x27;</span> + <span class="variable language_">this</span>.<span class="property">state</span>.<span class="property">id</span>,</span><br><span class="line">    <span class="attr">state</span>: &#123;</span><br><span class="line">        <span class="attr">platform</span>: obj.<span class="property">platform</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// 该 platform 属性在新页面刷新时不会丢失</span></span><br></pre></td></tr></table></figure>
+
+<p>通过 redux 的 state 保存的数据，在刷新页面时会丢失</p>
+<blockquote>
+<p>可以使用第三方 middleware来保存，如：redux-persist 或 redux-storage</p>
+</blockquote>
+<h3 id="state-状态的同步"><a href="#state-状态的同步" class="headerlink" title="state 状态的同步"></a>state 状态的同步</h3><p>组件的 state 通过 react-router 的 location.state 获取初始值，但是操作（改变值）后刷新页面还会恢复原值，如何同步？<br>可以使用 replace 方法再次设置状态</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="property">props</span>.<span class="property">router</span>.<span class="title function_">replace</span>(&#123;</span><br><span class="line">    <span class="attr">pathname</span>: <span class="string">&#x27;/app/&#x27;</span> + <span class="variable language_">this</span>.<span class="property">state</span>.<span class="property">id</span>,</span><br><span class="line">    <span class="attr">state</span>: &#123;</span><br><span class="line">        ...<span class="variable language_">this</span>.<span class="property">props</span>.<span class="property">location</span>.<span class="property">state</span>,</span><br><span class="line">        ...newState</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="props-属性的传递"><a href="#props-属性的传递" class="headerlink" title="props 属性的传递"></a>props 属性的传递</h3><p>父组件可以通过 props 给子组件传递参数，假如参数发生改变，怎么通知子组件重新渲染？<br>有两种方法：<br>0. 在父组件里用 IIFE 函数进行条件判断</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">state</span>.<span class="property">data</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="language-xml"><span class="tag">&lt;<span class="name">Child</span> <span class="attr">data</span>=<span class="string">&#123;this.state.data&#125;/</span>&gt;</span></span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)()&#125;</span><br></pre></td></tr></table></figure>
+<ol start="0">
+<li>在子组件里用 componentWillReceiveProps 方法<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">componentWillReceiveProps</span>(<span class="params">props</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">setState</span>(&#123;<span class="attr">data</span>: props.<span class="property">data</span>&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="尽量不要直接操作-state（论-Immutable-的重要性）"><a href="#尽量不要直接操作-state（论-Immutable-的重要性）" class="headerlink" title="尽量不要直接操作 state（论 Immutable 的重要性）"></a>尽量不要直接操作 state（论 Immutable 的重要性）</h3><p>通过子组件 props 传入的父组件的 state 和当前 state 绑定后，操作子 state 会影响父 state，所以尽量不要直接操作 state，一般 clone 后再操作</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 父组件</span></span><br><span class="line"><span class="variable language_">this</span>.<span class="property">state</span> = &#123;</span><br><span class="line">    <span class="attr">list</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">&#125;;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">Child</span> <span class="attr">data</span>=<span class="string">&#123;this.state.list&#125;/</span>&gt;</span></span></span><br><span class="line"><span class="comment">// 子组件</span></span><br><span class="line"><span class="variable language_">this</span>.<span class="property">state</span> = &#123;</span><br><span class="line">    <span class="attr">gridData</span>: props.<span class="property">data</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="title function_">changeParent</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> next = <span class="variable language_">this</span>.<span class="property">state</span>.<span class="property">gridData</span>;</span><br><span class="line">    next.<span class="property">length</span> = <span class="number">0</span>;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">setState</span>(&#123;<span class="attr">gridData</span>: next&#125;);</span><br><span class="line">&#125;</span><br><span class="line">这时 子组件的 gridData 和 父组件的 list 都是对同一对象的引用，直接操作 gridData 会改变 list，如上面的 <span class="title function_">changeParent</span>() 方法</span><br><span class="line"><span class="comment">// 可以修改如下：</span></span><br><span class="line"><span class="title function_">notChangeParent</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> next = <span class="variable language_">this</span>.<span class="property">state</span>.<span class="property">gridData</span>.<span class="title function_">slice</span>();</span><br><span class="line">    next.<span class="property">length</span> = <span class="number">0</span>;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">setState</span>(&#123;<span class="attr">gridData</span>: next&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="渲染可控组件时的注意事项"><a href="#渲染可控组件时的注意事项" class="headerlink" title="渲染可控组件时的注意事项"></a>渲染可控组件时的注意事项</h3><p>渲染时，必须把可控组件（类似 input）放入最终 return 语句，不能放入条件判断，否则在 setState 时会导致失焦<br>也可以把该控件单纯剥离为一个独立组件</p>
+<h3 id="渲染可控组件时的注意事项Ⅱ"><a href="#渲染可控组件时的注意事项Ⅱ" class="headerlink" title="渲染可控组件时的注意事项Ⅱ"></a>渲染可控组件时的注意事项Ⅱ</h3><p>在使用可控组件时，假如其值为 state 非直接属性，则在 setState 时需要注意，不能直接设置父级属性为空，需要直接操作对应的属性</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Demo</span> <span class="keyword">extends</span> <span class="title class_ inherited__">React.Component</span> &#123;</span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">super</span>();</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">state</span> = &#123;</span><br><span class="line">            <span class="attr">people</span>: &#123;<span class="attr">username</span>: <span class="string">&#x27;&#x27;</span>&#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">handleInput</span> = <span class="variable language_">this</span>.<span class="property">handleInput</span>.<span class="title function_">bind</span>(<span class="variable language_">this</span>);</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">reset</span> = <span class="variable language_">this</span>.<span class="property">reset</span>.<span class="title function_">bind</span>(<span class="variable language_">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_">handleInput</span>(<span class="params">evt</span>) &#123;</span><br><span class="line">        <span class="keyword">let</span> nextState = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(<span class="variable language_">this</span>.<span class="property">state</span>.<span class="property">people</span>));</span><br><span class="line">        nextState[evt.<span class="property">target</span>.<span class="property">name</span>] = evt.<span class="property">target</span>.<span class="property">value</span>;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="title function_">setState</span>(&#123;<span class="attr">people</span>: nextState&#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_">reset</span>(<span class="params">evt</span>) &#123;</span><br><span class="line">        evt.<span class="title function_">preventDefault</span>();</span><br><span class="line">        <span class="variable language_">this</span>.<span class="title function_">setState</span>(&#123;<span class="attr">people</span>: &#123;&#125;); <span class="comment">// 无效方式</span></span><br><span class="line">        <span class="variable language_">this</span>.<span class="title function_">setState</span>(&#123;<span class="attr">people</span>: &#123;<span class="attr">username</span>: <span class="string">&#x27;&#x27;</span>&#125;&#125;); <span class="comment">// 正确方式</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">                <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">value</span>=<span class="string">&#123;this.state.people.username&#125;</span> <span class="attr">onChange</span>=<span class="string">&#123;this.handleInput&#125;/</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">                <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span> <span class="attr">onClick</span>=<span class="string">&#123;this.reset&#125;</span>&gt;</span>Reset<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用-file-表单控件上传图片时，chrome-不允许重复上传同一文件造成的-bug"><a href="#使用-file-表单控件上传图片时，chrome-不允许重复上传同一文件造成的-bug" class="headerlink" title="使用 file 表单控件上传图片时，chrome 不允许重复上传同一文件造成的 bug"></a>使用 file 表单控件上传图片时，chrome 不允许重复上传同一文件造成的 bug</h3><p>自己开发了一个 uploader 组件，用于图片上传。<br>在 chrome 下，发现当对同一图片选择然后移除，再次上传时，没有反应（onchange 事件不会执行）。<br>后来发现是 chrome 的一个 <a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/9155136/chrome-file-upload-bug-on-change-event-wont-be-executed-twice-with-the-same-fi">特性</a> 造成的<br>知道原因解决方法就简单了，就是每次移除预览图时，重置 file 控件的 value 值：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="property">refs</span>.<span class="property">inputfile</span>.<span class="property">value</span> = <span class="string">&#x27;&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="React-升级实践"><a href="#React-升级实践" class="headerlink" title="React 升级实践"></a>React 升级实践</h2><h3 id="React-升级到-15-4-0-后"><a href="#React-升级到-15-4-0-后" class="headerlink" title="React 升级到 15.4.0 后"></a>React 升级到 15.4.0 后</h3><ul>
+<li>react-hot-loader        必须相应升级到 v1.3.1，或 v3.0.0-beta（webpack config 中相应要调整：’react-hot-loader’ 改为 ‘react-hot-loader&#x2F;babel’）</li>
+<li>react-tap-event-plugin  必须相应升级到 v2.0.1</li>
+</ul>
+<p>react-router 升级到 3.0.0 后</p>
+<ul>
+<li>history                 必须相应升级到 v3.0.0，但是不支持 v4.0.0</li>
+</ul>
+<h3 id="React-升级到-15-5-0-后"><a href="#React-升级到-15-5-0-后" class="headerlink" title="React 升级到 15.5.0 后"></a>React 升级到 15.5.0 后</h3><p>PropTypes 的代码从 React 中分离出来，使用前必须安装独立依赖包 prop-types</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 之前 (15.4)</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">React</span> <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Component</span> <span class="keyword">extends</span> <span class="title class_ inherited__">React.Component</span> &#123;</span><br><span class="line">  <span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;this.props.text&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="title class_">Component</span>.<span class="property">propTypes</span> = &#123;</span><br><span class="line">  <span class="attr">text</span>: <span class="title class_">React</span>.<span class="property">PropTypes</span>.<span class="property">string</span>.<span class="property">isRequired</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 现在 (15.5)</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">React</span> <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="title class_">PropTypes</span> <span class="keyword">from</span> <span class="string">&#x27;prop-types&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Component</span> <span class="keyword">extends</span> <span class="title class_ inherited__">React.Component</span> &#123;</span><br><span class="line">  <span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;this.props.text&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="title class_">Component</span>.<span class="property">propTypes</span> = &#123;</span><br><span class="line">  <span class="attr">text</span>: <span class="title class_">PropTypes</span>.<span class="property">string</span>.<span class="property">isRequired</span>,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用-Webpack-v1-版本的话"><a href="#使用-Webpack-v1-版本的话" class="headerlink" title="使用 Webpack v1 版本的话"></a>使用 Webpack v1 版本的话</h3><p>babel-loader 不能升级到 7.0.0，否则影响 webpack 的实时打包速度<br>React 不能升级到 15.6.0，否则在 Safari 下会报错</p>
+<h2 id="react-redux-相关"><a href="#react-redux-相关" class="headerlink" title="react-redux 相关"></a>react-redux 相关</h2><h3 id="Redux-的-connect-方法-造成无法通过-refs-访问该组件"><a href="#Redux-的-connect-方法-造成无法通过-refs-访问该组件" class="headerlink" title="Redux 的 connect() 方法 造成无法通过 refs 访问该组件"></a>Redux 的 connect() 方法 造成无法通过 refs 访问该组件</h3><p>假如用 Redux 的 connect() 方法包装了一个独立组件，就不能直接通过 refs 来访问该组件，必须设置 {withRef: true} 并通过 getWrappedInstance() 方法来访问（该方法返回一个对被包装组件实例的引用）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Parent component</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Child</span> <span class="keyword">from</span> <span class="string">&#x27;child.js&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Parent</span> <span class="keyword">extends</span> <span class="title class_ inherited__">React.Component</span> &#123;</span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">super</span>();</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">handle</span> = <span class="variable language_">this</span>.<span class="property">handle</span>.<span class="title function_">bind</span>(<span class="variable language_">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_">handle</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">_child</span>.<span class="title function_">doSomething</span>(); <span class="comment">// 不能正常工作</span></span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">_child</span>.<span class="title function_">getWrappedInstance</span>().<span class="title function_">doSomething</span>(); <span class="comment">// 正常工作</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">                <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span> <span class="attr">onClick</span>=<span class="string">&#123;this.handle&#125;</span>&gt;</span>Click<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">                <span class="tag">&lt;<span class="name">Child</span> <span class="attr">ref</span>=<span class="string">&#123;(c)</span> =&gt;</span> this._child = c&#125;/&gt;</span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Child component</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Child</span> <span class="keyword">extends</span> <span class="title class_ inherited__">React.Component</span> &#123;</span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">super</span>();</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">doSomething</span> = <span class="variable language_">this</span>.<span class="property">doSomething</span>.<span class="title function_">bind</span>(<span class="variable language_">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_">doSomething</span>(<span class="params"></span>) &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">connect</span>(mapStateToProps, mapDispatchToProps, <span class="literal">null</span>, &#123;<span class="attr">withRef</span>: <span class="literal">true</span>&#125;)(<span class="title class_">Child</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="react-router-相关"><a href="#react-router-相关" class="headerlink" title="react-router 相关"></a>react-router 相关</h2><h3 id="使用-react-router-时，让网址支持二级目录"><a href="#使用-react-router-时，让网址支持二级目录" class="headerlink" title="使用 react-router 时，让网址支持二级目录"></a>使用 react-router 时，让网址支持二级目录</h3><p>假如一个项目的网址如 <a target="_blank" rel="noopener" href="http://www.company.com/myproject%E3%80%82">www.company.com/myproject。</a><br>而我们用 react-router 已经把项目根目录设置为 “&#x2F;“ ，不想每个路由规则或者链接都添加同样的 “myproject” 字样的话，我们可以使用 history 组件添加 basename 属性来解决这个问题。</p>
+<blockquote>
+<p>注： react-router 为 v2.8.0 时，对应 history 组件必须为 v2.0<br>      react-router 为 v3.0.0 时，对应 history 组件必须为 v3.0<br>      react-router 暂不支持 history v4.0</p>
+</blockquote>
+<h4 id="整体路由设置："><a href="#整体路由设置：" class="headerlink" title="整体路由设置："></a>整体路由设置：</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;<span class="title class_">Router</span>, <span class="title class_">Route</span>, useRouterHistory&#125; <span class="keyword">from</span> <span class="string">&#x27;react-router&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123;createHistory&#125; <span class="keyword">from</span> <span class="string">&#x27;history&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> customHistory = <span class="title function_">useRouterHistory</span>(createHistory)(&#123;<span class="attr">basename</span>: <span class="string">&#x27;/myproject&#x27;</span>&#125;);</span><br><span class="line"></span><br><span class="line"><span class="title function_">render</span>((</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">Router</span> <span class="attr">history</span>=<span class="string">&#123;customHistory&#125;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">Route</span> <span class="attr">path</span>=<span class="string">&quot;/&quot;</span> <span class="attr">component</span>=<span class="string">&#123;App&#125;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Route</span> <span class="attr">path</span>=<span class="string">&quot;about&quot;</span> <span class="attr">component</span>=<span class="string">&#123;About&#125;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;<span class="name">Route</span> <span class="attr">path</span>=<span class="string">&quot;join&quot;</span> <span class="attr">component</span>=<span class="string">&#123;Join&#125;/</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;<span class="name">Route</span> <span class="attr">path</span>=<span class="string">&quot;contact&quot;</span> <span class="attr">component</span>=<span class="string">&#123;Contact&#125;/</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Route</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Route</span> <span class="attr">path</span>=<span class="string">&quot;*&quot;</span> <span class="attr">component</span>=<span class="string">&#123;NoMatch&#125;/</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">Route</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">Router</span>&gt;</span></span></span><br><span class="line">), <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;root&#x27;</span>));</span><br></pre></td></tr></table></figure>
+
+<h4 id="页面跳转链接设置："><a href="#页面跳转链接设置：" class="headerlink" title="页面跳转链接设置："></a>页面跳转链接设置：</h4><p>两种情况 (以下示例合二为一)：</p>
+<ol>
+<li>使用 Link 组件的，直接设置正常路径，basename 值会自动附加到 url 上</li>
+<li>使用脚本跳转，可以使用 withRouter 高阶组件</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;<span class="title class_">Link</span>, withRouter&#125; <span class="keyword">from</span> <span class="string">&#x27;react-router&#x27;</span>;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Demo</span> <span class="keyword">extends</span> <span class="title class_ inherited__">React.Component</span> &#123;</span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">super</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_">goto</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">props</span>.<span class="property">router</span>.<span class="title function_">push</span>(&#123;<span class="attr">pathname</span>: <span class="string">&#x27;/join&#x27;</span>, <span class="literal">null</span>, <span class="attr">state</span>: &#123;&#125;&#125;); <span class="comment">// 相当于 /myproject/join</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            <span class="language-xml"><span class="tag">&lt;<span class="name">Link</span> <span class="attr">to</span>=<span class="string">&quot;/contact&quot;</span>&gt;</span>Contact<span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span> <span class="comment">// 相当于 /myproject/contact</span></span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">withRouter</span>(<span class="title class_">About</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用-history-组件某些方法来增强功能"><a href="#使用-history-组件某些方法来增强功能" class="headerlink" title="使用 history 组件某些方法来增强功能"></a>使用 history 组件某些方法来增强功能</h3><ol start="0">
+<li>listenBefore 事件是应用内页面跳转时触发，可使用 getUserConfirmation 属性修改默认设置(第一个参数 message 来自于事件绑定函数的返回值，用于显示自定义消息)</li>
+<li>listenBeforeUnload 事件是关闭浏览器或标签页时触发，使用 useBeforeUnload() 方法进行绑定（遗憾的是，Firefox、Chrome 51+、Safari 9.1+ 已经取消了显示自定义消息的功能）</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useRouterHistory &#125; <span class="keyword">from</span> <span class="string">&#x27;react-router&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; createHistory, useBeforeUnload &#125; <span class="keyword">from</span> <span class="string">&#x27;history&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> history = <span class="title function_">useRouterHistory</span>(<span class="title function_">useBeforeUnload</span>(createHistory))(&#123;</span><br><span class="line">    <span class="attr">getUserConfirmation</span>: <span class="function">(<span class="params">message, callback</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="title function_">callback</span>(<span class="variable language_">window</span>.<span class="title function_">confirm</span>(message));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">history.<span class="title function_">listenBefore</span>(<span class="function">(<span class="params">location</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;Are you sure you want to leave this page?&#x27;</span>;</span><br><span class="line">&#125;)</span><br><span class="line">history.<span class="title function_">listenBeforeUnload</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;Are you sure you want to close this page?&#x27;</span>;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注：react-router 的 setRouteLeaveHook() 方法也可以实现类似效果（使用 withRouter 高阶函数绑定）<br>    react-router 的 &lt;Route&gt; 组件上的 onChange() 方法也可以实现类似效果</p>
+</blockquote>
+<h2 id="Material-UI-相关"><a href="#Material-UI-相关" class="headerlink" title="Material-UI 相关"></a>Material-UI 相关</h2><h3 id="Material-UI-的-Text-Field、Select-Field-组件在设置垂直居中时会导致本身高度锁死"><a href="#Material-UI-的-Text-Field、Select-Field-组件在设置垂直居中时会导致本身高度锁死" class="headerlink" title="Material UI 的 Text Field、Select Field 组件在设置垂直居中时会导致本身高度锁死"></a>Material UI 的 Text Field、Select Field 组件在设置垂直居中时会导致本身高度锁死</h3><p>当对上述组件设置 <code>verticalAlign: &#39;middle&#39;</code> 时，会造成该组件的高度固定不变（当内部有变化如显示 errorText 时）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;TextField errorText=&quot;This field is required&quot; style=&#123;&#123;verticalAlign: &#x27;middle&#x27;&#125;&#125;/&gt;</span><br></pre></td></tr></table></figure>
+
+<p>解决方案：不要设置该样式</p>
+<h3 id="Material-UI-的-Checkbox-组件在父级元素设置居中时会发生错位"><a href="#Material-UI-的-Checkbox-组件在父级元素设置居中时会发生错位" class="headerlink" title="Material UI 的 Checkbox 组件在父级元素设置居中时会发生错位"></a>Material UI 的 Checkbox 组件在父级元素设置居中时会发生错位</h3><p>当父级元素设置 <code>text-align: center;</code> 时，会造成 Checkbox 的 icon 点击区和显示区错位（估计 Radio 组件也会有此问题）<br>解决方案：内部样式重新设置对齐方式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;Checkbox checked=&#123;false&#125; style=&#123;&#123;textAlign: &#x27;left&#x27;&#125;&#125;/&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Material-UI-的-Popover-组件在-Table里使用小组件二次渲染时，会定位为-0-0"><a href="#Material-UI-的-Popover-组件在-Table里使用小组件二次渲染时，会定位为-0-0" class="headerlink" title="Material UI 的 Popover 组件在 Table里使用小组件二次渲染时，会定位为 (0, 0)"></a>Material UI 的 Popover 组件在 Table里使用小组件二次渲染时，会定位为 (0, 0)</h3><p>解决方案：减少渲染次数，用一次渲染</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">return list.map((item, i) =&gt; &#123;</span><br><span class="line">	return &lt;Row key=&#123;i&#125; order=&#123;i&#125; &#123;...item&#125;/&gt;;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>改为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">return list.map((item, i) =&gt; &#123;</span><br><span class="line">	return (</span><br><span class="line">		&lt;tr key=&#123;i&#125;&gt;&lt;td&gt;&lt;td&gt;&lt;/tr&gt;</span><br><span class="line">	);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="Material-UI-的-Button-组件在-Safari-下必须点击两次才能激发-onClick-事件"><a href="#Material-UI-的-Button-组件在-Safari-下必须点击两次才能激发-onClick-事件" class="headerlink" title="Material-UI 的 Button 组件在 Safari 下必须点击两次才能激发 onClick 事件"></a>Material-UI 的 Button 组件在 Safari 下必须点击两次才能激发 onClick 事件</h3><p>解决方案：<br>0. 使用 onTouchTap 代替<br>0. 添加 disableTouchRipple&#x3D;{true}</p>
+<h3 id="Material-UI-的-TextField-组件放在-Dialog-组件里时，会出现初始值为空时用中文输入法无法输入的-bug（-github上已有人反馈）"><a href="#Material-UI-的-TextField-组件放在-Dialog-组件里时，会出现初始值为空时用中文输入法无法输入的-bug（-github上已有人反馈）" class="headerlink" title="Material-UI 的 TextField 组件放在 Dialog 组件里时，会出现初始值为空时用中文输入法无法输入的 bug（ github上已有人反馈）"></a>Material-UI 的 TextField 组件放在 Dialog 组件里时，会出现初始值为空时用中文输入法无法输入的 bug（ <a target="_blank" rel="noopener" href="https://github.com/callemall/Material-UI/issues/5121">github上已有人反馈</a>）</h3><p>解决方案：<br>0. 使用原生组件代替<br>0. 使用 defaultValue 属性代替 value 属性（会变成非可控组件，导致 value 无法实时更新）<br>0. 设置 value 初始值为空格而不是空字符串(无实用价值)</p>
+<h3 id="Material-UI-表单控件的校验"><a href="#Material-UI-表单控件的校验" class="headerlink" title="Material-UI 表单控件的校验"></a>Material-UI 表单控件的校验</h3><p>Material-UI 库的 AutoComplete、TextField、SelectField 控件有个 errorText 属性，支持传入表达式，用于校验</p>
+<blockquote>
+<p>注：state 加入 submit 属性是为了表单提交时才进行校验</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> errors = &#123;</span><br><span class="line">    <span class="attr">required</span>: <span class="string">&#x27;this field is required&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Demo</span> <span class="keyword">extends</span> <span class="title class_ inherited__">React.Component</span> &#123;</span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">super</span>();</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">state</span> = &#123;<span class="attr">submit</span>: <span class="literal">false</span>&#125;;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">submit</span> = <span class="variable language_">this</span>.<span class="property">submit</span>.<span class="title function_">bind</span>(<span class="variable language_">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_">submit</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="title function_">setState</span>(&#123;<span class="attr">submit</span>: <span class="literal">true</span>&#125;);</span><br><span class="line">        <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">state</span>.<span class="property">username</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">                <span class="tag">&lt;<span class="name">TextField</span> <span class="attr">errorText</span>=<span class="string">&#123;this.state.submit</span> &amp;&amp; !<span class="attr">this.state.username</span> &amp;&amp; <span class="attr">errors.required</span>&#125; <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">value</span>=<span class="string">&#123;this.state.username&#125;</span> <span class="attr">onChange</span>=<span class="string">&#123;this.handleInput&#125;/</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">                <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span> <span class="attr">onClick</span>=<span class="string">&#123;this.submit&#125;</span>&gt;</span>submit<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于没有 errorText 属性的 Checkbox、RadioButton 控件，可以用变通方法来实现校验</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="title class_">RadioButtonGroup</span> defaultSelected=&#123;<span class="variable language_">this</span>.<span class="property">state</span>.<span class="property">sex</span>&#125; name=<span class="string">&quot;sex&quot;</span> onChange=&#123;<span class="variable language_">this</span>.<span class="property">handleInput</span>&#125;&gt;</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">RadioButton</span> <span class="attr">value</span>=<span class="string">&quot;1&quot;</span> <span class="attr">label</span>=<span class="string">&quot;male&quot;</span>/&gt;</span></span></span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">RadioButton</span> <span class="attr">value</span>=<span class="string">&quot;0&quot;</span> <span class="attr">label</span>=<span class="string">&quot;female&quot;</span>/&gt;</span></span></span><br><span class="line">&lt;/<span class="title class_">RadioButtonGroup</span>&gt;</span><br><span class="line">&#123;<span class="variable language_">this</span>.<span class="property">state</span>.<span class="property">submit</span> &amp;&amp; !<span class="variable language_">this</span>.<span class="property">state</span>.<span class="property">sex</span> &amp;&amp; <span class="language-xml"><span class="tag">&lt;<span class="name">span</span>&gt;</span>&#123;errors.required&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span>&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="React-中下拉列表或者弹出层，实现点击外部区域关闭"><a href="#React-中下拉列表或者弹出层，实现点击外部区域关闭" class="headerlink" title="React 中下拉列表或者弹出层，实现点击外部区域关闭"></a>React 中下拉列表或者弹出层，实现点击外部区域关闭</h2><p>在 React 中，由于没有类似 clickoutside 事件，所以要实现类似的功能，只能对 document 对象绑定 click 事件，而在 React 中直接操作 Dom 元素比较麻烦而且事后还涉及到解绑的问题，所以成本很高。<br>其实可以有个很巧妙的方法就是，添加一个浮动层：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Demo</span> <span class="keyword">extends</span> <span class="title class_ inherited__">React.Component</span> &#123;</span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">super</span>();</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">state</span> = &#123;<span class="attr">open</span>: <span class="literal">false</span>&#125;;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">closeMask</span> = <span class="variable language_">this</span>.<span class="property">closeMask</span>.<span class="title function_">bind</span>(<span class="variable language_">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_">closeMask</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="title function_">setState</span>(&#123;<span class="attr">open</span>: <span class="literal">false</span>&#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> styles = &#123;</span><br><span class="line">            <span class="attr">wrap</span>: &#123;</span><br><span class="line">                <span class="attr">position</span>: <span class="string">&#x27;relative&#x27;</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">mask</span>: &#123;</span><br><span class="line">                <span class="attr">position</span>: <span class="string">&#x27;fixed&#x27;</span>,</span><br><span class="line">                <span class="attr">top</span>: <span class="number">0</span>,</span><br><span class="line">                <span class="attr">right</span>: <span class="number">0</span>,</span><br><span class="line">                <span class="attr">bottom</span>: <span class="number">0</span>,</span><br><span class="line">                <span class="attr">left</span>: <span class="number">0</span>,</span><br><span class="line">                <span class="attr">zIndex</span>: <span class="number">99</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">result</span>: &#123;</span><br><span class="line">                <span class="attr">position</span>: <span class="string">&#x27;absolute&#x27;</span>,</span><br><span class="line">                <span class="attr">top</span>: <span class="number">0</span>,</span><br><span class="line">                <span class="attr">left</span>: <span class="number">0</span>,</span><br><span class="line">                <span class="attr">zIndex</span>: <span class="number">100</span>,</span><br><span class="line">                <span class="attr">width</span>: <span class="string">&#x27;200px&#x27;</span>,</span><br><span class="line">                <span class="attr">padding</span>: <span class="string">&#x27;5px&#x27;</span>,</span><br><span class="line">                <span class="attr">border</span>: <span class="string">&#x27;1px solid #ccc&#x27;</span>,</span><br><span class="line">                <span class="attr">background</span>: <span class="string">&#x27;#fff&#x27;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">state</span>.<span class="property">open</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> (</span><br><span class="line">                <span class="language-xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&#123;styles.wrap&#125;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">                    <span class="tag">&lt;<span class="name">ul</span> <span class="attr">style</span>=<span class="string">&#123;styles.result&#125;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">                        ...</span></span><br><span class="line"><span class="language-xml">                    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">                    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&#123;styles.mask&#125;</span> <span class="attr">onClick</span>=<span class="string">&#123;this.closeMask&#125;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">                <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">            );</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/React/" rel="tag"># React</a>
+              <a href="/tags/Material-UI/" rel="tag"># Material-UI</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/12/16/32.misc-tips/" rel="prev" title="Web 前端开发杂技">
+      <i class="fa fa-chevron-left"></i> Web 前端开发杂技
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/03/13/33.display/" rel="next" title="CSS 之 display:inline-block 详解及实战">
+      CSS 之 display:inline-block 详解及实战 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E8%AF%A6%E8%A7%A3"><span class="nav-number">1.</span> <span class="nav-text">生命周期详解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#React-%E7%9A%84%E7%BB%84%E4%BB%B6%EF%BC%88%E6%97%A0%E7%8A%B6%E6%80%81%EF%BC%89%E5%92%8C-%E5%85%83%E7%B4%A0%EF%BC%88JSX-%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%89%E5%8C%BA%E5%88%86"><span class="nav-number">2.</span> <span class="nav-text">React 的组件（无状态）和 元素（JSX 表达式）区分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#React-%E4%BB%A3%E7%A0%81%E4%BC%98%E5%8C%96"><span class="nav-number">3.</span> <span class="nav-text">React 代码优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%BD%E9%87%8F%E4%BD%BF%E7%94%A8%E4%B8%89%E5%85%83%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">3.1.</span> <span class="nav-text">尽量使用三元表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%BD%E9%87%8F%E4%BD%BF%E7%94%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%BB%A3%E6%9B%BF%E8%AF%AD%E5%8F%A5"><span class="nav-number">3.2.</span> <span class="nav-text">尽量使用表达式代替语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%BD%E9%87%8F%E7%94%A8%E5%8E%9F%E7%94%9F%E7%9A%84%E6%96%B9%E6%B3%95%E4%BB%A3%E6%9B%BF-lodash"><span class="nav-number">3.3.</span> <span class="nav-text">尽量用原生的方法代替 lodash</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#React-%E7%BB%84%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text">React 组件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#state-%E7%8A%B6%E6%80%81%E7%9A%84%E4%BF%9D%E5%AD%98"><span class="nav-number">4.1.</span> <span class="nav-text">state 状态的保存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#state-%E7%8A%B6%E6%80%81%E7%9A%84%E5%90%8C%E6%AD%A5"><span class="nav-number">4.2.</span> <span class="nav-text">state 状态的同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#props-%E5%B1%9E%E6%80%A7%E7%9A%84%E4%BC%A0%E9%80%92"><span class="nav-number">4.3.</span> <span class="nav-text">props 属性的传递</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%BD%E9%87%8F%E4%B8%8D%E8%A6%81%E7%9B%B4%E6%8E%A5%E6%93%8D%E4%BD%9C-state%EF%BC%88%E8%AE%BA-Immutable-%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7%EF%BC%89"><span class="nav-number">4.4.</span> <span class="nav-text">尽量不要直接操作 state（论 Immutable 的重要性）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E5%8F%AF%E6%8E%A7%E7%BB%84%E4%BB%B6%E6%97%B6%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">4.5.</span> <span class="nav-text">渲染可控组件时的注意事项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E5%8F%AF%E6%8E%A7%E7%BB%84%E4%BB%B6%E6%97%B6%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%E2%85%A1"><span class="nav-number">4.6.</span> <span class="nav-text">渲染可控组件时的注意事项Ⅱ</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-file-%E8%A1%A8%E5%8D%95%E6%8E%A7%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%9B%BE%E7%89%87%E6%97%B6%EF%BC%8Cchrome-%E4%B8%8D%E5%85%81%E8%AE%B8%E9%87%8D%E5%A4%8D%E4%B8%8A%E4%BC%A0%E5%90%8C%E4%B8%80%E6%96%87%E4%BB%B6%E9%80%A0%E6%88%90%E7%9A%84-bug"><span class="nav-number">4.7.</span> <span class="nav-text">使用 file 表单控件上传图片时，chrome 不允许重复上传同一文件造成的 bug</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#React-%E5%8D%87%E7%BA%A7%E5%AE%9E%E8%B7%B5"><span class="nav-number">5.</span> <span class="nav-text">React 升级实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#React-%E5%8D%87%E7%BA%A7%E5%88%B0-15-4-0-%E5%90%8E"><span class="nav-number">5.1.</span> <span class="nav-text">React 升级到 15.4.0 后</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#React-%E5%8D%87%E7%BA%A7%E5%88%B0-15-5-0-%E5%90%8E"><span class="nav-number">5.2.</span> <span class="nav-text">React 升级到 15.5.0 后</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Webpack-v1-%E7%89%88%E6%9C%AC%E7%9A%84%E8%AF%9D"><span class="nav-number">5.3.</span> <span class="nav-text">使用 Webpack v1 版本的话</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#react-redux-%E7%9B%B8%E5%85%B3"><span class="nav-number">6.</span> <span class="nav-text">react-redux 相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Redux-%E7%9A%84-connect-%E6%96%B9%E6%B3%95-%E9%80%A0%E6%88%90%E6%97%A0%E6%B3%95%E9%80%9A%E8%BF%87-refs-%E8%AE%BF%E9%97%AE%E8%AF%A5%E7%BB%84%E4%BB%B6"><span class="nav-number">6.1.</span> <span class="nav-text">Redux 的 connect() 方法 造成无法通过 refs 访问该组件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#react-router-%E7%9B%B8%E5%85%B3"><span class="nav-number">7.</span> <span class="nav-text">react-router 相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-react-router-%E6%97%B6%EF%BC%8C%E8%AE%A9%E7%BD%91%E5%9D%80%E6%94%AF%E6%8C%81%E4%BA%8C%E7%BA%A7%E7%9B%AE%E5%BD%95"><span class="nav-number">7.1.</span> <span class="nav-text">使用 react-router 时，让网址支持二级目录</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B4%E4%BD%93%E8%B7%AF%E7%94%B1%E8%AE%BE%E7%BD%AE%EF%BC%9A"><span class="nav-number">7.1.1.</span> <span class="nav-text">整体路由设置：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A1%B5%E9%9D%A2%E8%B7%B3%E8%BD%AC%E9%93%BE%E6%8E%A5%E8%AE%BE%E7%BD%AE%EF%BC%9A"><span class="nav-number">7.1.2.</span> <span class="nav-text">页面跳转链接设置：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-history-%E7%BB%84%E4%BB%B6%E6%9F%90%E4%BA%9B%E6%96%B9%E6%B3%95%E6%9D%A5%E5%A2%9E%E5%BC%BA%E5%8A%9F%E8%83%BD"><span class="nav-number">7.2.</span> <span class="nav-text">使用 history 组件某些方法来增强功能</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Material-UI-%E7%9B%B8%E5%85%B3"><span class="nav-number">8.</span> <span class="nav-text">Material-UI 相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Material-UI-%E7%9A%84-Text-Field%E3%80%81Select-Field-%E7%BB%84%E4%BB%B6%E5%9C%A8%E8%AE%BE%E7%BD%AE%E5%9E%82%E7%9B%B4%E5%B1%85%E4%B8%AD%E6%97%B6%E4%BC%9A%E5%AF%BC%E8%87%B4%E6%9C%AC%E8%BA%AB%E9%AB%98%E5%BA%A6%E9%94%81%E6%AD%BB"><span class="nav-number">8.1.</span> <span class="nav-text">Material UI 的 Text Field、Select Field 组件在设置垂直居中时会导致本身高度锁死</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Material-UI-%E7%9A%84-Checkbox-%E7%BB%84%E4%BB%B6%E5%9C%A8%E7%88%B6%E7%BA%A7%E5%85%83%E7%B4%A0%E8%AE%BE%E7%BD%AE%E5%B1%85%E4%B8%AD%E6%97%B6%E4%BC%9A%E5%8F%91%E7%94%9F%E9%94%99%E4%BD%8D"><span class="nav-number">8.2.</span> <span class="nav-text">Material UI 的 Checkbox 组件在父级元素设置居中时会发生错位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Material-UI-%E7%9A%84-Popover-%E7%BB%84%E4%BB%B6%E5%9C%A8-Table%E9%87%8C%E4%BD%BF%E7%94%A8%E5%B0%8F%E7%BB%84%E4%BB%B6%E4%BA%8C%E6%AC%A1%E6%B8%B2%E6%9F%93%E6%97%B6%EF%BC%8C%E4%BC%9A%E5%AE%9A%E4%BD%8D%E4%B8%BA-0-0"><span class="nav-number">8.3.</span> <span class="nav-text">Material UI 的 Popover 组件在 Table里使用小组件二次渲染时，会定位为 (0, 0)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Material-UI-%E7%9A%84-Button-%E7%BB%84%E4%BB%B6%E5%9C%A8-Safari-%E4%B8%8B%E5%BF%85%E9%A1%BB%E7%82%B9%E5%87%BB%E4%B8%A4%E6%AC%A1%E6%89%8D%E8%83%BD%E6%BF%80%E5%8F%91-onClick-%E4%BA%8B%E4%BB%B6"><span class="nav-number">8.4.</span> <span class="nav-text">Material-UI 的 Button 组件在 Safari 下必须点击两次才能激发 onClick 事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Material-UI-%E7%9A%84-TextField-%E7%BB%84%E4%BB%B6%E6%94%BE%E5%9C%A8-Dialog-%E7%BB%84%E4%BB%B6%E9%87%8C%E6%97%B6%EF%BC%8C%E4%BC%9A%E5%87%BA%E7%8E%B0%E5%88%9D%E5%A7%8B%E5%80%BC%E4%B8%BA%E7%A9%BA%E6%97%B6%E7%94%A8%E4%B8%AD%E6%96%87%E8%BE%93%E5%85%A5%E6%B3%95%E6%97%A0%E6%B3%95%E8%BE%93%E5%85%A5%E7%9A%84-bug%EF%BC%88-github%E4%B8%8A%E5%B7%B2%E6%9C%89%E4%BA%BA%E5%8F%8D%E9%A6%88%EF%BC%89"><span class="nav-number">8.5.</span> <span class="nav-text">Material-UI 的 TextField 组件放在 Dialog 组件里时，会出现初始值为空时用中文输入法无法输入的 bug（ github上已有人反馈）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Material-UI-%E8%A1%A8%E5%8D%95%E6%8E%A7%E4%BB%B6%E7%9A%84%E6%A0%A1%E9%AA%8C"><span class="nav-number">8.6.</span> <span class="nav-text">Material-UI 表单控件的校验</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#React-%E4%B8%AD%E4%B8%8B%E6%8B%89%E5%88%97%E8%A1%A8%E6%88%96%E8%80%85%E5%BC%B9%E5%87%BA%E5%B1%82%EF%BC%8C%E5%AE%9E%E7%8E%B0%E7%82%B9%E5%87%BB%E5%A4%96%E9%83%A8%E5%8C%BA%E5%9F%9F%E5%85%B3%E9%97%AD"><span class="nav-number">9.</span> <span class="nav-text">React 中下拉列表或者弹出层，实现点击外部区域关闭</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">可口可乐</p>
+  <div class="site-description" itemprop="description">Personal Blog</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">可口可乐</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

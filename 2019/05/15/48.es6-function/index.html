@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="函数参数默认值以前传统的参数默认值实现的方法是用布尔判断。某些特定情况下，容易产生误判：对参数赋值后，假如对应的布尔值为 false，则赋值会被默认值覆盖。 12345678function log(x, y) &amp;#123;    y &#x3D; y || &amp;#x27;World&amp;#x27;;    console.log(x, y);&amp;#125;log(&amp;#x27;Hello&amp;#x27;); &#x2F;&#x2F; He">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ES6 阅读心得之五：函数">
+<meta property="og:url" content="http://example.com/2019/05/15/48.es6-function/index.html">
+<meta property="og:site_name" content="Lizux">
+<meta property="og:description" content="函数参数默认值以前传统的参数默认值实现的方法是用布尔判断。某些特定情况下，容易产生误判：对参数赋值后，假如对应的布尔值为 false，则赋值会被默认值覆盖。 12345678function log(x, y) &amp;#123;    y &#x3D; y || &amp;#x27;World&amp;#x27;;    console.log(x, y);&amp;#125;log(&amp;#x27;Hello&amp;#x27;); &#x2F;&#x2F; He">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-05-14T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-26T02:32:58.385Z">
+<meta property="article:author" content="可口可乐">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="ES6">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2019/05/15/48.es6-function/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ES6 阅读心得之五：函数 | Lizux</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lizux</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Just go on</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2019/05/15/48.es6-function/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="可口可乐">
+      <meta itemprop="description" content="Personal Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lizux">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ES6 阅读心得之五：函数
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-05-15 00:00:00" itemprop="dateCreated datePublished" datetime="2019-05-15T00:00:00+08:00">2019-05-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-10-26 10:32:58" itemprop="dateModified" datetime="2023-10-26T10:32:58+08:00">2023-10-26</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><h3 id="参数默认值"><a href="#参数默认值" class="headerlink" title="参数默认值"></a>参数默认值</h3><p>以前传统的参数默认值实现的方法是用布尔判断。某些特定情况下，容易产生误判：对参数赋值后，假如对应的布尔值为 false，则赋值会被默认值覆盖。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">log</span>(<span class="params">x, y</span>) &#123;</span><br><span class="line">    y = y || <span class="string">&#x27;World&#x27;</span>;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(x, y);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">log</span>(<span class="string">&#x27;Hello&#x27;</span>); <span class="comment">// Hello World</span></span><br><span class="line"><span class="title function_">log</span>(<span class="string">&#x27;Hello&#x27;</span>, <span class="string">&#x27;China&#x27;</span>); <span class="comment">// Hello China</span></span><br><span class="line"><span class="title function_">log</span>(<span class="string">&#x27;Hello&#x27;</span>, <span class="string">&#x27;&#x27;</span>); <span class="comment">// Hello World</span></span><br></pre></td></tr></table></figure>
+
+<p>ES6 提供了设置默认参数的方法，直接放在参数定义后面。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">log</span>(<span class="params">x, y = <span class="string">&#x27;World&#x27;</span></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(x, y);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">log</span>(<span class="string">&#x27;Hello&#x27;</span>); <span class="comment">// Hello World</span></span><br><span class="line"><span class="title function_">log</span>(<span class="string">&#x27;Hello&#x27;</span>, <span class="string">&#x27;China&#x27;</span>); <span class="comment">// Hello China</span></span><br><span class="line"><span class="title function_">log</span>(<span class="string">&#x27;Hello&#x27;</span>, <span class="string">&#x27;&#x27;</span>); <span class="comment">// Hello</span></span><br><span class="line"><span class="title function_">log</span>(<span class="string">&#x27;Hello&#x27;</span>, <span class="literal">null</span>); <span class="comment">// Hello null</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ul>
+<li>使用参数默认值时，函数不能有同名参数。</li>
+<li>参数默认值是惰性求值，即每次都重新计算默认值表达式的值。</li>
+</ul>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params">x, x, y = <span class="number">1</span></span>) &#123;</span><br><span class="line">    <span class="comment">// error</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> x = <span class="number">99</span>;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params">p = x + <span class="number">1</span></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(p);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">foo</span>(); <span class="comment">// 100</span></span><br><span class="line"></span><br><span class="line">x = <span class="number">100</span>;</span><br><span class="line"><span class="title function_">foo</span>(); <span class="comment">// 101</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="与解构赋值默认值结合"><a href="#与解构赋值默认值结合" class="headerlink" title="与解构赋值默认值结合"></a>与解构赋值默认值结合</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params">&#123;x, y = <span class="number">5</span>&#125; = &#123;&#125;</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(x, y);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">foo</span>();</span><br></pre></td></tr></table></figure>
+
+<h4 id="参数默认值位置"><a href="#参数默认值位置" class="headerlink" title="参数默认值位置"></a>参数默认值位置</h4><p>一般来讲，定义默认值的参数都是尾部位置。非尾部的参数，实际上无法省略，所以其默认值无法生效的。<br>所以当某个参数设置默认值后，潜在要求就是其后的参数都应该提供默认值。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">log</span>(<span class="params">x = <span class="number">1</span>, y</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(x, y);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">log</span>() <span class="comment">// 1  undefined</span></span><br><span class="line"><span class="title function_">log</span>(<span class="number">2</span>) <span class="comment">// 2 undefined</span></span><br><span class="line"><span class="title function_">log</span>(， <span class="number">3</span>) <span class="comment">// error</span></span><br><span class="line"><span class="title function_">log</span>(<span class="literal">undefined</span>， <span class="number">4</span>) <span class="comment">// 1 4</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="length-属性"><a href="#length-属性" class="headerlink" title="length 属性"></a>length 属性</h4><p>指定了默认值以后，函数的 length 属性，将返回没有指定默认值的参数个数。即，该函数预期传入的参数个数。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">function</span> (<span class="params">a</span>) &#123;&#125;).<span class="property">length</span> <span class="comment">// 1</span></span><br><span class="line">(<span class="keyword">function</span> (<span class="params">a = <span class="number">2</span></span>) &#123;&#125;).<span class="property">length</span> <span class="comment">// 0</span></span><br><span class="line">(<span class="keyword">function</span> (<span class="params">a, b, c = <span class="number">5</span></span>) &#123;&#125;).<span class="property">length</span> <span class="comment">// 2</span></span><br><span class="line">(<span class="keyword">function</span> (<span class="params">a, b = <span class="number">3</span>, c</span>) &#123;&#125;).<span class="property">length</span> <span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h4><p>指定了默认值以后，函数进行声明初始化时，参数会形成一个单独的作用域（context），一直持续到初始化结束。这种语法行为，在设置参数默认值时，才会出现。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">f</span>(<span class="params">x, y = x</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(y);</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">f</span>(<span class="number">2</span>); <span class="comment">// 2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">f</span>(<span class="params">y = x</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> x = <span class="number">2</span>;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(y);</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">f</span>(); <span class="comment">// error</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="rest-参数"><a href="#rest-参数" class="headerlink" title="rest 参数"></a>rest 参数</h3><p>rest 参数的形式为…变量名，用于获取函数的多余不定参数，这样可以避免使用 arguments 对象。rest 参数变量是一个数组，该变量将多余的参数放入数组中。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">add</span>(<span class="params">...values</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> sum = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> val <span class="keyword">of</span> values) &#123;</span><br><span class="line">        sum += val;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">add</span>(<span class="number">2</span>, <span class="number">5</span>, <span class="number">3</span>); <span class="comment">// 10</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>arguments 对象不是数组，而是一个类数组对象。<br/><br> rest 参数是一个真正的数组。</p>
+</li>
+<li><p>rest 参数只能是函数最后一个参数，否则会报错。</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">f</span>(<span class="params">a, ...b, c</span>) &#123;</span><br><span class="line">  <span class="comment">// error</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>函数的 length 属性，不包括 rest 参数</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">function</span>(<span class="params">...a</span>) &#123;&#125;).<span class="property">length</span>  <span class="comment">// 0</span></span><br><span class="line">(<span class="keyword">function</span>(<span class="params">a, ...b</span>) &#123;&#125;).<span class="property">length</span>  <span class="comment">// 1</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="严格模式"><a href="#严格模式" class="headerlink" title="严格模式"></a>严格模式</h3><p>从 ES5 开始，函数内部可以设定为严格模式。<br>ES6 规定只要函数参数使用了默认值、解构赋值、或者扩展运算符，那么函数内部就不能显式设定为严格模式，否则会报错。<br>这是因为函数内部的严格模式，同时适用于函数体和函数参数。但是，函数执行的时候，先执行函数参数，然后再执行函数体。这样就有一个不合理的地方，只有从函数体之中，才能知道参数是否应该以严格模式执行，但是参数却应该先于函数体执行。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">doSomething</span>(<span class="params">a, b = a</span>) &#123;</span><br><span class="line">    <span class="string">&#x27;use strict&#x27;</span>;</span><br><span class="line">    <span class="comment">// error</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> <span class="title function_">doSomething</span> = (<span class="params">...a</span>) =&gt; &#123;</span><br><span class="line">    <span class="string">&#x27;use strict&#x27;</span>;</span><br><span class="line">    <span class="comment">// error</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="name-属性"><a href="#name-属性" class="headerlink" title="name 属性"></a>name 属性</h3><p>函数的 name 属性，返回该函数的函数名。</p>
+<ul>
+<li><p>获取一个匿名函数的 name 属性，ES5 会返回空字符串，而 ES6 会返回对应的初始变量名。</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> f = <span class="keyword">function</span> (<span class="params"></span>) &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ES5</span></span><br><span class="line">f.<span class="property">name</span>; <span class="comment">// &quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ES6</span></span><br><span class="line">f.<span class="property">name</span>; <span class="comment">// &quot;f&quot;</span></span><br><span class="line"><span class="keyword">let</span> show = f;</span><br><span class="line">show.<span class="property">name</span>; <span class="comment">// &quot;f&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取一个具名函数的 name 属性，，则 ES5 和 ES6 都返回这个函数原本的名字。</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> bar = <span class="keyword">function</span> <span class="title function_">baz</span>(<span class="params"></span>) &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ES5</span></span><br><span class="line">bar.<span class="property">name</span>; <span class="comment">// &quot;baz&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ES6</span></span><br><span class="line">bar.<span class="property">name</span>; <span class="comment">// &quot;baz&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Function 构造函数返回的函数实例，name 属性的值为 anonymous</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="title class_">Function</span>().<span class="property">name</span>; <span class="comment">// &quot;anonymous&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>bind 返回的函数，name 属性值会加上 bound 前缀。</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params"></span>) &#123;&#125;</span><br><span class="line">foo.<span class="title function_">bind</span>(&#123;&#125;).<span class="property">name</span>; <span class="comment">// &quot;bound foo&quot;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="箭头函数"><a href="#箭头函数" class="headerlink" title="箭头函数"></a>箭头函数</h3><p>ES6 允许使用“箭头”（&#x3D;&gt;）定义函数。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="title function_">f</span> = (<span class="params">v</span>) =&gt; v;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line"><span class="keyword">let</span> f = <span class="keyword">function</span> (<span class="params">v</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> v;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>箭头函数使用 圆括号 表示参数部分，当参数为一个时可以省略圆括号。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="title function_">f</span> = (<span class="params"></span>) =&gt; <span class="number">5</span>;</span><br><span class="line"><span class="keyword">let</span> <span class="title function_">f</span> = (<span class="params">v</span>) =&gt; v;</span><br><span class="line"><span class="keyword">let</span> <span class="title function_">sum</span> = (<span class="params">num1, num2</span>) =&gt; num1 + num2;</span><br></pre></td></tr></table></figure>
+
+<p>箭头函数使用 花括号 表示函数部分，当为一个语句时可以省略花括号；假如有返回值还可以省略 return 关键字。<br>假如直接返回一个对象时，则需要在对象外加上圆括号，否则对象的花括号会被解释为代码块</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="title function_">sum</span> = (<span class="params">num1, num2</span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> show = num1 * <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">return</span> show + num2;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">let</span> <span class="title function_">fn</span> = (<span class="params">item</span>) =&gt; arr.<span class="title function_">push</span>(item);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="title function_">getObject</span> = (<span class="params">id</span>) =&gt; (&#123;<span class="attr">id</span>: id, <span class="attr">name</span>: <span class="string">&#x27;temp&#x27;</span>&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>箭头函数使得表达式更简洁，回调函数更简化。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">isEven</span> = (<span class="params">n</span>) =&gt; n % <span class="number">2</span> === <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="title function_">square</span> = (<span class="params">n</span>) =&gt; n * n;</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].<span class="title function_">map</span>(<span class="function">(<span class="params">x</span>) =&gt;</span> x * x);</span><br></pre></td></tr></table></figure>
+
+<h4 id="使用要点"><a href="#使用要点" class="headerlink" title="使用要点"></a>使用要点</h4><ul>
+<li><p>函数体内的 this 对象，就是定义时所在的对象，而不是使用时所在的对象。<br> 普通函数内 this 对象的指向是可变的，但是在箭头函数中，它是固定的，永远指向外部代码块的 this 也就是父级作用域。</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;id:&#x27;</span>, <span class="variable language_">this</span>.<span class="property">id</span>);</span><br><span class="line">    &#125;, <span class="number">100</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> id = <span class="number">21</span>;</span><br><span class="line"></span><br><span class="line">foo.<span class="title function_">call</span>(&#123;<span class="attr">id</span>: <span class="number">42</span>&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>  因为箭头函数没有自己的 this，所以就不能用 call()、apply()、bind() 这些方法去改变 this 的指向。</p>
+</li>
+<li><p>函数体内没有 arguments 对象。如果要访问参数，可以用 rest 参数。</p>
+</li>
+<li><p>不可以使用 new 命令，因此不能用作构造函数，会出错。</p>
+<p>  因为箭头函数没有自己的 this，导致内部的 this 指向外部代码块。所以也就不能用作构造函数。</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="title function_">Foo</span> = (<span class="params"></span>) =&gt; &#123;&#125;;</span><br><span class="line"><span class="keyword">let</span> foo = <span class="keyword">new</span> <span class="title class_">Foo</span>(); <span class="comment">// TypeError: Foo is not a constructor</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>没有 prototype 属性</p>
+<p>  因为箭头函数不能作为构造函数，构造函数才有 prototype 属性用来指向实例的原型对象</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="title function_">Foo</span> = (<span class="params"></span>) =&gt; &#123;&#125;;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Foo</span>.<span class="property"><span class="keyword">prototype</span></span>); <span class="comment">// undefined</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>不可以使用 yield 命令，因此不能用作 Generator 函数。</p>
+</li>
+</ul>
+<h4 id="不适用场景"><a href="#不适用场景" class="headerlink" title="不适用场景"></a>不适用场景</h4><ul>
+<li><p>定义函数的方法，且该方法内部包括 this。</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> cat = &#123;</span><br><span class="line">    <span class="attr">lives</span>: <span class="number">9</span>,</span><br><span class="line">    <span class="attr">jumps</span>: <span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">lives</span>--;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>  调用 cat.jumps()时，如果是普通函数，该方法内部的 this 指向 cat；如果写成箭头函数，使得 this 指向全局对象，因此不会得到预期结果。</p>
+</li>
+<li><p>需要动态 this 的时候</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> button = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;press&#x27;</span>);</span><br><span class="line">button.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">classList</span>.<span class="title function_">toggle</span>(<span class="string">&#x27;on&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>  上面代码中 button 的监听函数是一个箭头函数，导致里面的 this 就是全局对象。如果改成普通函数，this 就会动态指向被点击的按钮对象。</p>
+</li>
+</ul>
+<h3 id="双冒号运算符"><a href="#双冒号运算符" class="headerlink" title="双冒号运算符"></a>双冒号运算符</h3><p>ES7 提出了“函数绑定”（function bind）运算符，用来取代 call、apply、bind 调用。<br>函数绑定运算符是并排的两个冒号（::），左边是一个对象，右边是一个函数。该运算符会自动将左边的对象，作为上下文环境（即 this 对象），绑定到右边的函数上面。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">foo</span>::bar;</span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line">bar.<span class="title function_">bind</span>(foo);</span><br><span class="line"></span><br><span class="line"><span class="attr">foo</span>::<span class="title function_">bar</span>(...<span class="variable language_">arguments</span>);</span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line">bar.<span class="title function_">apply</span>(foo, <span class="variable language_">arguments</span>);</span><br></pre></td></tr></table></figure>
+
+<p>如果双冒号左边为空，右边是一个对象的方法，则等于将该方法绑定在该对象上面。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> log = ::<span class="variable language_">console</span>.<span class="property">log</span>;</span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line"><span class="keyword">let</span> log = <span class="variable language_">console</span>.<span class="property">log</span>.<span class="title function_">bind</span>(<span class="variable language_">console</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="尾调用"><a href="#尾调用" class="headerlink" title="尾调用"></a>尾调用</h3><h4 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h4><p>尾调用（Tail Call）是函数式编程的一个重要概念，就是指某个函数的最后一步是调用另一个函数。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">f</span>(<span class="params">x</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">g</span>(x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 不属于尾调用，因为调用函数g之后，还有赋值操作，即使语义完全一样</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">f</span>(<span class="params">x</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> y = <span class="title function_">g</span>(x);</span><br><span class="line">    <span class="keyword">return</span> y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 不属于尾调用，因为调用后还有操作，即使写在一行内</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">f</span>(<span class="params">x</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">g</span>(x) + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 不属于尾调用，因为执行操作后没有返回，最后一步相当于隐式的返回了 undefined</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">f</span>(<span class="params">x</span>) &#123;</span><br><span class="line">    <span class="title function_">g</span>(x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="尾调用优化"><a href="#尾调用优化" class="headerlink" title="尾调用优化"></a>尾调用优化</h4><p>函数调用会在内存形成一个“调用帧”（call frame），保存调用位置和内部变量等信息。如果在函数 A 的内部调用函数 B，那么在 A 的调用帧上方，还会形成一个 B 的调用帧。等到 B 运行结束，将结果返回到 A，B 的调用帧才会消失。如果函数 B 内部还调用函数 C，那就还有一个 C 的调用帧，以此类推。所有的调用帧，就形成一个“调用栈”（call stack）。</p>
+<p>尾调用由于是函数的最后一步操作，所以不需要保留外层函数的调用帧，因为调用位置、内部变量等信息都不会再用到了，只要直接用内层函数的调用帧，取代外层函数的调用帧就可以了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">f</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> m = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">let</span> n = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">g</span>(m + n);</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">f</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">f</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">g</span>(<span class="number">3</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">f</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line"><span class="title function_">g</span>(<span class="number">3</span>);</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，如果函数 g 不是尾调用，函数 f 就需要保存内部变量 m 和 n 的值、g 的调用位置等信息。但由于调用 g 之后，函数 f 就结束了，所以执行到最后一步，完全可以删除 f(x)的调用帧，只保留 g(3)的调用帧。</p>
+<p>这就叫做“尾调用优化”（Tail call optimization），即只保留内层函数的调用帧。如果所有函数都是尾调用，那么完全可以做到每次执行时，调用帧只有一项，这将大大节省内存。这就是“尾调用优化”的意义。</p>
+<p>注意，只有不再用到外层函数的内部变量，内层函数的调用帧才会取代外层函数的调用帧，否则就无法进行“尾调用优化”。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">addOne</span>(<span class="params">a</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> one = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">inner</span>(<span class="params">b</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> b + one;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">inner</span>(a);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的函数不会进行尾调用优化，因为内层函数 inner 用到了外层函数 addOne 的内部变量 one。</p>
+<h4 id="尾递归"><a href="#尾递归" class="headerlink" title="尾递归"></a>尾递归</h4><p>函数调用自身，称为递归。如果尾调用自身，就称为尾递归。</p>
+<p>递归非常耗费内存，因为需要同时保存成千上百个调用帧，很容易发生“栈溢出”错误（stack overflow）。但对于尾递归来说，由于只存在一个调用帧，所以永远不会发生“栈溢出”错误。</p>
+<blockquote>
+<p>注：这是针对运行环境做了尾调用优化的情况而言，而现代浏览器或者 Node.js 都没有部署尾调用优化，所以在数据量大的情况下仍可能发生“栈溢出”。其根本原因是因为 V8 引擎开发者认为尾调用优化依旧有隐式优化和调用栈丢失的问题。<a target="_blank" rel="noopener" href="https://v8.dev/blog/modern-javascript">来源</a></p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">sum</span>(<span class="params">n</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (n &lt; <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> n + <span class="title function_">sum</span>(n - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">sum</span>(<span class="number">5</span>);</span><br><span class="line"><span class="number">5</span> + <span class="title function_">sum</span>(<span class="number">4</span>);</span><br><span class="line"><span class="number">5</span> + (<span class="number">4</span> + <span class="title function_">sum</span>(<span class="number">3</span>));</span><br><span class="line"><span class="number">5</span> + (<span class="number">4</span> + (<span class="number">3</span> + <span class="title function_">sum</span>(<span class="number">2</span>)));</span><br><span class="line"><span class="number">5</span> + (<span class="number">4</span> + (<span class="number">3</span> + (<span class="number">2</span> + <span class="title function_">sum</span>(<span class="number">1</span>))));</span><br><span class="line"><span class="number">5</span> + (<span class="number">4</span> + (<span class="number">3</span> + (<span class="number">2</span> + <span class="number">1</span> + <span class="title function_">sum</span>(<span class="number">0</span>))));</span><br><span class="line"><span class="number">5</span> + (<span class="number">4</span> + (<span class="number">3</span> + (<span class="number">2</span> + <span class="number">1</span>)));</span><br><span class="line"><span class="number">5</span> + (<span class="number">4</span> + (<span class="number">3</span> + <span class="number">3</span>));</span><br><span class="line"><span class="number">5</span> + (<span class="number">4</span> + <span class="number">6</span>);</span><br><span class="line"><span class="number">5</span> + <span class="number">10</span>;</span><br><span class="line"><span class="number">15</span>;</span><br></pre></td></tr></table></figure>
+
+<p>最多需要保存 n 个调用记录，复杂度 O(n) 。<br>改成尾递归，只保留一个调用记录，复杂度 O(1) 。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">tailSum</span>(<span class="params">n, total = <span class="number">0</span></span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> total;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">tailSum</span>(n - <span class="number">1</span>, n + total);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 计算步骤</span></span><br><span class="line"><span class="title function_">tailSum</span>(<span class="number">5</span>, <span class="number">0</span>);</span><br><span class="line"><span class="title function_">tailSum</span>(<span class="number">4</span>, <span class="number">5</span>);</span><br><span class="line"><span class="title function_">tailSum</span>(<span class="number">3</span>, <span class="number">9</span>);</span><br><span class="line"><span class="title function_">tailSum</span>(<span class="number">2</span>, <span class="number">12</span>);</span><br><span class="line"><span class="title function_">tailSum</span>(<span class="number">1</span>, <span class="number">14</span>);</span><br><span class="line"><span class="title function_">tailSum</span>(<span class="number">0</span>, <span class="number">15</span>);</span><br><span class="line"><span class="number">15</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 另外一种优化方案：使用循环，从最低值递推计算</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">loopSum</span>(<span class="params">n</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> result = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">let</span> next = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        count++;</span><br><span class="line">        result = next;</span><br><span class="line">        next += i + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>另外一个比较著名的例子，就是计算 斐波那契数列 Fibonacci，也能充分说明尾递归优化的重要性。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 原始版本 */</span></span><br><span class="line"><span class="keyword">let</span> count = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">fibonacci</span>(<span class="params">n</span>) &#123;</span><br><span class="line">    count++;</span><br><span class="line">    <span class="keyword">if</span> (n &lt; <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> n;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">fibonacci</span>(n - <span class="number">1</span>) + <span class="title function_">fibonacci</span>(n - <span class="number">2</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 计算步骤</span></span><br><span class="line"><span class="title function_">fibonacci</span>(<span class="number">5</span>);</span><br><span class="line"><span class="title function_">fibonacci</span>(<span class="number">4</span>) + <span class="title function_">fibonacci</span>(<span class="number">3</span>);</span><br><span class="line"><span class="title function_">fibonacci</span>(<span class="number">3</span>) + <span class="title function_">fibonacci</span>(<span class="number">2</span>) + <span class="title function_">fibonacci</span>(<span class="number">2</span>) + <span class="title function_">fibonacci</span>(<span class="number">1</span>);</span><br><span class="line"><span class="title function_">fibonacci</span>(<span class="number">2</span>) + <span class="title function_">fibonacci</span>(<span class="number">1</span>) + <span class="title function_">fibonacci</span>(<span class="number">1</span>) + <span class="title function_">fibonacci</span>(<span class="number">0</span>) + <span class="title function_">fibonacci</span>(<span class="number">1</span>) + <span class="title function_">fibonacci</span>(<span class="number">0</span>) + <span class="number">1</span>;</span><br><span class="line"><span class="title function_">fibonacci</span>(<span class="number">1</span>) + <span class="title function_">fibonacci</span>(<span class="number">0</span>) + <span class="number">1</span> + <span class="number">1</span> + <span class="number">0</span> + <span class="number">1</span> + <span class="number">0</span> + <span class="number">1</span>;</span><br><span class="line"><span class="number">1</span> + <span class="number">0</span> + <span class="number">1</span> + <span class="number">1</span> + <span class="number">0</span> + <span class="number">1</span> + <span class="number">0</span> + <span class="number">1</span>;</span><br><span class="line"><span class="number">5</span>;</span><br><span class="line"><span class="comment">// 调用函数共计 15 次</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 尾递归版本 */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">tailFibonacci</span>(<span class="params">n, result = <span class="number">0</span>, next = <span class="number">1</span></span>) &#123;</span><br><span class="line">    count++;</span><br><span class="line">    <span class="keyword">if</span> (n === <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">tailFibonacci</span>(n - <span class="number">1</span>, next, result + next);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 计算步骤</span></span><br><span class="line"><span class="title function_">fibonacci</span>(<span class="number">5</span>);</span><br><span class="line"><span class="title function_">fibonacci</span>(<span class="number">4</span>, <span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line"><span class="title function_">fibonacci</span>(<span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>);</span><br><span class="line"><span class="title function_">fibonacci</span>(<span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>);</span><br><span class="line"><span class="title function_">fibonacci</span>(<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>);</span><br><span class="line"><span class="title function_">fibonacci</span>(<span class="number">0</span>, <span class="number">5</span>, <span class="number">8</span>);</span><br><span class="line"><span class="number">5</span>;</span><br><span class="line"><span class="comment">// 调用函数共计 6 次</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//在计算大数值时更为明显</span></span><br><span class="line"><span class="title function_">fibonacci</span>(<span class="number">100</span>); <span class="comment">// 堆栈溢出</span></span><br><span class="line"><span class="title function_">tailFibonacci</span>(<span class="number">100</span>); <span class="comment">// 354224848179262000000</span></span><br></pre></td></tr></table></figure>
+
+<p>从本质上说，尾递归，比线性递归多一个参数，这个参数是上一次调用函数得到的结果；优化关键点在于，尾递归尾是把当前的运算结果放在参数里传给下层函数，每次调用都在收集结果，避免了线性递归不收集结果只能依次展开消耗内存的坏处。</p>
+<h4 id="函数记忆"><a href="#函数记忆" class="headerlink" title="函数记忆"></a>函数记忆</h4><p>针对上面需要重复计算的函数，还有一个优化方向是使用函数记忆。<br>函数记忆是指将上次的计算结果缓存起来，当下次调用时，如果遇到相同的参数，就直接返回缓存中的数据。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 简单实现的记忆函数</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">memorize</span>(<span class="params">fn, hash</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> flag = <span class="keyword">function</span> (<span class="params">key</span>) &#123;</span><br><span class="line">        <span class="keyword">let</span> cache = flag.<span class="property">cache</span>;</span><br><span class="line">        <span class="keyword">let</span> address = <span class="string">&#x27;&#x27;</span> + (hash ? hash.<span class="title function_">apply</span>(<span class="variable language_">this</span>, <span class="variable language_">arguments</span>) : key);</span><br><span class="line">        <span class="keyword">if</span> (!cache[address]) &#123;</span><br><span class="line">            cache[address] = fn.<span class="title function_">apply</span>(<span class="variable language_">this</span>, <span class="variable language_">arguments</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> cache[address];</span><br><span class="line">    &#125;;</span><br><span class="line">    flag.<span class="property">cache</span> = &#123;&#125;;</span><br><span class="line">    <span class="keyword">return</span> flag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>用法示例（必须对原始函数进行同名赋值，才能达到优化目的）：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fibonacci = <span class="title function_">memorize</span>(fibonacci);</span><br></pre></td></tr></table></figure>
+
+<p>函数记忆里函数的运行次数，等于循环次数 loop，另外运行时间相比原始函数也大大缩短，达到了优化目标</p>
+<h4 id="Fibonacci-的其他优化版本"><a href="#Fibonacci-的其他优化版本" class="headerlink" title="Fibonacci 的其他优化版本"></a>Fibonacci 的其他优化版本</h4><h5 id="缓存-闭包"><a href="#缓存-闭包" class="headerlink" title="缓存 + 闭包"></a>缓存 + 闭包</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> cacheFibonacci = (<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> cache = &#123;&#125;;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params">n</span>) &#123;</span><br><span class="line">        count++;</span><br><span class="line">        <span class="keyword">if</span> (cache[n]) &#123;</span><br><span class="line">            <span class="keyword">return</span> cache[n];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> (cache[n] = n &lt; <span class="number">2</span> ? n : <span class="title function_">cacheFibonacci</span>(n - <span class="number">1</span>) + <span class="title function_">cacheFibonacci</span>(n - <span class="number">2</span>));</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+
+<h5 id="递推法-结构赋值"><a href="#递推法-结构赋值" class="headerlink" title="递推法 + 结构赋值"></a>递推法 + 结构赋值</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">loopFibonacci</span>(<span class="params">n</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> [a, b] = [<span class="number">1</span>, <span class="number">0</span>];</span><br><span class="line">    count = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> (n &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        count++;</span><br><span class="line">        n--;</span><br><span class="line">        [a, b] = [a + b, a];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="统一性能测试"><a href="#统一性能测试" class="headerlink" title="统一性能测试"></a>统一性能测试</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> loop = <span class="number">35</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">time</span>(<span class="string">&#x27;origin&#x27;</span>);</span><br><span class="line"><span class="keyword">let</span> result = <span class="title function_">fibonacci</span>(loop);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;运行次数 == &#x27;</span>, count);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;结果 == &#x27;</span>, result);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">timeEnd</span>(<span class="string">&#x27;origin&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">time</span>(<span class="string">&#x27;use tail&#x27;</span>);</span><br><span class="line">count = <span class="number">0</span>;</span><br><span class="line">result = <span class="title function_">tailFibonacci</span>(loop);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;运行次数 == &#x27;</span>, count);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;结果 == &#x27;</span>, result);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">timeEnd</span>(<span class="string">&#x27;use tail&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">time</span>(<span class="string">&#x27;use memorize&#x27;</span>);</span><br><span class="line">count = <span class="number">0</span>;</span><br><span class="line">fibonacci = <span class="title function_">memorize</span>(fibonacci);</span><br><span class="line">result = <span class="title function_">fibonacci</span>(loop);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;运行次数 == &#x27;</span>, count);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;结果 == &#x27;</span>, result);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">timeEnd</span>(<span class="string">&#x27;use memorize&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">time</span>(<span class="string">&#x27;use cache&#x27;</span>);</span><br><span class="line">count = <span class="number">0</span>;</span><br><span class="line">result = <span class="title function_">cacheFibonacci</span>(loop);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;运行次数 == &#x27;</span>, count);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;结果 == &#x27;</span>, result);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">timeEnd</span>(<span class="string">&#x27;use cache&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">time</span>(<span class="string">&#x27;use loop&#x27;</span>);</span><br><span class="line">count = <span class="number">0</span>;</span><br><span class="line">result = <span class="title function_">loopFibonacci</span>(loop);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;运行次数 == &#x27;</span>, count);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;结果 == &#x27;</span>, result);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">timeEnd</span>(<span class="string">&#x27;use loop&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="尾递归函数封装"><a href="#尾递归函数封装" class="headerlink" title="尾递归函数封装"></a>尾递归函数封装</h4><p>递归函数的优化也就是尾递归的实现，往往需要改写递归函数，确保最后一步只调用自身。做到这一点的话，就要把所有用到的内部变量改写成函数的参数。这样调用函数时就要多传入一些前置参数，这样的话很不直观，也容易产生困惑。<br>我们可以用以下方法进行简单封装，使得其调用方式和优化前一样。</p>
+<ol>
+<li><p>函数内调用</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function tailSumSimple(n) &#123;</span><br><span class="line">	let tailSum  = function(n, total) &#123;</span><br><span class="line">	  if (n &lt;= 0) return total;</span><br><span class="line">	  return tailSum(n - 1, n + total);</span><br><span class="line">	&#125;</span><br><span class="line">	return tailSum(n, 0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>函数科里化</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">function curry(fn, ...n) &#123;</span><br><span class="line">  return function(m) &#123;</span><br><span class="line">    return fn.call(this, m, ...n);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let tailSumCurry = curry(tailSum, 1);</span><br><span class="line">let tailFibonacciCurry = curry(tailFibonacci, 0, 1);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>参数默认值</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function tailSum(n, total = 0) &#123;</span><br><span class="line">	if (n &lt;= 0) return total;</span><br><span class="line">	return tailSum(n - 1, n + total);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="尾递归优化"><a href="#尾递归优化" class="headerlink" title="尾递归优化"></a>尾递归优化</h4><p>虽然 ES6 已经提出了要实现尾递归优化，但是因为 一些<a target="_blank" rel="noopener" href="https://v8.dev/blog/modern-javascript">原因<sup>注1</sup></a>，真正部署实施尾递归优化的浏览器并不多。所以当我们使用尾递归的时候，仍有可能发生“栈溢出”的错误。</p>
+<blockquote>
+<p>注1：开发者认为尾调用优化依旧有隐式优化和调用栈丢失</p>
+</blockquote>
+<p>这时就需要手动实现优化。</p>
+<ol>
+<li><p>蹦床函数</p>
+<p> 可以将递归执行转为循环执行。就是随着递归执行的开始和结束，调用栈会出现入栈、出栈效果，就像是在弹蹦床。</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">function trampoline (fn) &#123;</span><br><span class="line">    while (fn &amp;&amp; fn instanceof Function) &#123;</span><br><span class="line">        fn = fn();</span><br><span class="line">    &#125;</span><br><span class="line">    return fn;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function tailSum(n, total = 0) &#123;</span><br><span class="line">  if (n &lt;= 0) return total;</span><br><span class="line">  return tailSum.bind(this, n - 1, n + total);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">trampoline(tailSum(100000))</span><br></pre></td></tr></table></figure>
+
+<p> 在使用蹦床函数辅助递归时，每次递归执行时都会保留上一次递归的激活对象（执行环境中的变量对象）的引用，执行本次递归完毕后，返回另一个待执行的递归，然后对上一次递归的激活对象的引用也就结束了。</p>
+<p> 分析蹦床函数代码可以发现：它接受一个函数 fn 作为参数。只要 fn 执行后返回还是一个函数，就继续执行。注意，这里是返回一个函数，然后执行该函数，而不是函数里面调用函数，这样就避免了递归执行，从而就消除了调用栈过大的问题。</p>
+<p> 另外，需要将原来的递归函数，改写为每一步返回绑定了下一次递归参数的匿名函数。</p>
+<p> 两个函数结合就可以将递归状态转为循环，栈溢出的问题也就解决了。</p>
+</li>
+<li><p>尾调用优化函数</p>
+<p> 实际上，蹦床函数并非真正的尾递归优化，以下才是：</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">function tail(fn) &#123;</span><br><span class="line">    let value,</span><br><span class="line">        active = false,</span><br><span class="line">        stack = [];</span><br><span class="line">    return function() &#123;</span><br><span class="line">        // 每次进入递归都执行</span><br><span class="line">        stack.push(arguments);</span><br><span class="line">        if (!active) &#123;</span><br><span class="line">            // 只会执行一次</span><br><span class="line">            active = true;</span><br><span class="line">            while (stack.length) &#123;</span><br><span class="line">                // 因为 stack 数组里总会推入一个数组项，所以 while 循环总会执行处理新的参数列表</span><br><span class="line">                value = fn.apply(this, stack.shift());</span><br><span class="line">            &#125;</span><br><span class="line">            active = false;</span><br><span class="line">            return value;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let tailSum = tail(function(n, total = 0) &#123;</span><br><span class="line">    if (n &lt;= 0) return total;</span><br><span class="line">    return tailSum(n - 1, n + total);</span><br><span class="line">&#125;);</span><br><span class="line">tailSum(100000)</span><br></pre></td></tr></table></figure>
+
+<p> 上述 tail 函数的精妙之处在于，状态变量 active。默认情况下，这个变量是不激活的。第一次调用返回的匿名函数时，变量 active 会“激活”，导致后续每次进入递归后，只是将这次递归接受的参数都被推入了 stack 数组，只是返回的都是 undefined，所以就避免了递归执行；另外由于 stack 数组里总有一个数组项，内部的 while 循环总是会执行处理新的参数列表，所以就会一直这样“进入递归-&gt;获得参数列表-&gt;返回-&gt;进入递归-&gt;…”的循环。这样就很巧妙地将“递归”改成了“循环”，而后一轮的参数会取代前一轮的参数，保证了调用栈只有一层。直到最后递归没有向 stack 数组推入参数，这时函数刚好跳出递归分支，直接根据参数返回结果。</p>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/ES6/" rel="tag"># ES6</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/05/14/47.es6-number/" rel="prev" title="ES6 阅读心得之四：数值">
+      <i class="fa fa-chevron-left"></i> ES6 阅读心得之四：数值
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/05/16/49.es6-array/" rel="next" title="ES6 阅读心得之六：数组">
+      ES6 阅读心得之六：数组 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E9%BB%98%E8%AE%A4%E5%80%BC"><span class="nav-number">1.1.</span> <span class="nav-text">参数默认值</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%8E%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC%E9%BB%98%E8%AE%A4%E5%80%BC%E7%BB%93%E5%90%88"><span class="nav-number">1.1.1.</span> <span class="nav-text">与解构赋值默认值结合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E9%BB%98%E8%AE%A4%E5%80%BC%E4%BD%8D%E7%BD%AE"><span class="nav-number">1.1.2.</span> <span class="nav-text">参数默认值位置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#length-%E5%B1%9E%E6%80%A7"><span class="nav-number">1.1.3.</span> <span class="nav-text">length 属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-number">1.1.4.</span> <span class="nav-text">作用域</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rest-%E5%8F%82%E6%95%B0"><span class="nav-number">1.2.</span> <span class="nav-text">rest 参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.3.</span> <span class="nav-text">严格模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#name-%E5%B1%9E%E6%80%A7"><span class="nav-number">1.4.</span> <span class="nav-text">name 属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0"><span class="nav-number">1.5.</span> <span class="nav-text">箭头函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E8%A6%81%E7%82%B9"><span class="nav-number">1.5.1.</span> <span class="nav-text">使用要点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%8D%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">1.5.2.</span> <span class="nav-text">不适用场景</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8C%E5%86%92%E5%8F%B7%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">1.6.</span> <span class="nav-text">双冒号运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%BE%E8%B0%83%E7%94%A8"><span class="nav-number">1.7.</span> <span class="nav-text">尾调用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-number">1.7.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%BE%E8%B0%83%E7%94%A8%E4%BC%98%E5%8C%96"><span class="nav-number">1.7.2.</span> <span class="nav-text">尾调用优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%BE%E9%80%92%E5%BD%92"><span class="nav-number">1.7.3.</span> <span class="nav-text">尾递归</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E8%AE%B0%E5%BF%86"><span class="nav-number">1.7.4.</span> <span class="nav-text">函数记忆</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Fibonacci-%E7%9A%84%E5%85%B6%E4%BB%96%E4%BC%98%E5%8C%96%E7%89%88%E6%9C%AC"><span class="nav-number">1.7.5.</span> <span class="nav-text">Fibonacci 的其他优化版本</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%BC%93%E5%AD%98-%E9%97%AD%E5%8C%85"><span class="nav-number">1.7.5.1.</span> <span class="nav-text">缓存 + 闭包</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%80%92%E6%8E%A8%E6%B3%95-%E7%BB%93%E6%9E%84%E8%B5%8B%E5%80%BC"><span class="nav-number">1.7.5.2.</span> <span class="nav-text">递推法 + 结构赋值</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%BB%9F%E4%B8%80%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95"><span class="nav-number">1.7.5.3.</span> <span class="nav-text">统一性能测试</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%BE%E9%80%92%E5%BD%92%E5%87%BD%E6%95%B0%E5%B0%81%E8%A3%85"><span class="nav-number">1.7.6.</span> <span class="nav-text">尾递归函数封装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%BE%E9%80%92%E5%BD%92%E4%BC%98%E5%8C%96"><span class="nav-number">1.7.7.</span> <span class="nav-text">尾递归优化</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">可口可乐</p>
+  <div class="site-description" itemprop="description">Personal Blog</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">可口可乐</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

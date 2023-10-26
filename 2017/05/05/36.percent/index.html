@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="前言CSS 中有很多属性可以设置百分比值，而这些百分比值的参照物却各不相同，本文就来总结一下这些属性百分比值是基于什么来计算的。在列举属性之前，首先需要明确一个概念 containing block（包含块）。许多元素百分比值是相对包含块来计算的，因此明确包含块的定义，就非常重要了。在 CSS2.1 中，很多框的定位和尺寸的计算，都取决于一个矩形的边界，这个矩形，被称作是包含块（containin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSS 之 percent 详解">
+<meta property="og:url" content="http://example.com/2017/05/05/36.percent/index.html">
+<meta property="og:site_name" content="Lizux">
+<meta property="og:description" content="前言CSS 中有很多属性可以设置百分比值，而这些百分比值的参照物却各不相同，本文就来总结一下这些属性百分比值是基于什么来计算的。在列举属性之前，首先需要明确一个概念 containing block（包含块）。许多元素百分比值是相对包含块来计算的，因此明确包含块的定义，就非常重要了。在 CSS2.1 中，很多框的定位和尺寸的计算，都取决于一个矩形的边界，这个矩形，被称作是包含块（containin">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-05-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-26T02:32:58.382Z">
+<meta property="article:author" content="可口可乐">
+<meta property="article:tag" content="CSS">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2017/05/05/36.percent/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>CSS 之 percent 详解 | Lizux</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lizux</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Just go on</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2017/05/05/36.percent/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="可口可乐">
+      <meta itemprop="description" content="Personal Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lizux">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CSS 之 percent 详解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-05-05 00:00:00" itemprop="dateCreated datePublished" datetime="2017-05-05T00:00:00+08:00">2017-05-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-10-26 10:32:58" itemprop="dateModified" datetime="2023-10-26T10:32:58+08:00">2023-10-26</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>CSS 中有很多属性可以设置百分比值，而这些百分比值的参照物却各不相同，本文就来总结一下这些属性百分比值是基于什么来计算的。<br>在列举属性之前，首先需要明确一个概念 containing block（包含块）。许多元素百分比值是相对包含块来计算的，因此明确包含块的定义，就非常重要了。<br>在 CSS2.1 中，很多框的定位和尺寸的计算，都取决于一个矩形的边界，这个矩形，被称作是包含块（containing block）。<br>一般来说，(元素)生成的框会扮演它子孙元素包含块的角色；我们称之为：一个(元素的)框为它的子孙节点建造了包含块。</p>
+<p>包含块是一个相对的概念，而包含块的定义对不同元素来说各不相同。<br>0. 根元素的包含块叫做初始包含块，和 viewport（视窗） 有同样的尺寸<br>0. static&#x2F;relative: 包含块为祖先元素中最近的 display 值为 block、inline-block、list-item、table、table-cell 的元素的内容区域<br>0. absolute: 包含块为祖先元素中最近的非 static 定位的的包括 padding 的内容区域<br>0. fixed: 包含块为 viewport</p>
+<h3 id="宽-Width、高-Height-的百分比"><a href="#宽-Width、高-Height-的百分比" class="headerlink" title="宽 Width、高 Height 的百分比"></a>宽 Width、高 Height 的百分比</h3><p>宽度 width 的百分比值是相对于元素的包含块宽度。<br>高度 height的百分比值是相对于元素的包含块高度。<br>如果元素为绝对定位，则元素的高度相对于祖先元素最近的非 static 定位元素的高度计算；如果元素为固定定位，则元素的高度相对于 viewport 的高度计算。</p>
+<blockquote>
+<p>如果包含块没有显式地指定高度，并且当前元素不是绝对定位或者固定定位，则该值计算为auto。这就是很多时候设置 height:100% 无效的原因。<br>另外，<html> 根元素高度定义百分比总是有效的（相对于 viewport），而如果希望在<body>里也用高度百分比，就一定要先为<html>定义明确的高度。这就是为什么在固定页脚范例中，有html, body{height:100%;}这样的写法。</p>
+</blockquote>
+<h3 id="外边距-Margin、内边距-Padding-的百分比"><a href="#外边距-Margin、内边距-Padding-的百分比" class="headerlink" title="外边距 Margin、内边距 Padding 的百分比"></a>外边距 Margin、内边距 Padding 的百分比</h3><p>边距的百分比值相对于包含块的宽度计算。</p>
+<blockquote>
+<p>注意，top 和 bottom 的值也是相对于包含块的宽度计算，而不是包含块的高度。</p>
+</blockquote>
+<h3 id="font-size"><a href="#font-size" class="headerlink" title="font-size"></a>font-size</h3><p>font-size 的百分比值指定了该元素的字体大小相对于父元素的字体大小的百分比。没有单位的纯数字也有同样效果。</p>
+<h3 id="line-height"><a href="#line-height" class="headerlink" title="line-height"></a>line-height</h3><p>line-height 用于指定行内框的高度。<br>对于块级元素，line-height 指定了元素行内框的最小高度；对于非替换行内元素，line-height 指定了行内框的高度；对于替换行内元素（如input、button），line-height 无效。<br>line-height的百分比值相对于元素自身的字体大小计算。</p>
+<h3 id="vertical-align"><a href="#vertical-align" class="headerlink" title="vertical-align"></a>vertical-align</h3><p>vertical-align 相对于元素自身的 line-height 值计算。将元素的基线对齐于父元素基线为起点的指定高度，允许负值。</p>
+<blockquote>
+<p>尽管 vertical-align 可以使用数字，百分比值，但浏览器兼容性差异较大，在跨浏览器实现时可能需要较多hack。因此，推荐使用 middle 等相对来说兼容性差异较小的关键字类型的值。</p>
+</blockquote>
+<h3 id="border-radius"><a href="#border-radius" class="headerlink" title="border-radius"></a>border-radius</h3><p>border-radius 的百分比值相对于该元素自身的尺寸。</p>
+<h3 id="background-position"><a href="#background-position" class="headerlink" title="background-position"></a>background-position</h3><p>background-position 的百分比值，参照物是一个减法计算值，由放置背景图的区域尺寸，减去背景图的尺寸得到，可以为负值。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CSS/" rel="tag"># CSS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/04/15/25.dom-manipulate/" rel="prev" title="对 html 页面根元素常见操作的辨析">
+      <i class="fa fa-chevron-left"></i> 对 html 页面根元素常见操作的辨析
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/05/31/37.react-performance/" rel="next" title="React 性能优化">
+      React 性能优化 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%BD-Width%E3%80%81%E9%AB%98-Height-%E7%9A%84%E7%99%BE%E5%88%86%E6%AF%94"><span class="nav-number">1.1.</span> <span class="nav-text">宽 Width、高 Height 的百分比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%96%E8%BE%B9%E8%B7%9D-Margin%E3%80%81%E5%86%85%E8%BE%B9%E8%B7%9D-Padding-%E7%9A%84%E7%99%BE%E5%88%86%E6%AF%94"><span class="nav-number">1.2.</span> <span class="nav-text">外边距 Margin、内边距 Padding 的百分比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#font-size"><span class="nav-number">1.3.</span> <span class="nav-text">font-size</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#line-height"><span class="nav-number">1.4.</span> <span class="nav-text">line-height</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vertical-align"><span class="nav-number">1.5.</span> <span class="nav-text">vertical-align</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#border-radius"><span class="nav-number">1.6.</span> <span class="nav-text">border-radius</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#background-position"><span class="nav-number">1.7.</span> <span class="nav-text">background-position</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">可口可乐</p>
+  <div class="site-description" itemprop="description">Personal Blog</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">可口可乐</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

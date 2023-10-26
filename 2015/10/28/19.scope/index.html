@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="javascript 中的原型继承在 javascript 中，有个原型继承的概念，这里就不展开篇幅深入讲述了。我们仅仅描述一下它的机制：  子作用域访问一个原始类型属性时，会优先查找自身存在该属性否，不存在接着沿着原型链往上查找父作用域，直到全局作用域为止，这时还找不到就会返回 undefined。 子作用域对原始类型属性进行赋值时，不会查询原型链，因为原型中的属性对于子作用域来说是只读的，假如">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解 AngularJS 的 Scope">
+<meta property="og:url" content="http://example.com/2015/10/28/19.scope/index.html">
+<meta property="og:site_name" content="Lizux">
+<meta property="og:description" content="javascript 中的原型继承在 javascript 中，有个原型继承的概念，这里就不展开篇幅深入讲述了。我们仅仅描述一下它的机制：  子作用域访问一个原始类型属性时，会优先查找自身存在该属性否，不存在接着沿着原型链往上查找父作用域，直到全局作用域为止，这时还找不到就会返回 undefined。 子作用域对原始类型属性进行赋值时，不会查询原型链，因为原型中的属性对于子作用域来说是只读的，假如">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-10-27T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-26T02:32:58.377Z">
+<meta property="article:author" content="可口可乐">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="AngularJS">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2015/10/28/19.scope/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>深入理解 AngularJS 的 Scope | Lizux</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lizux</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Just go on</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2015/10/28/19.scope/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="可口可乐">
+      <meta itemprop="description" content="Personal Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lizux">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深入理解 AngularJS 的 Scope
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2015-10-28 00:00:00" itemprop="dateCreated datePublished" datetime="2015-10-28T00:00:00+08:00">2015-10-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-10-26 10:32:58" itemprop="dateModified" datetime="2023-10-26T10:32:58+08:00">2023-10-26</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="javascript-中的原型继承"><a href="#javascript-中的原型继承" class="headerlink" title="javascript 中的原型继承"></a>javascript 中的原型继承</h2><p>在 javascript 中，有个原型继承的概念，这里就不展开篇幅深入讲述了。我们仅仅描述一下它的机制：</p>
+<ul>
+<li>子作用域访问一个原始类型属性时，会优先查找自身存在该属性否，不存在接着沿着原型链往上查找父作用域，直到全局作用域为止，这时还找不到就会返回 undefined。</li>
+<li>子作用域对原始类型属性进行赋值时，不会查询原型链，因为原型中的属性对于子作用域来说是只读的，假如自身没有该属性就会直接创建并赋值（不会修改父作用域的同名属性）。</li>
+<li>子作用域访问一个对象的属性时，会优先查找自身存在该对象否，不存在接着沿着原型链往上查找父作用域，直到全局作用域为止，这时还找不到就会返回 undefined。</li>
+<li>子作用域对对象的属性进行赋值时，则会优先查找自身存在该对象否，不存在接着沿着原型链往上查找父作用域，直到全局作用域为止，这时还找不到对象就会报错，因为无法对 undefined 的属性赋值；假如找到了该对象，就会就会对其属性直接赋值，所以可以修改父作用域的对象属性。</li>
+</ul>
+<h2 id="AngularJS-中的原型继承"><a href="#AngularJS-中的原型继承" class="headerlink" title="AngularJS 中的原型继承"></a>AngularJS 中的原型继承</h2><p>AngularJS 中，子作用域一般都会通过 JavaScript 原型继承机制继承其父作用域的属性和方法。<br>这样，当我们对原始类型属性进行双向数据绑定时，会出现一些意想不到的问题，尤其是使用了 ng-if、ng-repeat、 ng-switch、ng-view 和 ng-include 创建了子作用域以后。因为 AngularJS 不会把数据写到你期望的父作用域属性中去，而是直接在子作用域创建同名属性并写入数据。<br>例如：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-controller</span>=<span class="string">&quot;OuterCtrl&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">span</span>&gt;</span>&#123;&#123;a&#125;&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-controller</span>=<span class="string">&quot;InnerCtrl&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">span</span>&gt;</span>&#123;&#123;a&#125;&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">button</span> <span class="attr">ng-click</span>=<span class="string">&quot;a=a+1&quot;</span>&gt;</span>a++<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">OuterCtrl</span>(<span class="params">$scope</span>) &#123;</span><br><span class="line">    $scope.<span class="property">a</span> = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当点击按钮后，InnerCtrl.a 会变成 2，而 OuterCtrl.a 还是 1。<br>整个事件流程如下：没有点击按钮前，InnerCtrl 本身并没有 a 属性，它的值来自于 OuterCtrl 域，点击按钮后，由于原型继承机制的原因，此时相当于在 InnerCtrl 作用域创建了 a 属性并写入值，这就会产生困扰。</p>
+<p>避免这个问题的技巧就是在 ng-model 中总使用点（.）语法，使用对象的属性来解决问题。</p>
+<p>比如：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">ng-model</span>=<span class="string">&quot;someObj.someProp&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>优于：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">ng-model</span>=<span class="string">&quot;someProp&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>如果你一定要直接使用原始类型属性，有两种办法：<br>0. 在子作用域中使用 $parent.属性名，这样可以直接修改父作用域的属性。<br>0. 在父作用域中定义函数，子作用域通过原型继承调用函数把值传递给父作用域（这种方式极少使用）。<br>    <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// in the parent scope</span></span><br><span class="line">$scope.<span class="property">setProp</span> = <span class="keyword">function</span>(<span class="params">value</span>) &#123;</span><br><span class="line">    $scope.<span class="property">someProp</span> = value;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// in the child scope</span></span><br><span class="line">$scope.<span class="title function_">setProp</span>(someValue);</span><br></pre></td></tr></table></figure></p>
+<h2 id="在父scope中调用子scope的函数或方法"><a href="#在父scope中调用子scope的函数或方法" class="headerlink" title="在父scope中调用子scope的函数或方法"></a>在父scope中调用子scope的函数或方法</h2><ol start="0">
+<li><p>常规方法，使用了原型继承中第4点来实现的<br> 父scope:</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$scope.<span class="property">action</span> = &#123;&#125;;</span><br></pre></td></tr></table></figure>
+<p> 子scope:</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$scope.<span class="property">action</span>.<span class="property">view</span> = <span class="keyword">function</span>(<span class="params">param</span>) &#123;</span><br><span class="line">    <span class="title function_">someFunction</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>也可以使用 $broadcast 方法<br> 父scope:</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$scope.<span class="property">action</span> = <span class="keyword">function</span>(<span class="params">param</span>) &#123;</span><br><span class="line">    $scope.$broadcast(<span class="string">&#x27;someAction&#x27;</span>, param);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 子scope:</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$scope.$on(<span class="string">&#x27;someAction&#x27;</span>, <span class="keyword">function</span>(<span class="params">scope, param</span>) &#123;</span><br><span class="line">    <span class="title function_">someFunction</span>();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/AngularJS/" rel="tag"># AngularJS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2015/10/27/19.$scope-controllerAs/" rel="prev" title="AngularJS 中 $scope 与 controller as 辨析">
+      <i class="fa fa-chevron-left"></i> AngularJS 中 $scope 与 controller as 辨析
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2015/10/30/20.gulp-tips/" rel="next" title="Gulp 使用技巧">
+      Gulp 使用技巧 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#javascript-%E4%B8%AD%E7%9A%84%E5%8E%9F%E5%9E%8B%E7%BB%A7%E6%89%BF"><span class="nav-number">1.</span> <span class="nav-text">javascript 中的原型继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AngularJS-%E4%B8%AD%E7%9A%84%E5%8E%9F%E5%9E%8B%E7%BB%A7%E6%89%BF"><span class="nav-number">2.</span> <span class="nav-text">AngularJS 中的原型继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E7%88%B6scope%E4%B8%AD%E8%B0%83%E7%94%A8%E5%AD%90scope%E7%9A%84%E5%87%BD%E6%95%B0%E6%88%96%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">在父scope中调用子scope的函数或方法</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">可口可乐</p>
+  <div class="site-description" itemprop="description">Personal Blog</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">可口可乐</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

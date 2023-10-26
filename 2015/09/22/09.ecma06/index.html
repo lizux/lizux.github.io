@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="兼容性这一部分是最可能出现浏览器兼容性问题的地方  事件（用户采取的触发脚本的行为）&#x3D;&#x3D;&#x3D;&gt; 少 绑定事件处理（Attach Event Handler）函数（定义事件发生时执行哪个函数）&#x3D;&#x3D;&#x3D;&gt; 有，多在 W3C 和微软标准间 事件冒泡和捕获（元素和其祖先元素处理相同事件时，事件处理函数的触发顺序）&#x3D;&#x3D;&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript 读书心得之六：事件（Event）">
+<meta property="og:url" content="http://example.com/2015/09/22/09.ecma06/index.html">
+<meta property="og:site_name" content="Lizux">
+<meta property="og:description" content="兼容性这一部分是最可能出现浏览器兼容性问题的地方  事件（用户采取的触发脚本的行为）&#x3D;&#x3D;&#x3D;&gt; 少 绑定事件处理（Attach Event Handler）函数（定义事件发生时执行哪个函数）&#x3D;&#x3D;&#x3D;&gt; 有，多在 W3C 和微软标准间 事件冒泡和捕获（元素和其祖先元素处理相同事件时，事件处理函数的触发顺序）&#x3D;&#x3D;&amp;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-09-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-26T02:32:58.374Z">
+<meta property="article:author" content="可口可乐">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2015/09/22/09.ecma06/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>JavaScript 读书心得之六：事件（Event） | Lizux</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lizux</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Just go on</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2015/09/22/09.ecma06/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="可口可乐">
+      <meta itemprop="description" content="Personal Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lizux">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JavaScript 读书心得之六：事件（Event）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2015-09-22 00:00:00" itemprop="dateCreated datePublished" datetime="2015-09-22T00:00:00+08:00">2015-09-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-10-26 10:32:58" itemprop="dateModified" datetime="2023-10-26T10:32:58+08:00">2023-10-26</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="兼容性"><a href="#兼容性" class="headerlink" title="兼容性"></a>兼容性</h2><p>这一部分是最可能出现浏览器兼容性问题的地方</p>
+<ul>
+<li>事件（用户采取的触发脚本的行为）&#x3D;&#x3D;&#x3D;&gt; 少</li>
+<li>绑定事件处理（Attach Event Handler）函数（定义事件发生时执行哪个函数）&#x3D;&#x3D;&#x3D;&gt; 有，多在 W3C 和微软标准间</li>
+<li>事件冒泡和捕获（元素和其祖先元素处理相同事件时，事件处理函数的触发顺序）&#x3D;&#x3D;&#x3D;&gt; 少</li>
+<li>访问事件对象（该对象保存着脚本需要的事件信息）&#x3D;&#x3D;&#x3D;&gt; 多，某些无法解决</li>
+<li>访问目标对象（发生事件的元素）&#x3D;&#x3D;&#x3D;&gt; 少</li>
+</ul>
+<h2 id="事件列表"><a href="#事件列表" class="headerlink" title="事件列表"></a>事件列表</h2><ul>
+<li>鼠标事件：<ul>
+<li>click 左键单击</li>
+<li>dblclick 左键双击</li>
+<li>mouseover&#x2F;mouseout 鼠标移至和移开</li>
+<li>mousedown&#x2F;mouseup 鼠标按下和释放</li>
+<li>mousemove 鼠标移动</li>
+<li>mousewheel 鼠标滚轮滚动</li>
+<li>mouseenter&#x2F;mouseleave 鼠标移至和移开（一次触发。IE 优先支持，FF10、Chrome30 才开始支持，这是微软标准优于 W3C 标准的地方之一）。<br>触发顺序：mousedown 首先触发，mouseup 接着触发，click 最后触发</li>
+</ul>
+</li>
+<li>键盘事件：<ul>
+<li>keydown&#x2F;keyup 按下和释放按键</li>
+<li>keypress 按下按键（只字母、数字键有效，很少用）</li>
+</ul>
+</li>
+<li>接口事件：<ul>
+<li>focus&#x2F;blur 获得和失去焦点</li>
+<li>change 表单域值改变（在失去焦点后才触发）</li>
+<li>input 表单域值改变 (随时触发，IE9+ 支持)</li>
+<li>contextmenu 右键菜单</li>
+<li>load&#x2F;unload 元素加载和释放</li>
+<li>readystatechange 用来支持 XMLHttpRequest</li>
+<li>reset&#x2F;submit 重置和提交表单</li>
+<li>resize 改变窗口尺寸</li>
+<li>scroll 滚动页面</li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Events-20001113/events.html#Events-MutationEvent">W3C 事件</a>、<a target="_blank" rel="noopener" href="https://msdn.microsoft.com/en-us/library/ms533051.aspx">微软事件</a></li>
+</ul>
+<p>优化 resize 事件，在结束后集中触发</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> resizeCallback = <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> delay = <span class="number">100</span>;</span><br><span class="line">    <span class="keyword">var</span> executionTimer;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">function</span>(<span class="params">e</span>)&#123;</span><br><span class="line">        <span class="keyword">var</span> winX = <span class="variable language_">document</span>.<span class="property">documentElement</span>.<span class="property">clientWidth</span>;</span><br><span class="line">        <span class="keyword">var</span> winY = <span class="variable language_">document</span>.<span class="property">documentElement</span>.<span class="property">clientHeight</span>;</span><br><span class="line">        <span class="keyword">if</span> (executionTimer) &#123;</span><br><span class="line">            <span class="built_in">clearTimeout</span>(executionTimer);</span><br><span class="line">        &#125;</span><br><span class="line">        executionTimer = <span class="built_in">setTimeout</span>(<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">            <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;delayEvent&quot;</span>).<span class="property">innerHTML</span> = <span class="string">&quot;尺寸：&quot;</span> + winX + <span class="string">&quot;：&quot;</span> + winY;</span><br><span class="line">        &#125;, delay);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;();</span><br><span class="line"><span class="title function_">addEvent</span>(<span class="variable language_">window</span>, <span class="string">&#x27;resize&#x27;</span>, resizeCallback);</span><br></pre></td></tr></table></figure>
+
+<h3 id="默认操作"><a href="#默认操作" class="headerlink" title="默认操作"></a>默认操作</h3><p>很多事件有个关联的默认操作；一般是事件处理函数先执行，然后默认操作发生，所以事件处理函数可以取消默认操作；唯一例外是 unload，它不能被取消<br>要让事件处理函数取消默认操作，该函数必须返回 false（其他任何值都会默认操作发生），并且要正确绑定</p>
+<p>绑定事件并能正确返回值的方法</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">demo</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;你在点击页面&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 方法①：</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="property">onclick</span> = demo;</span><br><span class="line"><span class="comment">// 方法②：</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="property">onclick</span> = <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">demo</span>();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 方法③：</span></span><br><span class="line">&lt;body onclick=<span class="string">&quot;return demo()&quot;</span>&gt;&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="模拟事件的方法"><a href="#模拟事件的方法" class="headerlink" title="模拟事件的方法"></a>模拟事件的方法</h2><p>目前支持</p>
+<ul>
+<li>focus()</li>
+<li>blur()</li>
+<li>click()</li>
+<li>submit()（无法触发 submit 事件）</li>
+<li>reset()</li>
+</ul>
+<blockquote>
+<p>注：Opera 中，当按键按下时只会触发一次 keydown 事件，而在其他浏览器当中则都会按照一定的频率来触发</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="http://www.matts411.com/post/delaying_javascript_event_execution/">延迟事件触发</a> 函数，可以减少事件触发次数，提高性能（闭包的应用）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> onEventEnd = <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> delay = <span class="number">100</span>;</span><br><span class="line">    <span class="keyword">var</span> executionTimer;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">function</span>(<span class="params">e</span>)&#123;</span><br><span class="line">        <span class="keyword">var</span> evt = e || <span class="variable language_">window</span>.<span class="property">event</span>;</span><br><span class="line">        evtX = evt.<span class="property">pageX</span> || evt.<span class="property">clientX</span> + <span class="title class_">Math</span>.<span class="title function_">max</span>(<span class="variable language_">document</span>.<span class="property">documentElement</span>.<span class="property">scrollLeft</span>, <span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">scrollLeft</span>);</span><br><span class="line">        evtY = evt.<span class="property">pageY</span> || evt.<span class="property">clientY</span> + <span class="title class_">Math</span>.<span class="title function_">max</span>(<span class="variable language_">document</span>.<span class="property">documentElement</span>.<span class="property">scrollTop</span>, <span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">scrollTop</span>);</span><br><span class="line">        <span class="keyword">if</span> (executionTimer) &#123;</span><br><span class="line">            <span class="built_in">clearTimeout</span>(executionTimer);</span><br><span class="line">        &#125;</span><br><span class="line">        executionTimer = <span class="built_in">setTimeout</span>(<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">            <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;delayEvent&quot;</span>).<span class="property">innerHTML</span> = <span class="string">&quot;鼠标位置：&quot;</span> + evtX + <span class="string">&quot;：&quot;</span> + evtY;</span><br><span class="line">        &#125;, delay);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;();</span><br><span class="line"><span class="title function_">addEvent</span>(<span class="variable language_">document</span>,<span class="string">&#x27;mousemove&#x27;</span>,onEventEnd);</span><br></pre></td></tr></table></figure>
+
+<h2 id="绑定事件处理函数"><a href="#绑定事件处理函数" class="headerlink" title="绑定事件处理函数"></a>绑定事件处理函数</h2><h3 id="绑定事件的方法"><a href="#绑定事件的方法" class="headerlink" title="绑定事件的方法"></a>绑定事件的方法</h3><ol start="0">
+<li>内联（inline）方式 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;&quot;</span> <span class="attr">onclick</span>=<span class="string">&quot;demo()&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span> <span class="attr">onload</span>=<span class="string">&quot;demo()&quot;</span>&gt;</span></span><br><span class="line">el.setAttribute(&#x27;onclick&#x27;, &#x27;demo()&#x27;);</span><br></pre></td></tr></table></figure>
+ 缺点：违背了结构和行为分离的原则，不推荐使用</li>
+<li>传统方式 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x.<span class="property">onclick</span> = demo;</span><br></pre></td></tr></table></figure>
+ 注：函数名后无 ()，有了它表示立即执行函数并把返回值赋值给 x 的 onclick 属性<br> 优点：可以通过 x.onclick() 直接执行函数<br> 缺点：不能定义多个函数到一个事件中，后者会覆盖前者</li>
+<li>高级方式<br> W3C 和微软都提供了高级的事件处理函数绑定模型来解决覆盖的问题，这些模型允许在同一个事件定义任意数量的事件处理函数<br> W3C 标准使用 <code>addEventListener(type, listener[, useCapture])</code> 和 <code>removeEventListener(type, listener[, useCapture])</code>，微软标准使用 <code>attachEvent()</code> 和 <code>detachEvent()</code>；IE9+、现代浏览器支持前者，IE 支持后者<br> 两者区别：微软标准只支持事件冒泡，不支持事件捕获，不过这个影响不大；微软标准把事件处理函数作为一个全局函数，而不是被绑定元素的一个方法，这会影响到 this 关键字，因为它会永远指向 Window 对象<br> 缺点：不能移除一个事件上所有绑定的事件处理函数，因为高级方式要求必须提供要移除的函数名称；而传统方式可以使用 x.onclick &#x3D; null;<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">addEventSimple</span>(<span class="params">obj, evt, fn</span>)&#123;</span><br><span class="line">    <span class="keyword">if</span> (obj.<span class="property">addEventListener</span>) &#123;</span><br><span class="line">        obj.<span class="title function_">addEventListener</span>(evt, fn, <span class="literal">false</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (obj.<span class="property">attachEvent</span>) &#123;</span><br><span class="line">        obj.<span class="title function_">attachEvent</span>(<span class="string">&#x27;on&#x27;</span> + evt, fn);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">removeEventSimple</span>(<span class="params">obj, evt, fn</span>)&#123;</span><br><span class="line">    <span class="keyword">if</span> (obj.<span class="property">removeEventListener</span>) &#123;</span><br><span class="line">        obj.<span class="title function_">removeEventListener</span>(evt, fn, <span class="literal">false</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (obj.<span class="property">detachEvent</span>) &#123;</span><br><span class="line">        obj.<span class="title function_">detachEvent</span>(<span class="string">&#x27;on&#x27;</span> + evt, fn);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+事件绑定函数 by <a target="_blank" rel="noopener" href="http://www.quirksmode.org/blog/archives/2005/10/_and_the_winner_1.html">John Resig + PPK</a><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">addEvent</span>(<span class="params">obj,evt,fn</span>)&#123;<span class="keyword">if</span>(obj.<span class="property">addEventListener</span>)&#123;obj.<span class="title function_">addEventListener</span>(evt,fn,<span class="literal">false</span>)&#125;<span class="keyword">else</span> <span class="keyword">if</span>(obj.<span class="property">attachEvent</span>)&#123;obj[<span class="string">&#x27;e&#x27;</span>+evt+fn]=fn;obj[evt+fn]=<span class="keyword">function</span>(<span class="params"></span>)&#123;obj[<span class="string">&#x27;e&#x27;</span>+evt+fn](<span class="variable language_">window</span>.<span class="property">event</span>)&#125;;obj.<span class="title function_">attachEvent</span>(<span class="string">&#x27;on&#x27;</span>+evt,obj[evt+fn])&#125;&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">removeEvent</span>(<span class="params">obj,evt,fn</span>)&#123;<span class="keyword">if</span>(obj.<span class="property">removeEventListener</span>)&#123;obj.<span class="title function_">removeEventListener</span>(evt,fn,<span class="literal">false</span>)&#125;<span class="keyword">else</span> <span class="keyword">if</span>(obj.<span class="property">detachEvent</span>)&#123;obj.<span class="title function_">detachEvent</span>(<span class="string">&#x27;on&#x27;</span>+evt,obj[evt+fn]);obj[evt+fn]=<span class="literal">null</span>;obj[<span class="string">&#x27;e&#x27;</span>+evt+fn]=<span class="literal">null</span>&#125;&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">addEvent</span>(<span class="variable language_">window</span>, <span class="string">&#x27;load&#x27;</span>, <span class="keyword">function</span>);</span><br><span class="line"><span class="title function_">removeEvent</span>(<span class="variable language_">window</span>, <span class="string">&#x27;load&#x27;</span>, <span class="keyword">function</span>);</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="一般规则："><a href="#一般规则：" class="headerlink" title="一般规则："></a>一般规则：</h3><ul>
+<li>一般不建议使用传统方式，尤其在整个站点由多人开发，会造成事件覆盖</li>
+<li>需要大量初始化或事件处理函数可能被反复使用时，使用高级方式 addEventSimple()，但是要特别注意，this 关键字无法正确工作（IE8-）</li>
+<li>当需要用到 this 关键字时，可以使用更强大的 addEvent() 函数；或者使用流行库解决（jQuery、Mootools）</li>
+</ul>
+<h2 id="事件冒泡和捕获"><a href="#事件冒泡和捕获" class="headerlink" title="事件冒泡和捕获"></a>事件冒泡和捕获</h2><ul>
+<li>当事件发生时，有多个可选的事件处理函数时，它们都会被触发；而触发的顺序有两种：<ol start="0">
+<li>事件冒泡：事件从它的目标开始，触发对应的事件处理函数，然后沿着文档树逐级向上冒泡，直到 Document 对象为止；沿途对每个遇到的元素，都会触发相关的事件处理函数</li>
+<li>事件捕获：事件从 Document 对象开始，沿着文档树向下游历，直到事件目标为止；沿途对每个遇到的元素，都会触发相关的事件处理函数</li>
+</ol>
+</li>
+<li>传统方式和微软标准只支持事件冒泡，W3C 标准两者都支持（<code>addEventListener()/removeEventListener()</code> 的第三个参数，true：事件捕获 &#x2F; false：事件冒泡），注：为了避免兼容性问题，推荐只使用事件冒泡</li>
+<li>使用事件冒泡，可以把许多元素的事件集中到一个点，只需要在一个元素上设置事件处理函数，这样有事件在它的后代元素上发生时都会冒泡到该元素处，脚本处理就会很简单了</li>
+<li>接口事件不冒泡：不是所有的情况都冒泡，blur、focus、load 和 unload 是不冒泡的；另外在某些元素上有些事件是不合法的，比如 change、submit 之类接口事件就不会在 Window 对象或 Document 对象上发生。<br>一般规则：在 Document 对象上，可以捕获鼠标和键盘事件，不能捕获接口事件</li>
+<li>取消事件冒泡：W3C 标准使用事件的 <code>stopPropagation()</code> 方法，微软标准使用事件的 <code>cancelBubble</code> 属性；在复杂的动态菜单中，使用了 mouseover 和 mouseout 后，取消它们的传播可以避免一些问题<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">stopBubble</span>(<span class="params">evt</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (evt.<span class="property">stopPropagation</span>) &#123;</span><br><span class="line">        evt.<span class="title function_">stopPropagation</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    evt.<span class="property">cancelBubble</span> = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>取消事件默认操作：W3C 标准使用事件的 preventDefault() 方法，微软标准使用事件的 returnValue 属性<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">stopDefault</span>(<span class="params">evt</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (evt.<span class="property">preventDefault</span>) &#123;</span><br><span class="line">        evt.<span class="title function_">preventDefault</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    evt.<span class="property">returnValue</span> = <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="让事件可以到浏览器外也可以触发"><a href="#让事件可以到浏览器外也可以触发" class="headerlink" title="让事件可以到浏览器外也可以触发"></a>让事件可以到浏览器外也可以触发</h3><ul>
+<li>微软标准使用对象的 <code>setCapture()</code> 方法，这样对象的事件将会被继承到整个文档进行捕获。当不需要把事件继承到整个文档捕获时，要用 <code>releaseCapture()</code></li>
+<li>W3C 标准使用 <code>window.captureEvents(Event.eventType)</code> 和 <code>window.releaseEvents(Event.eventType)</code>，其中 eventType 包括：ABORT、BLUR、CLICK、CHANGE、DBLCLICK、DRAGDROP、ERROR、FOCUS、KEYDOWN、KEYPRESS、KEYUP、LOAD、MOUSEDOWN、MOUSEMOVE、MOUSEOUT、MOUSEOVER、MOUSEUP、MOVE、RESET、RESIZE、SELECT、SUBMIT、UNLOAD<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">alwaysCapture</span>(<span class="params">obj</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (obj.<span class="property">setCapture</span>) &#123;</span><br><span class="line">        obj.<span class="title function_">setCapture</span>();</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="variable language_">window</span>.<span class="property">captureEvents</span>) &#123;</span><br><span class="line">        <span class="variable language_">window</span>.<span class="title function_">captureEvents</span>(<span class="title class_">Event</span>.<span class="property">MOUSEMOVE</span> | <span class="title class_">Event</span>.<span class="property">MOUSEUP</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="访问事件对象"><a href="#访问事件对象" class="headerlink" title="访问事件对象"></a>访问事件对象</h2><ul>
+<li>当在元素绑定了事件处理函数，就需要访问事件对象了。事件发生时，浏览器会自动创建对象，它包括了事件的各种有用信息：目标对象、事件类型、鼠标位置、按下键值等等</li>
+<li>事件对象和其属性备受浏览器兼容性的影响：一些属性名称不一致，一些问题涉及到底层结构，一些属性并非所有浏览器都提供</li>
+</ul>
+<h3 id="事件对象"><a href="#事件对象" class="headerlink" title="事件对象"></a>事件对象</h3><p>W3C 标准中，事件对象作为第一个参数被传递到当前的事件处理函数中；微软标准中，事件对象总是 window.event</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">handle</span>(<span class="params">e</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> evt = e || <span class="variable language_">window</span>.<span class="property">event</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="事件对象的属性"><a href="#事件对象的属性" class="headerlink" title="事件对象的属性"></a>事件对象的属性</h3><ul>
+<li><p>type 属性：事件类型（click、mouseover、keydown、submit 等）</p>
+</li>
+<li><p>timeStamp 属性：返回一个毫秒时间戳，表示事件发生的时间。</p>
+</li>
+<li><p>目标对象（发生事件的元素）：W3C 标准使用 <code>target</code> 属性，微软标准使用 <code>srcElement</code> 属性</p>
+</li>
+<li><p>鼠标事件（mouseover&#x2F;mouseout）中与目标对象相关的元素：W3C 标准使用 <code>relatedTarget</code> 属性，微软标准使用两个属性：<code>fromElement（mouseover）</code> 指的是鼠标从上移走的元素，<code>toElement（mouseout）</code> 指的是鼠标移到其上的元素</p>
+</li>
+<li><p>绑定事件处理函数的元素：W3C 标准使用 <code>currentTarget</code> 属性，微软标准的解决方法是使用 <code>this</code> 关键字</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">mover</span>(<span class="params">e</span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> evt = e || <span class="variable language_">window</span>.<span class="property">event</span>;</span><br><span class="line">    <span class="keyword">var</span> evtTarget = evt.<span class="property">target</span> || evt.<span class="property">srcElement</span>;</span><br><span class="line">    <span class="comment">// 修正旧版 Safari 的弊端，它会把目标对象指向其元素包含的文本</span></span><br><span class="line">    <span class="keyword">if</span> (evtTarget.<span class="property">nodeType</span> == <span class="number">3</span>) &#123;</span><br><span class="line">        evtTarget = evtTarget.<span class="property">parentNode</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (evt.<span class="property">type</span> == <span class="string">&quot;mouseover&quot;</span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> evtRel = evt.<span class="property">relatedTarget</span> || evt.<span class="property">fromElement</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (evt.<span class="property">type</span> == <span class="string">&quot;mouseout&quot;</span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> evtRel = evt.<span class="property">relatedTarget</span> || evt.<span class="property">toElement</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> evtObj = evt.<span class="property">currentTarget</span> || <span class="variable language_">this</span>;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;target=&quot;</span> + evtTarget.<span class="property">nodeName</span>);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;relatedTarget=&quot;</span> + evtRel.<span class="property">nodeName</span>);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;currentTarget=&quot;</span> + evtObj.<span class="property">nodeName</span>);</span><br><span class="line">    evtObj.<span class="property">style</span>.<span class="property">border</span> = <span class="string">&quot;1px solid #F00&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>鼠标位置，鼠标相对参考点的坐标</p>
+<ul>
+<li>screenX&#x2F;screenY      参考点：屏幕                        兼容性：所有浏览器</li>
+<li>clientX&#x2F;clientY      参考点：视口                        兼容性：所有浏览器</li>
+<li>pageX&#x2F;pageY          参考点：页面                        兼容性：所有浏览器，除了 IE8-</li>
+<li>offsetX&#x2F;offsetY      参考点：事件目标对象                兼容性：所有浏览器，除了 Firefox39-</li>
+<li>layerX&#x2F;layerY        参考点：最近动态定位的祖先元素      兼容性：所有浏览器，除了 IE8-</li>
+</ul>
+<p>  最有用的是 pageX&#x2F;Y，读取鼠标相对于页面的坐标，但是 IE8- 不支持，但是 IE8- 支持 clientX&#x2F;Y，这是相对于视口的，再加上页面的滚动偏移量 scrollLeft&#x2F;Top，也能得到相同的结果<br>  通用读取鼠标坐标（相对于页面）函数</p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">eventPos</span>(<span class="params">e</span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> evt = e || <span class="variable language_">window</span>.<span class="property">event</span>;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(evt.<span class="property">type</span>);</span><br><span class="line">    <span class="keyword">var</span> evtX = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">var</span> evtY = <span class="number">0</span>;</span><br><span class="line">    evtX = evt.<span class="property">pageX</span> || evt.<span class="property">clientX</span> + <span class="title class_">Math</span>.<span class="title function_">max</span>(<span class="variable language_">document</span>.<span class="property">documentElement</span>.<span class="property">scrollLeft</span>, <span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">scrollLeft</span>);</span><br><span class="line">    evtY = evt.<span class="property">pageY</span> || evt.<span class="property">clientY</span> + <span class="title class_">Math</span>.<span class="title function_">max</span>(<span class="variable language_">document</span>.<span class="property">documentElement</span>.<span class="property">scrollTop</span>, <span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">scrollTop</span>);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(evtX+<span class="string">&quot;：&quot;</span>+evtY)</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">document</span>.<span class="property">onclick</span> = eventPos;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>鼠标按键</p>
+<ul>
+<li>button 属性，鼠标按键的键值</li>
+<li>W3C 标准：左键（0）、中键（1）、右键（2）</li>
+<li>微软标准：左键（1）、中键（4）、右键（2，注：Maxthon 中启用鼠标手势后为 0）</li>
+<li>IE9+ 支持 W3C 标准，IE8- 支持微软标准</li>
+<li>mousedown&#x2F;up 事件支持全部，click 事件仅支持左键<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 禁止鼠标右键菜单，注：某些浏览器有禁用它的选项</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="property">oncontextmenu</span> = <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>键盘按键</p>
+<ul>
+<li>key 属性：返回一个按下的键名字符串。如果同时按下一个控制键和一个字符键，则返回字符键的键名。IE8-、Chrome 不支持</li>
+<li>keyCode 属性：键盘按键的键值（大小写字母不区分）<br>数字键值范围为 48（0）～57（9），字母键值范围为 65（A）～90（Z），而按下 Alt、Ctrl、Shift、Win 键时，对应的 altKey、ctrlKey、shiftKey、metaKey 属性还会为 true</li>
+<li>charCode 属性：键盘按键对应的 ASCII 编码（大小写字母对应值不同）。<br>比上个属性多了 97（a）～122（z）<br>注：该属性已经从标准移除，虽然浏览器还支持，但应该尽量不使用。</li>
+<li>通过 keydown 和 keyup 事件可以读取 keyCode 值</li>
+<li>通过 keypress 事件（仅字母、数字键有效）<ul>
+<li>在 Firefox 中可以读取 charCode 值（keyCode 值为 0）；</li>
+<li>在 IE8- 中可以读取 keyCode 值（相当于 charCode 值）；</li>
+<li>在 IE9+、Chrome 中，可以读取 charCode 值（keyCode 和它一样）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">showKey</span>(<span class="params">e</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> evt = e || <span class="variable language_">window</span>.<span class="property">event</span>;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(evt.<span class="property">keyCode</span>);</span><br><span class="line">    <span class="keyword">if</span> (evt.<span class="property">altKey</span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;alt&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (evt.<span class="property">ctrlKey</span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;ctrl&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (evt.<span class="property">shiftKey</span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;shift&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">document</span>.<span class="property">onkeydown</span> = showKey;</span><br></pre></td></tr></table></figure>
+
+<h3 id="访问目标对象"><a href="#访问目标对象" class="headerlink" title="访问目标对象"></a>访问目标对象</h3><ul>
+<li>访问目标对象有两种方法：<ul>
+<li>使用事件对象的 target&#x2F;srcElement 属性</li>
+<li>使用 this 关键字，它一般（并不总是）指向发生事件的元素<br>this 关键字总是指向方法被调用的对象，也就是绑定事件处理函数的元素，相当于 W3C 标准的 currentTarget 属性；而且必须封闭在函数主体中才能正确工作，如：</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a.<span class="property">onclick</span> = <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="title function_">test</span>();</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre><code>test() 函数是通过全局对象来调用的，所以 test() 内的 this 关键字指向 Window 对象
+
+0. 使用内联方式绑定事件时，函数当作全局函数调用，this 关键字指向 Window 对象；除非直接使用 this 关键字：`&lt;p onclick=&quot;this.style.color=&#39;#000&#39;&quot;&gt;、&lt;p onclick=&quot;setStyle(this)&quot;&gt;`
+0. 使用传统方式，函数作为元素的一个方法，this 关键字指向正确的元素
+0. 使用 W3C 标准，函数作为元素的一个方法，this 关键字指向正确的元素
+0. 使用微软标准，函数当作全局函数调用，this 关键字指向 Window 对象
+</code></pre>
+<ul>
+<li>一般规则：<ol start="0">
+<li>当绑定相同的事件处理函数到许多元素或想直接调用该事件处理函数（即使没有事件发生）时，使用 this 关键字</li>
+<li>当依赖于事件冒泡使得事件沿文档树由下往上传播时，使用目标对象（target&#x2F;srcElement）属性<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">eventObj</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> obj = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;eventUl&quot;</span>).<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;li&quot;</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>;i &lt; obj.<span class="property">length</span>;i++) &#123;</span><br><span class="line">        obj[i].<span class="property">onmouseover</span> = mover;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+</ul>
+<h2 id="事件绑定的应用："><a href="#事件绑定的应用：" class="headerlink" title="事件绑定的应用："></a>事件绑定的应用：</h2><p>屏蔽 F5 键，防止浏览器刷新页面</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">disableF5</span>(<span class="params">e</span>)&#123;</span><br><span class="line">    e = e || <span class="variable language_">window</span>.<span class="property">event</span>;</span><br><span class="line">    <span class="keyword">if</span> (e.<span class="property">keyCode</span> == <span class="number">116</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">document</span>.<span class="property">all</span>) &#123;</span><br><span class="line">            e.<span class="property">keyCode</span> = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (e.<span class="property">preventDefault</span>) &#123;</span><br><span class="line">            e.<span class="title function_">preventDefault</span>()</span><br><span class="line">        &#125;</span><br><span class="line">        e.<span class="property">returnValue</span> = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">window</span>.<span class="property">onload</span> = <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="title function_">addEvent</span>(<span class="variable language_">document</span>,<span class="string">&quot;keydown&quot;</span>, disableF5);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>表单验证</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">initForm</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> f = <span class="variable language_">document</span>.<span class="property">forms</span>[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">if</span> (!f) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    f.<span class="property">onsubmit</span> = validateForm;</span><br><span class="line">    <span class="keyword">var</span> x = <span class="variable language_">document</span>.<span class="title function_">getElementsByTagName</span>(<span class="string">&#x27;textarea&#x27;</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; x.<span class="property">length</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (x[i].<span class="title function_">getAttribute</span>(<span class="string">&#x27;maxlength&#x27;</span>)) &#123;</span><br><span class="line">            <span class="title function_">addEvent</span>(x[i], <span class="string">&quot;change&quot;</span>, checkLength);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">checkLength</span>(<span class="params">e</span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> evt = e || <span class="variable language_">window</span>.<span class="property">event</span>;</span><br><span class="line">    <span class="comment">//console.log(evt.type);</span></span><br><span class="line">    <span class="comment">//console.log(this.nodeName);</span></span><br><span class="line">    <span class="keyword">var</span> max = <span class="variable language_">this</span>.<span class="title function_">getAttribute</span>(<span class="string">&#x27;maxlength&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">value</span>.<span class="property">length</span> &gt; max) &#123;</span><br><span class="line">        <span class="keyword">var</span> show = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&quot;span&quot;</span>);</span><br><span class="line">        <span class="keyword">var</span> showtext = <span class="variable language_">document</span>.<span class="title function_">createTextNode</span>(<span class="string">&quot;最多3个字&quot;</span>);</span><br><span class="line">        show.<span class="property">className</span> = <span class="string">&quot;alert&quot;</span>;</span><br><span class="line">        show.<span class="title function_">appendChild</span>(showtext);</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">parentNode</span>.<span class="title function_">appendChild</span>(show);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">validateForm</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> x = <span class="variable language_">this</span>.<span class="property">elements</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; x.<span class="property">length</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (x[i].<span class="property">className</span>.<span class="title function_">indexOf</span>(<span class="string">&#x27;required&#x27;</span>) != -<span class="number">1</span> &amp;&amp; !x[i].<span class="property">value</span>) &#123;</span><br><span class="line">            <span class="keyword">var</span> show = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&quot;span&quot;</span>);</span><br><span class="line">            <span class="keyword">var</span> showtext = <span class="variable language_">document</span>.<span class="title function_">createTextNode</span>(<span class="string">&quot;请填写必填项&quot;</span>);</span><br><span class="line">            show.<span class="property">className</span> = <span class="string">&quot;hint&quot;</span>;</span><br><span class="line">            show.<span class="title function_">appendChild</span>(showtext);</span><br><span class="line">            x[i].<span class="property">parentNode</span>.<span class="title function_">appendChild</span>(show);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//alert(isRequired(x[i]));</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">isRequired</span>(<span class="params">obj</span>)&#123;</span><br><span class="line">    <span class="keyword">switch</span> (obj.<span class="property">type</span>) &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&quot;text&quot;</span>:</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&quot;password&quot;</span>:</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&quot;textarea&quot;</span>:</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&quot;select-one&quot;</span>:</span><br><span class="line">            <span class="keyword">if</span> (obj.<span class="property">value</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&quot;radio&quot;</span>:</span><br><span class="line">            <span class="keyword">var</span> radios = obj.<span class="property">form</span>[obj.<span class="property">name</span>];</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; radios.<span class="property">length</span>; i++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (radios[i].<span class="property">checked</span>) &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&quot;checkbox&quot;</span>:</span><br><span class="line">            <span class="keyword">return</span> obj.<span class="property">checked</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&quot;submit&quot;</span>:</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&quot;reset&quot;</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2015/09/21/08.ecma05/" rel="prev" title="JavaScript 读书心得之五：浏览器对象模型（BOM）">
+      <i class="fa fa-chevron-left"></i> JavaScript 读书心得之五：浏览器对象模型（BOM）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2015/09/23/10.ecma07/" rel="next" title="JavaScript 读书心得之七：文档对象模型（DOM）">
+      JavaScript 读书心得之七：文档对象模型（DOM） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%BC%E5%AE%B9%E6%80%A7"><span class="nav-number">1.</span> <span class="nav-text">兼容性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E5%88%97%E8%A1%A8"><span class="nav-number">2.</span> <span class="nav-text">事件列表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4%E6%93%8D%E4%BD%9C"><span class="nav-number">2.1.</span> <span class="nav-text">默认操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E6%8B%9F%E4%BA%8B%E4%BB%B6%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">模拟事件的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%91%E5%AE%9A%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0"><span class="nav-number">4.</span> <span class="nav-text">绑定事件处理函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%91%E5%AE%9A%E4%BA%8B%E4%BB%B6%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">4.1.</span> <span class="nav-text">绑定事件的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E8%A7%84%E5%88%99%EF%BC%9A"><span class="nav-number">4.2.</span> <span class="nav-text">一般规则：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E5%86%92%E6%B3%A1%E5%92%8C%E6%8D%95%E8%8E%B7"><span class="nav-number">5.</span> <span class="nav-text">事件冒泡和捕获</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A9%E4%BA%8B%E4%BB%B6%E5%8F%AF%E4%BB%A5%E5%88%B0%E6%B5%8F%E8%A7%88%E5%99%A8%E5%A4%96%E4%B9%9F%E5%8F%AF%E4%BB%A5%E8%A7%A6%E5%8F%91"><span class="nav-number">5.1.</span> <span class="nav-text">让事件可以到浏览器外也可以触发</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BF%E9%97%AE%E4%BA%8B%E4%BB%B6%E5%AF%B9%E8%B1%A1"><span class="nav-number">6.</span> <span class="nav-text">访问事件对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E5%AF%B9%E8%B1%A1"><span class="nav-number">6.1.</span> <span class="nav-text">事件对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%B1%9E%E6%80%A7"><span class="nav-number">6.2.</span> <span class="nav-text">事件对象的属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BF%E9%97%AE%E7%9B%AE%E6%A0%87%E5%AF%B9%E8%B1%A1"><span class="nav-number">6.3.</span> <span class="nav-text">访问目标对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E7%BB%91%E5%AE%9A%E7%9A%84%E5%BA%94%E7%94%A8%EF%BC%9A"><span class="nav-number">7.</span> <span class="nav-text">事件绑定的应用：</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">可口可乐</p>
+  <div class="site-description" itemprop="description">Personal Blog</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">可口可乐</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
