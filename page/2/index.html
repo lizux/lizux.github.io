@@ -148,6 +148,94 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2019/05/13/46.es6-string/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="可口可乐">
+      <meta itemprop="description" content="Personal Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lizux">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/05/13/46.es6-string/" class="post-title-link" itemprop="url">ES6 阅读心得之三：字符串</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-05-13 00:00:00" itemprop="dateCreated datePublished" datetime="2019-05-13T00:00:00+08:00">2019-05-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-10-26 10:32:58" itemprop="dateModified" datetime="2023-10-26T10:32:58+08:00">2023-10-26</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h2><h3 id="模板字符串"><a href="#模板字符串" class="headerlink" title="模板字符串"></a>模板字符串</h3><p>模板字符串（template string）是增强版的字符串，用反引号（&#96;）标识。它可以当作普通字符串使用，也可以用来定义多行字符串，或者在字符串中嵌入变量。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 普通字符串</span></span><br><span class="line"><span class="keyword">let</span> strA = <span class="string">`In JavaScript &#x27;\n&#x27; is a line-feed.`</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 多行字符串，所有的空格和缩进都会被保留在输出中</span></span><br><span class="line"><span class="keyword">let</span> strB =  <span class="string">`In JavaScript this is</span></span><br><span class="line"><span class="string"> not legal.`</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 字符串中嵌入变量</span></span><br><span class="line"><span class="keyword">let</span> name = <span class="string">&quot;Bob&quot;</span>;</span><br><span class="line"><span class="keyword">let</span> strC = <span class="string">`Hello <span class="subst">$&#123;name&#125;</span>`</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="迭代器接口"><a href="#迭代器接口" class="headerlink" title="迭代器接口"></a>迭代器接口</h3><p>ES6 为字符串添加了迭代器接口，使得字符串可以被 for…of 循环遍历。</p>
+<pre><code><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> codePoint <span class="keyword">of</span> <span class="string">&#x27;show&#x27;</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(codePoint)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</code></pre>
+<h3 id="新增方法"><a href="#新增方法" class="headerlink" title="新增方法"></a>新增方法</h3><ol start="0">
+<li><p>includes</p>
+<p> 传统上，JavaScript 只有 indexOf 方法，可以用来确定一个字符串是否包含在另一个字符串中</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> s = <span class="string">&#x27;Hello world!&#x27;</span>;</span><br><span class="line"></span><br><span class="line">s.<span class="title function_">indexOf</span>(<span class="string">&#x27;Hello&#x27;</span>) <span class="comment">// 0</span></span><br></pre></td></tr></table></figure>
+<p> includes 直接返回布尔值，表示是否找到参数字符串</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> s = <span class="string">&#x27;Hello world!&#x27;</span>;</span><br><span class="line">s.<span class="title function_">startsWith</span>(<span class="string">&#x27;Hello&#x27;</span>) <span class="comment">// true</span></span><br></pre></td></tr></table></figure></li>
+<li><p>startsWith</p>
+<p> 返回布尔值，表示参数字符串是否在原字符串的头部</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> s = <span class="string">&#x27;Hello world!&#x27;</span>;</span><br><span class="line">s.<span class="title function_">startsWith</span>(<span class="string">&#x27;Hello&#x27;</span>) <span class="comment">// true</span></span><br></pre></td></tr></table></figure></li>
+<li><p>endsWith</p>
+<p> 返回布尔值，表示参数字符串是否在原字符串的尾部</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> s = <span class="string">&#x27;Hello world!&#x27;</span>;</span><br><span class="line"><span class="title function_">endsWith</span>(<span class="string">&#x27;!&#x27;</span>) <span class="comment">// true</span></span><br></pre></td></tr></table></figure></li>
+<li><p>repeat<br> 返回一个新字符串，表示将原字符串重复 n 次</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;hello&#x27;</span>.<span class="title function_">repeat</span>(<span class="number">2</span>) <span class="comment">// &quot;hellohello&quot;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>padStart&#x2F;padEnd</p>
+<p> ES2017 引入了字符串补全长度的功能。如果某个字符串不够指定长度，会在头部或尾部补全。padStart() 用于头部补全，padEnd() 用于尾部补全。<br> 如果省略第二个参数，默认使用空格补全长度。</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;x&#x27;</span>.<span class="title function_">padStart</span>(<span class="number">4</span>, <span class="string">&#x27;ab&#x27;</span>) <span class="comment">// &#x27;abax&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;x&#x27;</span>.<span class="title function_">padEnd</span>(<span class="number">4</span>, <span class="string">&#x27;ab&#x27;</span>) <span class="comment">// &#x27;xaba&#x27;</span></span><br><span class="line"><span class="string">&#x27;x&#x27;</span>.<span class="title function_">padEnd</span>(<span class="number">4</span>) <span class="comment">// &#x27;x   &#x27;</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2019/05/12/45.es6-deconstruct/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -366,7 +454,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/04/17/42.loop-async/" class="post-title-link" itemprop="url">当迭代 iterate 碰到异步 async/await</a>
+            <a href="/2019/04/17/42.loop-async/" class="post-title-link" itemprop="url">当循环 loop 碰到异步 async/await</a>
         </h2>
 
         <div class="post-meta">
@@ -383,7 +471,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-10-26 10:32:58" itemprop="dateModified" datetime="2023-10-26T10:32:58+08:00">2023-10-26</time>
+                <time title="修改时间：2023-11-14 11:44:38" itemprop="dateModified" datetime="2023-11-14T11:44:38+08:00">2023-11-14</time>
               </span>
 
           
@@ -401,7 +489,7 @@
 <ol start="0">
 <li><p>for<br>for 循环是迭代数组元素最基础最简单的方式。</p>
 <blockquote>
-<p>可以 continue；可以 break。</p>
+<p>可以 continue 和 break。</p>
 </blockquote>
  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; arr.<span class="property">length</span>; i++) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(arr[i]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
@@ -413,29 +501,29 @@
 </li>
 <li><p>for…of<br>for…of 在可迭代目标（包括 Array，Map，Set，String，arguments 对象等）上创建一个迭代循环，调用自定义迭代钩子，并为每个不同属性的值执行语句。一般用于遍历数组。</p>
 <blockquote>
-<p>为 ES6 新增方法；可以 break。</p>
+<p>为 ES6 新增方法；可以 continue 和 break。</p>
 </blockquote>
  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> item <span class="keyword">of</span> arr) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(item);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>for…in<br>遍历目标的键名，包括继承自原型的键。一般用于遍历对象。</p>
 <blockquote>
-<p>可以 break；对于数组，会把数字键名作为字符串处理。<br>和 for-of 的区别：for…in 循环，获得目标的键名。for…of 循环，获得目标的键值。另外 for…of 迭代数组时只返回具有数字索引的属性。</p>
+<p>可以 continue 和 break；对于数组，会把数字键名作为字符串处理。<br>和 for-of 的区别：for…in 循环，获得目标的键名。for…of 循环，获得目标的键值。另外 for…of 迭代数组时只返回具有数字索引的属性。</p>
 </blockquote>
  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> key <span class="keyword">in</span> person) &#123;</span><br><span class="line">    <span class="keyword">if</span> (person.<span class="title function_">hasOwnProperty</span>(key)) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(key);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>上述这些迭代方法正常使用不再赘述，但是当和异步 async&#x2F;await 结合起来的话有些点需要注意。</p>
 <p>如下代码：期望每隔 1 秒按序输出数字，最后输出 end</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">getArray</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">fetch</span>(<span class="params">num</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">            <span class="title function_">resolve</span>(num);</span><br><span class="line">        &#125;, <span class="number">1000</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">test</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> arr = <span class="title function_">getArray</span>();</span><br><span class="line">    arr.<span class="title function_">forEach</span>(<span class="keyword">async</span> item =&gt; &#123;</span><br><span class="line">        <span class="keyword">const</span> result = <span class="keyword">await</span> <span class="title function_">fetch</span>(item);</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(result);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;end&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">test</span>();</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">getArray</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">fetch</span>(<span class="params">num</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">            <span class="title function_">resolve</span>(num);</span><br><span class="line">        &#125;, <span class="number">1000</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">test</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> arr = <span class="title function_">getArray</span>();</span><br><span class="line">    arr.<span class="title function_">forEach</span>(<span class="keyword">async</span> (item) =&gt; &#123;</span><br><span class="line">        <span class="keyword">const</span> result = <span class="keyword">await</span> <span class="title function_">fetch</span>(item);</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(result);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;end&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">test</span>();</span><br></pre></td></tr></table></figure>
 
 <p>结果先输出”end”，过了 1 秒后，一次性输出 1, 2, 3</p>
 <h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>因为 forEach 回调是并发执行，它并不关心回调函数的返回值，所以这里 forEach 只是执行了 3 个会返回 Promise 的函数。async&#x2F;await 语句仅仅影响回调的匿名函数内部执行，将其变为异步。</p>
-<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><h3 id="方案一-改造-forEach"><a href="#方案一-改造-forEach" class="headerlink" title="方案一 改造 forEach"></a>方案一 改造 forEach</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">asyncForEach</span>(<span class="params">array, callback</span>) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> index = <span class="number">0</span>; index &lt; array.<span class="property">length</span>; index++) &#123;</span><br><span class="line">        <span class="keyword">await</span> <span class="title function_">callback</span>(array[index], index, array);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">test</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> arr = <span class="title function_">getArray</span>();</span><br><span class="line">    <span class="title function_">asyncForEach</span>(arr, <span class="keyword">async</span> item =&gt; &#123;</span><br><span class="line">        <span class="keyword">const</span> result = <span class="keyword">await</span> <span class="title function_">fetch</span>(item);</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(result);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;end&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><h3 id="方案一-改造-forEach"><a href="#方案一-改造-forEach" class="headerlink" title="方案一 改造 forEach"></a>方案一 改造 forEach</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">asyncForEach</span>(<span class="params">array, callback</span>) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> index = <span class="number">0</span>; index &lt; array.<span class="property">length</span>; index++) &#123;</span><br><span class="line">        <span class="keyword">await</span> <span class="title function_">callback</span>(array[index], index, array);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">test</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> arr = <span class="title function_">getArray</span>();</span><br><span class="line">    <span class="title function_">asyncForEach</span>(arr, <span class="keyword">async</span> (item) =&gt; &#123;</span><br><span class="line">        <span class="keyword">const</span> result = <span class="keyword">await</span> <span class="title function_">fetch</span>(item);</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(result);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;end&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>方案一特点是，先输出”end”，然后按顺序间隔输出数字。因为改造函数仅仅是避免了并发执行回调，但是没有把整个迭代变为异步<br>可以接着再改造，支持完美场景：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">asyncForEach</span>(<span class="params">array, callback, callbackAll</span>) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> index = <span class="number">0</span>; index &lt; array.<span class="property">length</span>; index++) &#123;</span><br><span class="line">        <span class="keyword">await</span> <span class="title function_">callback</span>(array[index], index, array);</span><br><span class="line">    &#125;</span><br><span class="line">    callbackAll &amp;&amp; <span class="title function_">callbackAll</span>();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">test</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> arr = <span class="title function_">getArray</span>();</span><br><span class="line">    <span class="title function_">asyncForEach</span>(</span><br><span class="line">        arr,</span><br><span class="line">        <span class="keyword">async</span> item =&gt; &#123;</span><br><span class="line">            <span class="keyword">const</span> result = <span class="keyword">await</span> <span class="title function_">fetch</span>(item);</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(result);</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="function">() =&gt;</span> &#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;end&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">asyncForEach</span>(<span class="params">array, callback, callbackAll</span>) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> index = <span class="number">0</span>; index &lt; array.<span class="property">length</span>; index++) &#123;</span><br><span class="line">        <span class="keyword">await</span> <span class="title function_">callback</span>(array[index], index, array);</span><br><span class="line">    &#125;</span><br><span class="line">    callbackAll &amp;&amp; <span class="title function_">callbackAll</span>();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">test</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> arr = <span class="title function_">getArray</span>();</span><br><span class="line">    <span class="title function_">asyncForEach</span>(</span><br><span class="line">        arr,</span><br><span class="line">        <span class="keyword">async</span> (item) =&gt; &#123;</span><br><span class="line">            <span class="keyword">const</span> result = <span class="keyword">await</span> <span class="title function_">fetch</span>(item);</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(result);</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="function">() =&gt;</span> &#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;end&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="方案二-使用-map-方法"><a href="#方案二-使用-map-方法" class="headerlink" title="方案二 使用 map 方法"></a>方案二 使用 map 方法</h3><p>map 对 Promise 支持也不错，可以配合 Promise.all 使用</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">test</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> arr = <span class="title function_">getArray</span>();</span><br><span class="line">    <span class="keyword">await</span> <span class="title class_">Promise</span>.<span class="title function_">all</span>(</span><br><span class="line">        arr.<span class="title function_">map</span>(<span class="keyword">async</span> item =&gt; &#123;</span><br><span class="line">            <span class="keyword">const</span> result = <span class="keyword">await</span> <span class="title function_">fetch</span>(item);</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(result);</span><br><span class="line">        &#125;)</span><br><span class="line">    );</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;end&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">test</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> arr = <span class="title function_">getArray</span>();</span><br><span class="line">    <span class="keyword">await</span> <span class="title class_">Promise</span>.<span class="title function_">all</span>(</span><br><span class="line">        arr.<span class="title function_">map</span>(<span class="keyword">async</span> (item) =&gt; &#123;</span><br><span class="line">            <span class="keyword">const</span> result = <span class="keyword">await</span> <span class="title function_">fetch</span>(item);</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(result);</span><br><span class="line">        &#125;)</span><br><span class="line">    );</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;end&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>方案二的特点是，过了 1 秒后，一次性输出 1, 2, 3，但是 “end” 输出是最后面。说明 map 还是并发执行回调，只是用 Promise.all 把整个迭代变为异步</p>
 <h3 id="方案三-使用-for…of-语句"><a href="#方案三-使用-for…of-语句" class="headerlink" title="方案三 使用 for…of 语句"></a>方案三 使用 for…of 语句</h3><p>for…of 是迭代，支持继发执行。for…of 迭代对象时，先调用迭代对象的迭代器方法，该方法返回一个迭代器对象；然后调用该迭代器对象上的 next 方法。</p>
@@ -951,106 +1039,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2017/04/07/35.xss_csrf/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="可口可乐">
-      <meta itemprop="description" content="Personal Blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Lizux">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/04/07/35.xss_csrf/" class="post-title-link" itemprop="url">XSS 和 CSRF 攻击研究</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-04-07 00:00:00" itemprop="dateCreated datePublished" datetime="2017-04-07T00:00:00+08:00">2017-04-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-10-26 10:32:58" itemprop="dateModified" datetime="2023-10-26T10:32:58+08:00">2023-10-26</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Web安全"><a href="#Web安全" class="headerlink" title="Web安全"></a>Web安全</h1><p>在前端开发领域，理解 Web 安全也是很重要的基本需求，因为确保 Web 站点或 Web 应用安全十分重要，这个需要服务器端和前端人员协同合作，才能避免用户隐私信息被泄露和黑客攻击。<br>下面就了解一下主要的两种攻击方式：</p>
-<h2 id="XSS"><a href="#XSS" class="headerlink" title="XSS"></a>XSS</h2><p>XSS（Cross-site scripting 跨站脚本）是一种网站应用程序的安全漏洞攻击，是代码注入的一种。它允许恶意用户将代码注入到网页上，其他用户在观看网页时就会受到影响。这类攻击通常包含了HTML以及用户端脚本语言。<br>XSS攻击通常指的是通过利用网页开发时留下的漏洞，通过巧妙的方法注入恶意指令代码到网页，使用户加载并执行攻击者恶意制造的网页程序。这些恶意网页程序通常是JavaScript，但实际上也可以包括Java，VBScript，ActiveX，Flash或者甚至是普通的HTML。攻击成功后，攻击者可能得到更高的权限（如执行一些操作）、私密网页内容、会话和cookie等各种内容。</p>
-<h3 id="攻击场景："><a href="#攻击场景：" class="headerlink" title="攻击场景："></a>攻击场景：</h3><p>攻击者使被攻击者在浏览器中执行脚本后，如果需要收集来自被攻击者的数据（如cookie或其他敏感信息），可以自行架设一个网站，让被攻击者通过JavaScript等方式把收集好的数据作为参数提交，随后以数据库等形式记录在攻击者自己的服务器上。</p>
-<h3 id="攻击手段："><a href="#攻击手段：" class="headerlink" title="攻击手段："></a>攻击手段：</h3><ol>
-<li>盗用cookie，获取敏感信息。</li>
-<li>利用植入Flash，通过crossdomain权限设置进一步获取更高权限；或者利用Java等得到类似的操作。</li>
-<li>利用iframe、frame、XMLHttpRequest或上述Flash等方式，以（被攻击）用户的身份执行一些管理动作，或执行一些一般的如发微博、加好友、发私信等操作。</li>
-<li>利用可被攻击的域受到其他域信任的特点，以受信任来源的身份请求一些平时不允许的操作，如进行不当的投票活动。</li>
-<li>在访问量极大的一些页面上的XSS可以攻击一些小型网站，实现DDoS攻击的效果。</li>
-</ol>
-<h3 id="防御手段："><a href="#防御手段：" class="headerlink" title="防御手段："></a>防御手段：</h3><h4 id="网站用户防御方法"><a href="#网站用户防御方法" class="headerlink" title="网站用户防御方法"></a>网站用户防御方法</h4><ol>
-<li>包括Internet Explorer、Firefox在内的大多数浏览器皆有关闭JavaScript的选项，但关闭功能并非是最好的方法，因为许多网站都需要使用JavaScript语言才能正常运作。</li>
-</ol>
-<h4 id="网站开发者防御手段"><a href="#网站开发者防御手段" class="headerlink" title="网站开发者防御手段"></a>网站开发者防御手段</h4><ol>
-<li>过滤特殊字符。避免XSS的方法之一主要是将用户所提供的内容进行过滤。</li>
-<li>使用HTTP头指定类型。可以使用HTTP头指定内容的类型，使得输出的内容避免被作为HTML解析。</li>
-</ol>
-<h3 id="后注："><a href="#后注：" class="headerlink" title="后注："></a>后注：</h3><p>我们知道 AJAX 技术所使用的 XMLHttpRequest 对象都被浏览器做了限制，只能访问当前域名下的 URL，所谓不能“跨域”问题。这种做法的初衷也是防范 XSS，但不是总有用，因为用 iframe 也一样可以达到相同的目的。还能用 iframe 发起 POST 请求。<br>当然，现在一些浏览器能够很智能地分析出部分 XSS 并予以拦截，例如新版的 Firefox、Chrome 都能这么做。但拦截不总是能成功。从原则上讲，我们也不应该把事关安全性的责任推脱给浏览器，所以防止 XSS 的根本之道还是过滤用户输入。用户输入总是不可信任的，这点对于 Web 开发者应该是常识。</p>
-<p>如果我们不需要用户输入 HTML 而只想让他们输入纯文本，那么把所有用户输入进行 HTML 转义输出是个不错的做法。<br>如果一些场合我们要允许用户输入 HTML，又要过滤其中的脚本。简单的方法就是白名单重新整理。用户输入的 HTML 可能拥有很复杂的结构，但我们并不将这些数据直接存入数据库，而是使用 HTML 解析库遍历节点，获取其中数据。然后根据用户原有的标签属性，重新构建 HTML 元素树。构建的过程中，所有的标签、属性都只从白名单中拿取。</p>
-<h2 id="CSRF"><a href="#CSRF" class="headerlink" title="CSRF"></a>CSRF</h2><p>CSRF（Cross-site request forgery 跨站请求伪造），是一种挟制用户在当前已登录的Web应用程序上执行非本意的操作的攻击方法。跟跨网站脚本（XSS）相比，XSS 利用的是用户对指定网站的信任，CSRF 利用的是网站对用户网页浏览器的信任。它与XSS非常不同，并且攻击方式几乎相左。往往不大流行（因此对其进行防范的资源也相当稀少）和难以防范，所以被认为比XSS更具危险性。</p>
-<h3 id="攻击场景：-1"><a href="#攻击场景：-1" class="headerlink" title="攻击场景："></a>攻击场景：</h3><p>攻击者通过一些技术手段欺骗用户的浏览器去访问一个自己曾经认证过的网站并执行一些操作（如发邮件，发消息，甚至财产操作如转账和购买商品）。由于浏览器曾经认证过，所以被访问的网站会认为是真正的用户操作而去执行。这利用了web中用户身份验证的一个漏洞：简单的身份验证只能保证请求发自某个用户的浏览器，却不能保证请求本身是用户自愿发出的。</p>
-<h3 id="攻击手段：-1"><a href="#攻击手段：-1" class="headerlink" title="攻击手段："></a>攻击手段：</h3><ol>
-<li>以用户名义发送邮件和发消息</li>
-<li>盗取用户的账号</li>
-<li>使用用户帐号来购买商品、虚拟货币转账</li>
-</ol>
-<h3 id="防御手段：-1"><a href="#防御手段：-1" class="headerlink" title="防御手段："></a>防御手段：</h3><h4 id="网站用户防御方法-1"><a href="#网站用户防御方法-1" class="headerlink" title="网站用户防御方法"></a>网站用户防御方法</h4><ol>
-<li>不要轻易打开第三方连接。（如果邮件内部有第三方连接你打开的时候都会有相应的提示信息，谨慎操作）</li>
-<li>尽量不要使用网站的”自动登陆”。如果你是一打开浏览器就访问”攻击网站”，在它发送连接请求的时候就会触发自动登录的功能，从而盗取你的身份</li>
-</ol>
-<h4 id="网站开发者防御手段-1"><a href="#网站开发者防御手段-1" class="headerlink" title="网站开发者防御手段"></a>网站开发者防御手段</h4><ol>
-<li>使用Post请求（这种方式治标不治本，但可以提高攻击门槛）。对于修改和创建资源的API应该只接受 POST 请求，而 GET 请求应该只浏览而不改变服务器端资源。这样攻击者已经不可能通过发布链接来伪造请求了，但他们仍可以发布表单，或者在其他站点上使用我们肉眼不可见的表单，在后台用 js 操作，伪造请求。</li>
-<li>检查Referer字段。HTTP头中有一个Referer字段，这个字段用以标明请求来源于哪个地址。在处理敏感数据请求时，通常来说，Referer字段应和请求的地址位于同一域名下。</li>
-<li>验证码。验证码可以很好的解决上述问题,但是如果任何一个操作都加入验证码的话会导致用户体验下降，只能在用户操作重要数据的时候（尤其涉及到金额）。</li>
-<li>表单提供随机数。首先服务器端要以某种策略生成随机字符串，作为令牌（token），保存在 Session 里。然后在发出请求的页面，把该令牌以隐藏域一类的形式，与其他信息一并发出。在接收请求的页面，把接收到的信息中的令牌与 Session 中的令牌比较，只有一致的时候才处理请求，否则返回 HTTP 403 拒绝请求或者要求用户重新登录验证身份。因为理论上攻击者不能获得第三方的 Cookie，所以表单中的数据也就构造失败了。使用这个方法时注意：不能全局使用一个 Session Key。因为其理论上是可破解的，破解方式是解析来源页面的文本，获取令牌内容。如果全局使用一个 Session Key，那么危险系数会上升。原则上来说，每个页面的请求令牌都应该放在独立的 Session Key 中。我们在设计服务器端的时候，可以稍加封装，编写一个令牌工具包，将页面的标识作为 Session 中保存令牌的键。</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1120,7 +1108,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-count">54</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1152,7 +1140,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

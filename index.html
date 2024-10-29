@@ -148,6 +148,104 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/11/17/55.react-function/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="可口可乐">
+      <meta itemprop="description" content="Personal Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lizux">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/11/17/55.react-function/" class="post-title-link" itemprop="url">React 函数式组件实践和技巧</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-11-17 00:00:00 / 修改时间：16:25:59" itemprop="dateCreated datePublished" datetime="2023-11-17T00:00:00+08:00">2023-11-17</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>React 从 v16.8 引入 hooks 概念以来，使用函数式组件开发已渐渐成为趋势。以下为最近开始重新开发 react 项目并使用函数式组件的一些经验总结。</p>
+<h2 id="父组件状态更新导致子组件重新渲染的问题"><a href="#父组件状态更新导致子组件重新渲染的问题" class="headerlink" title="父组件状态更新导致子组件重新渲染的问题"></a>父组件状态更新导致子组件重新渲染的问题</h2><p>有三种方式解决重复渲染的问题：</p>
+<ol>
+<li>React.memo</li>
+<li>useMemo</li>
+<li>useCallback</li>
+</ol>
+<h3 id="React-memo"><a href="#React-memo" class="headerlink" title="React.memo"></a>React.memo</h3><p>memo 为高阶组件，可以直接将组件包裹起来。这样如果组件的 props 未更新的话，就不会重新渲染，React 将跳过渲染组件的操作并直接复用最近一次渲染的结果。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title class_">React</span>.<span class="title function_">memo</span>(<span class="title class_">Child</span>);</span><br></pre></td></tr></table></figure>
+
+<p>memo 仅检查 props 的变更，但当组件中有实现 useState、useReducer、useContext 的 hooks 时，当 state 或 context 发生变化时也会重新渲染。</p>
+<p>默认情况下是对 props 做浅比较，如果 props 是对象类型的时候，比较的是引用地址，所以如果要精确控制比较，需要传递一个函数：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">isEqual</span>(<span class="params">prevProps, nextProps</span>) &#123;</span><br><span class="line">    <span class="comment">// 返回 true 表示不渲染，否则渲染</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title class_">React</span>.<span class="title function_">memo</span>(<span class="title class_">Child</span>, isEqual);</span><br></pre></td></tr></table></figure>
+
+<h3 id="useMemo"><a href="#useMemo" class="headerlink" title="useMemo"></a>useMemo</h3><p>在某些场景下，我们只是希望组件的部分不要进行重新渲染，而不是整个组件，也就是要实现局部更细粒的控制渲染功能。</p>
+<p>useMemo 返回一个记忆的值（memoized），把创建函数和依赖项数组作为参数传入，它仅会在某个依赖项改变的时候才重新计算 memoized 值，这有助于避免在每次渲染时都进行的高开销计算。有点类似于 vue 的 computed 属性</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> memoizedValue = <span class="title function_">useMemo</span>(<span class="function">() =&gt;</span> <span class="title function_">computeExpensiveValue</span>(a, b), [a, b]);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>useMemo 是在渲染期间执行的，它和 useEffect 的区别是，useEffect 会执行一些副作用导致开始再次渲染，useMemo 仅仅是在这个渲染期间内的一些操作，不应该有副作用。</p>
+</blockquote>
+<h3 id="useCallback"><a href="#useCallback" class="headerlink" title="useCallback"></a>useCallback</h3><p>useCallback 返回一个 memoized 函数。它将返回该回调函数的 memoized 版本，该回调函数仅在某个依赖项改变时才会更新。当把回调函数传递给经过优化的并使用相等性去避免非必要渲染的子组件时，它非常有用。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">useCallback</span>(fn, deps) 相当于 <span class="title function_">useMemo</span>(<span class="function">() =&gt;</span> fn, deps)</span><br></pre></td></tr></table></figure>
+
+<p>在使用 React.memo 的情况下，可以解决一部分场景需求（如果 props 传递都是简单变量的情况下）。</p>
+<p>但是如果 props 传入了函数就不太适用了。因为当父组件更新的时候，该函数会重新声明赋值，尽管新旧方法一样，但子组件接受的函数会变成一个新的引用地址，React.memo 对比后发现对象 props 改变，就重新渲染了。</p>
+<p>这时候可以用 useCallback 和 memo 结合来实现。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">function</span> <span class="title function_">App</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> [count, setCount] = <span class="title function_">useState</span>(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">const</span> handleClick = <span class="title function_">useCallback</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="title function_">setCount</span>(count + <span class="number">1</span>);</span><br><span class="line">    &#125;, [count]);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">        <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;<span class="name">Child</span> <span class="attr">onClick</span>=<span class="string">&#123;handleClick&#125;</span>&gt;</span>Button<span class="tag">&lt;/<span class="name">Child</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>解决了上述问题，这时候新场景又出现了，假如子组件包裹了 children 的话，useCallback + memo 的组合又失效了，这时就需要重新使用前面的 useMemo 来解决这个复合型问题。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="title function_">useMemo</span>(</span><br><span class="line">        <span class="function">() =&gt;</span> (</span><br><span class="line">            <span class="language-xml"><span class="tag">&lt;<span class="name">Child</span> <span class="attr">isOpen</span>=<span class="string">&#123;isOpen&#125;</span> <span class="attr">onClose</span>=<span class="string">&#123;doSome&#125;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">                <span class="tag">&lt;<span class="name">div</span>&gt;</span>children<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;/<span class="name">Child</span>&gt;</span></span></span><br><span class="line">        ),</span><br><span class="line">        [isOpen]</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li>在子组件不需要父组件的函数的情况下，只需要使用 memo 函数包裹子组件即可。</li>
+<li>如果有函数传递给子组件，使用 useCallback</li>
+<li>如果有 children 值传递给子组件，使用 useMemo；另外拥有巨大计算量的计算属性，使用 useMemo</li>
+</ul>
+<blockquote>
+<p>缓存绝不是用的越多越好，缓存这项技术本身也需要成本</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/28/43.vue-practice/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -179,7 +277,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-10-30 14:26:11" itemprop="dateModified" datetime="2023-10-30T14:26:11+08:00">2023-10-30</time>
+                <time title="修改时间：2024-10-29 16:09:38" itemprop="dateModified" datetime="2024-10-29T16:09:38+08:00">2024-10-29</time>
               </span>
 
           
@@ -350,6 +448,7 @@
 <li>v 2.4.10 中，number 修饰符使用没有问题。</li>
 <li>v 2.13.0 中，加上.number 之后可以输入整数，可以输入 0.x 的小数，但是输入大于 1 的小数，小数点会消失。（输入 35 之后回去在 3 和 5 中间加一个小数点，是没有问题的）</li>
 <li>v 2.15.0 中（键入 0.5 变为 5，键入 3.5 变为 35 ）</li>
+<li>v 2.15.14 中（小数点后输入 0，小数点会消失，可以先输入非 0 值，然后在前面加 0，是没有问题的 ）</li>
 </ol>
 <blockquote>
 <p>注：针对 type&#x3D;”text” 而言，为 type&#x3D;”number” 时没有问题</p>
@@ -389,11 +488,6 @@
 <h3 id="multiselect-组件被禁用的选项不能被移除"><a href="#multiselect-组件被禁用的选项不能被移除" class="headerlink" title="multiselect 组件被禁用的选项不能被移除"></a>multiselect 组件被禁用的选项不能被移除</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;el-select v-model=&quot;formData[field.key]&quot; multiple @remove-tag=&quot;handleRemoveTag(field)&quot;&gt;</span><br><span class="line">handleRemoveTag(field) &#123;</span><br><span class="line">    let oldValue = this.cloneData[field.key];</span><br><span class="line">    let options = this.handleArrayData(field.values);</span><br><span class="line">    let lock = [];</span><br><span class="line">    options.forEach(item =&gt; &#123;</span><br><span class="line">        if (oldValue.indexOf(item.key) &gt; -1) &#123;</span><br><span class="line">            if (this.isUnselect(field, item)) &#123;</span><br><span class="line">                lock.push(item.key);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    if (lock.length) &#123;</span><br><span class="line">        let value = this.formData[field.key];</span><br><span class="line">        this.formData[field.key] = this.$util.unique([</span><br><span class="line">            ...lock,</span><br><span class="line">            ...value</span><br><span class="line">        ]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="date-组件实现日期范围限制"><a href="#date-组件实现日期范围限制" class="headerlink" title="date 组件实现日期范围限制"></a>date 组件实现日期范围限制</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;el-date-picker type=&quot;date&quot; v-model=&quot;formData[field.key]&quot; :picker-options=&quot;dateLimit&quot;&gt;&lt;/el-date-picker&gt;</span><br><span class="line"></span><br><span class="line">data: function() &#123;</span><br><span class="line">    return &#123;</span><br><span class="line">        dateLimit: &#123;</span><br><span class="line">            disabledDate: time =&gt; &#123;</span><br><span class="line">                let min = this.minDate;</span><br><span class="line">                if (min &amp;&amp; time &lt; new Date(min)) &#123;</span><br><span class="line">                    return true;</span><br><span class="line">                &#125;</span><br><span class="line">                if (time &gt; Date.now()) &#123;</span><br><span class="line">                    return true;</span><br><span class="line">                &#125;</span><br><span class="line">                return false;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="在-element-的-event-事件中增加自定义参数"><a href="#在-element-的-event-事件中增加自定义参数" class="headerlink" title="在 element 的 event 事件中增加自定义参数"></a>在 element 的 event 事件中增加自定义参数</h3><p>如果你直接在方法中写，他就会将原生内置的参数覆盖！</p>
-<p>但是你可以在自定义参数之前加入 <code>$event</code> 这个变量，然后再传其他值，这样的话事件的内置回调参数就会保留了。</p>
-<p>例如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;el-select v-model=&quot;formData[field.key]&quot; multiple @remove-tag=&quot;handleRemoveTag($event, field)&quot;&gt;</span><br></pre></td></tr></table></figure>
 
 <h2 id="Vue-规范"><a href="#Vue-规范" class="headerlink" title="Vue 规范"></a>Vue 规范</h2><h3 id="组件属性"><a href="#组件属性" class="headerlink" title="组件属性"></a>组件属性</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">name</span><br><span class="line">components</span><br><span class="line">model</span><br><span class="line">data</span><br><span class="line">props</span><br><span class="line">computed</span><br><span class="line">watch</span><br><span class="line"></span><br><span class="line">beforeCreate</span><br><span class="line">created</span><br><span class="line">beforeMount</span><br><span class="line">mounted</span><br><span class="line">beforeUpdate</span><br><span class="line">updated</span><br><span class="line">beforeDestroy</span><br><span class="line">destroyed</span><br><span class="line"></span><br><span class="line">methods</span><br><span class="line">template</span><br></pre></td></tr></table></figure>
 
@@ -1387,94 +1481,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2019/05/13/46.es6-string/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="可口可乐">
-      <meta itemprop="description" content="Personal Blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Lizux">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/05/13/46.es6-string/" class="post-title-link" itemprop="url">ES6 阅读心得之三：字符串</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-05-13 00:00:00" itemprop="dateCreated datePublished" datetime="2019-05-13T00:00:00+08:00">2019-05-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-10-26 10:32:58" itemprop="dateModified" datetime="2023-10-26T10:32:58+08:00">2023-10-26</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h2><h3 id="模板字符串"><a href="#模板字符串" class="headerlink" title="模板字符串"></a>模板字符串</h3><p>模板字符串（template string）是增强版的字符串，用反引号（&#96;）标识。它可以当作普通字符串使用，也可以用来定义多行字符串，或者在字符串中嵌入变量。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 普通字符串</span></span><br><span class="line"><span class="keyword">let</span> strA = <span class="string">`In JavaScript &#x27;\n&#x27; is a line-feed.`</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 多行字符串，所有的空格和缩进都会被保留在输出中</span></span><br><span class="line"><span class="keyword">let</span> strB =  <span class="string">`In JavaScript this is</span></span><br><span class="line"><span class="string"> not legal.`</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 字符串中嵌入变量</span></span><br><span class="line"><span class="keyword">let</span> name = <span class="string">&quot;Bob&quot;</span>;</span><br><span class="line"><span class="keyword">let</span> strC = <span class="string">`Hello <span class="subst">$&#123;name&#125;</span>`</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="迭代器接口"><a href="#迭代器接口" class="headerlink" title="迭代器接口"></a>迭代器接口</h3><p>ES6 为字符串添加了迭代器接口，使得字符串可以被 for…of 循环遍历。</p>
-<pre><code><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> codePoint <span class="keyword">of</span> <span class="string">&#x27;show&#x27;</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(codePoint)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</code></pre>
-<h3 id="新增方法"><a href="#新增方法" class="headerlink" title="新增方法"></a>新增方法</h3><ol start="0">
-<li><p>includes</p>
-<p> 传统上，JavaScript 只有 indexOf 方法，可以用来确定一个字符串是否包含在另一个字符串中</p>
- <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> s = <span class="string">&#x27;Hello world!&#x27;</span>;</span><br><span class="line"></span><br><span class="line">s.<span class="title function_">indexOf</span>(<span class="string">&#x27;Hello&#x27;</span>) <span class="comment">// 0</span></span><br></pre></td></tr></table></figure>
-<p> includes 直接返回布尔值，表示是否找到参数字符串</p>
- <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> s = <span class="string">&#x27;Hello world!&#x27;</span>;</span><br><span class="line">s.<span class="title function_">startsWith</span>(<span class="string">&#x27;Hello&#x27;</span>) <span class="comment">// true</span></span><br></pre></td></tr></table></figure></li>
-<li><p>startsWith</p>
-<p> 返回布尔值，表示参数字符串是否在原字符串的头部</p>
- <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> s = <span class="string">&#x27;Hello world!&#x27;</span>;</span><br><span class="line">s.<span class="title function_">startsWith</span>(<span class="string">&#x27;Hello&#x27;</span>) <span class="comment">// true</span></span><br></pre></td></tr></table></figure></li>
-<li><p>endsWith</p>
-<p> 返回布尔值，表示参数字符串是否在原字符串的尾部</p>
- <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> s = <span class="string">&#x27;Hello world!&#x27;</span>;</span><br><span class="line"><span class="title function_">endsWith</span>(<span class="string">&#x27;!&#x27;</span>) <span class="comment">// true</span></span><br></pre></td></tr></table></figure></li>
-<li><p>repeat<br> 返回一个新字符串，表示将原字符串重复 n 次</p>
- <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;hello&#x27;</span>.<span class="title function_">repeat</span>(<span class="number">2</span>) <span class="comment">// &quot;hellohello&quot;</span></span><br></pre></td></tr></table></figure></li>
-<li><p>padStart&#x2F;padEnd</p>
-<p> ES2017 引入了字符串补全长度的功能。如果某个字符串不够指定长度，会在头部或尾部补全。padStart() 用于头部补全，padEnd() 用于尾部补全。<br> 如果省略第二个参数，默认使用空格补全长度。</p>
- <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;x&#x27;</span>.<span class="title function_">padStart</span>(<span class="number">4</span>, <span class="string">&#x27;ab&#x27;</span>) <span class="comment">// &#x27;abax&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;x&#x27;</span>.<span class="title function_">padEnd</span>(<span class="number">4</span>, <span class="string">&#x27;ab&#x27;</span>) <span class="comment">// &#x27;xaba&#x27;</span></span><br><span class="line"><span class="string">&#x27;x&#x27;</span>.<span class="title function_">padEnd</span>(<span class="number">4</span>) <span class="comment">// &#x27;x   &#x27;</span></span><br></pre></td></tr></table></figure></li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1544,7 +1550,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-count">54</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1576,7 +1582,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

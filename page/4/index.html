@@ -148,6 +148,97 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2016/06/07/27.react-webpack/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="可口可乐">
+      <meta itemprop="description" content="Personal Blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lizux">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/06/07/27.react-webpack/" class="post-title-link" itemprop="url">用 webpack 打造 React 开发环境</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-06-07 00:00:00" itemprop="dateCreated datePublished" datetime="2016-06-07T00:00:00+08:00">2016-06-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-10-26 10:32:58" itemprop="dateModified" datetime="2023-10-26T10:32:58+08:00">2023-10-26</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>最近正在学习热门的 <code>React</code> 库。</p>
+<p>大家都知道每个库由于自己的特色造就了与之配套的开发构建环境差异选择。对于 AngularJS 大家一般都是用 Gulp 来搭配，那么对于 React 来讲，官方推荐的是 Webpack。</p>
+<blockquote>
+<p>两者辨析：<br>0. Gulp 是基于 nodejs 流式工作的自动化批量处理工具，本身不提供处理文件的功能，但是通过插件可以实现脚本（包括 ES6）、CSS、图片、字体的编译、压缩、合并、打包以及开发中的自动注入、代码同步等工作，大大减轻开发中的重复性劳动，提供开发效率。<br>0. 而 Webpack 是当下流行的 commonjs 模块合并打包工具（browserify 也类似），打包后的 js 文件可以直接运行在浏览器环境中。<br>Wbpack 功能全面，可以对脚本、CSS、甚至图片、字体文件（通过加载器 Loader 提供支持）统一进行加载、预处理、合并打包。而 browserify 的特点是职责单一，只负责 js 模块合并打包。<br>Webpack 通过模块加载器提供对 React 完美的支持，比如说 JSX 语法、ES6 编译（使用 babel-loader）；支持 sass、less 等各种 css 预编码；提供 Web 服务器 webpack-dev-server，支持 HMR（hot module replacement 热模块替换），可以修改代码后自动刷新页面，甚至配合 react-hot-loader 后可以实现无刷新更新页面。</p>
+</blockquote>
+<p>而在网上搜索配置 Webpack 环境的最佳实践时，发现有些文档的方法有些过时，容易给大家造成困扰；而有些文档又有点照本宣科，有些重复的选项，容易造成冗余。</p>
+<p>所以 2016 年的最新实践新鲜出炉：</p>
+<blockquote>
+<p>注：本环境假设已经全局安装最新版的 nodejs 和 npm<br>注：本环境依赖 webpack v1.13 截至发稿时的官方最新版本）</p>
+</blockquote>
+<h2 id="项目初始化"><a href="#项目初始化" class="headerlink" title="项目初始化"></a>项目初始化</h2><p>首先新建文件夹，并运行命令行：<code>npm init</code>，按照提示完成项目初始化</p>
+<p>然后 package.json 文件下配置如下字段</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">	<span class="attr">&quot;build&quot;</span><span class="punctuation">:</span> <span class="string">&quot;webpack -p --profile --display-error-details --progress --colors --config webpack.product.config.js&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="attr">&quot;start&quot;</span><span class="punctuation">:</span> <span class="string">&quot;webpack-dev-server -d --inline --hot --progress --port 8080 --host 127.0.0.1&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="attr">&quot;server&quot;</span><span class="punctuation">:</span> <span class="string">&quot;node server.js&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>这样的话，以后可以<br>运行 <code>npm run build</code> 来打包生产环境；<br>运行 <code>npm start</code> 来启动开发环境（命令行方式）；<br>运行 <code>npm run server</code> 是用另外一种方式启动开发环境（node 脚本方式）。</p>
+<h2 id="依赖包安装"><a href="#依赖包安装" class="headerlink" title="依赖包安装"></a>依赖包安装</h2><p>在项目文件夹下运行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">npm install --save-dev webpack webpack-dev-server // 安装 webpack 及 server</span><br><span class="line">npm install --save-dev react react-dom // 安装 react</span><br><span class="line">npm install --save-dev babel-core babel-loader babel-preset-es2015 babel-preset-react // 安装 babel loader 以支持 react 和 es6</span><br><span class="line">npm install --save-dev css-loader style-loader less less-loader url-loader file-loader // 安装其他 loader。css-loader 会遍历 css 文件，找到所有的 url(...) 并且处理。style-loader 会把所有的样式插入到页面的 style 标签中。url-loader 根据需求将一些图片自动转成 base64 编码，减少网络请求。</span><br></pre></td></tr></table></figure>
+
+<h2 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h2><p>在项目文件夹下创建 webpack.config.js 文件并编辑：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> webpack = <span class="built_in">require</span>(<span class="string">&#x27;webpack&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> <span class="variable constant_">APP_PATH</span> = path.<span class="title function_">join</span>(__dirname, <span class="string">&#x27;app&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> <span class="variable constant_">BUILD_PATH</span> = path.<span class="title function_">join</span>(__dirname, <span class="string">&#x27;dist&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">    <span class="attr">entry</span>: &#123;</span><br><span class="line">        <span class="attr">app</span>: [</span><br><span class="line">            <span class="comment">// 命令行定义 --inline 将会自动完成以下两行工作</span></span><br><span class="line">            <span class="comment">// &#x27;webpack-dev-server/client?http://127.0.0.1:8080&#x27;, // for Automatic Refresh Inline mode</span></span><br><span class="line">            <span class="comment">// &#x27;webpack/hot/only-dev-server&#x27;, // for HMR,&quot;only&quot; prevents reload on syntax errors</span></span><br><span class="line">            path.<span class="title function_">join</span>(<span class="variable constant_">APP_PATH</span>, <span class="string">&#x27;app.js&#x27;</span>)</span><br><span class="line">        ],</span><br><span class="line">        <span class="comment">// 可以抽离页面公共代码，生成一个公共文件，供多个页面缓存使用</span></span><br><span class="line">        <span class="attr">vendor</span>: [<span class="string">&#x27;react&#x27;</span>, <span class="string">&#x27;react-dom&#x27;</span>]</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">output</span>: &#123;</span><br><span class="line">        <span class="attr">path</span>: <span class="variable constant_">BUILD_PATH</span>, <span class="comment">// for webpack build</span></span><br><span class="line">        <span class="attr">filename</span>: <span class="string">&#x27;bundle.js&#x27;</span>,</span><br><span class="line">        <span class="attr">publicPath</span>: <span class="string">&#x27;/static/&#x27;</span> <span class="comment">// for webpack-dev-server HMR</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">module</span>: &#123;</span><br><span class="line">        <span class="comment">// 用! 来链式调用 loader，注意 loaders 的处理顺序是从右到左的</span></span><br><span class="line">        <span class="attr">loaders</span>: [&#123;</span><br><span class="line">            <span class="comment">// 处理 less 文件</span></span><br><span class="line">            <span class="attr">test</span>: <span class="regexp">/\.less$/</span>,</span><br><span class="line">            <span class="attr">loader</span>: <span class="string">&#x27;style-loader!css-loader!less-loader&#x27;</span></span><br><span class="line">        &#125;, &#123;</span><br><span class="line">            <span class="comment">// 处理 css 文件</span></span><br><span class="line">            <span class="attr">test</span>: <span class="regexp">/\.css$/</span>,</span><br><span class="line">            <span class="attr">loader</span>: <span class="string">&#x27;style-loader!css-loader&#x27;</span></span><br><span class="line">        &#125;, &#123;</span><br><span class="line">            <span class="comment">// 图片要小于 8k 直接转为内联 base64 形式，直接的 url 的地址则不解析</span></span><br><span class="line">            <span class="attr">test</span>: <span class="regexp">/\.(png|jpg)$/</span>,</span><br><span class="line">            <span class="attr">loader</span>: <span class="string">&#x27;url-loader?limit=8192&#x27;</span></span><br><span class="line">        &#125;, &#123;</span><br><span class="line">            <span class="comment">// 字体小于 10k 的直接转为内联形式</span></span><br><span class="line">            <span class="attr">test</span>: <span class="regexp">/\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/</span>,</span><br><span class="line">            <span class="attr">loader</span>: <span class="string">&#x27;url-loader?limit=10000&amp;mimetype=application/font-woff&#x27;</span></span><br><span class="line">        &#125;, &#123;</span><br><span class="line">            <span class="comment">// 处理字体文件</span></span><br><span class="line">            <span class="attr">test</span>: <span class="regexp">/\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/</span>,</span><br><span class="line">            <span class="attr">loader</span>: <span class="string">&#x27;file-loader&#x27;</span></span><br><span class="line">        &#125;, &#123;</span><br><span class="line">            <span class="comment">// 处理 jsx 文件并 es6 转码</span></span><br><span class="line">            <span class="attr">test</span>: <span class="regexp">/\.jsx?$/</span>,</span><br><span class="line">            <span class="attr">include</span>: <span class="variable constant_">APP_PATH</span>,</span><br><span class="line">            <span class="attr">exclude</span>: <span class="regexp">/node_modules/</span>,</span><br><span class="line">            <span class="attr">loaders</span>: [<span class="string">&#x27;babel?presets[]=react,presets[]=es2015&#x27;</span>]</span><br><span class="line">        &#125;]</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">resolve</span>: &#123;</span><br><span class="line">        <span class="comment">// 现在引入文件时可以直接使用从 APP_PATH 算起的路径 require(&#x27;folder/file&#x27;)，不用使用目标文件相对于当前文件的路径 require(&#x27;../../folder/file&#x27;)</span></span><br><span class="line">        <span class="attr">root</span>: <span class="variable constant_">APP_PATH</span>,</span><br><span class="line">        <span class="comment">// 现在引入文件时可以直接使用 require(&#x27;file&#x27;)，不用使用 require(&#x27;file.coffee&#x27;)</span></span><br><span class="line">        <span class="attr">extensions</span>: [<span class="string">&#x27;&#x27;</span>, <span class="string">&#x27;.js&#x27;</span>, <span class="string">&#x27;.jsx&#x27;</span>, <span class="string">&#x27;.coffee&#x27;</span>]</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">plugins</span>: [</span><br><span class="line">        <span class="keyword">new</span> webpack.<span class="title class_">NoErrorsPlugin</span>(),</span><br><span class="line">        <span class="comment">// 命令行定义 --hot 将会自动完成以下工作</span></span><br><span class="line">        <span class="comment">// new webpack.HotModuleReplacementPlugin(),</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 把入口文件里面的公共代码打包成 verdors.js</span></span><br><span class="line">        <span class="keyword">new</span> webpack.<span class="property">optimize</span>.<span class="title class_">CommonsChunkPlugin</span>(<span class="string">&#x27;vendor&#x27;</span>, <span class="string">&#x27;vendor.js&#x27;</span>)</span><br><span class="line">    ],</span><br><span class="line">    <span class="comment">// webpack-dev-sever 的配置，其中 hot 字段不需要，因为命令行已定义 --hot；inline 字段无效，只能通过命令行方式 --line</span></span><br><span class="line">    <span class="attr">devServer</span>: &#123;</span><br><span class="line">        <span class="attr">contentBase</span>: <span class="string">&#x27;./dist&#x27;</span>,</span><br><span class="line">        <span class="comment">// hot: true, 多余</span></span><br><span class="line">        <span class="comment">// inline: true, 无效</span></span><br><span class="line">        <span class="attr">historyApiFallback</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="comment">// 代理设置</span></span><br><span class="line">        <span class="attr">proxy</span>: &#123;</span><br><span class="line">            <span class="string">&#x27;/api/*&#x27;</span>: <span class="string">&#x27;http://api.app.com/&#x27;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">compress</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="attr">noInfo</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="attr">stats</span>: &#123;</span><br><span class="line">            <span class="attr">colors</span>: <span class="literal">true</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="项目配置"><a href="#项目配置" class="headerlink" title="项目配置"></a>项目配置</h2><p>在项目文件夹下分别创建 app、dist 目录，分别对应上面配置文件中的 APP_PATH、BUILD_PATH，表示源码目录、成品目录。<br>然后在 app 目录下创建 app.js，是整个项目的入口文件</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="title class_">React</span> <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123;render&#125; <span class="keyword">from</span> <span class="string">&#x27;react-dom&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title class_">App</span> = <span class="title class_">React</span>.<span class="title function_">createClass</span>(&#123;</span><br><span class="line">    <span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">                React 项目 启动！</span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="title function_">render</span>((</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">App</span>&gt;</span><span class="tag">&lt;/<span class="name">App</span>&gt;</span></span></span><br><span class="line">), <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;root&#x27;</span>));</span><br></pre></td></tr></table></figure>
+
+<p>在 dist 目录下创建 index.html，是整个项目的首页，调用生成的入口文件</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;X-UA-Compatible&quot;</span> <span class="attr">content</span>=<span class="string">&quot;IE=edge&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1, maximum-scale=1&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>React<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&#x27;root&#x27;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;/static/vendor.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;/static/bundle.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="项目运行"><a href="#项目运行" class="headerlink" title="项目运行"></a>项目运行</h2><p>进入项目文件夹，然后运行 <code>npm start</code>，即可启动开发环境，浏览器中访问 <a target="_blank" rel="noopener" href="http://127.0.0.1:8080/">http://127.0.0.1:8080</a> 即可</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2016/06/06/26.jquery-angular-lodash/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -969,84 +1060,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2015/10/08/16.jquery-event-bind/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="可口可乐">
-      <meta itemprop="description" content="Personal Blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Lizux">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2015/10/08/16.jquery-event-bind/" class="post-title-link" itemprop="url">jQuery 中事件绑定方法 bind()、live()、delegate()、on() 的区别</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2015-10-08 00:00:00" itemprop="dateCreated datePublished" datetime="2015-10-08T00:00:00+08:00">2015-10-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-10-26 10:32:58" itemprop="dateModified" datetime="2023-10-26T10:32:58+08:00">2023-10-26</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>jQuery 中绑定事件的方法有三种，新版（v1.9）已经整合到 on 方法中</p>
-<ul>
-<li>bind(eventType [, eventData], handler(eventObject))<br>为每个匹配元素的特定事件绑定事件处理函数<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">&#x27;a&#x27;</span>).<span class="title function_">bind</span>(<span class="string">&#x27;click&#x27;</span>, <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="title function_">alert</span>(<span class="string">&#x27;ok&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></li>
-<li>live(events, handler(eventObject) )<br>给所有匹配的元素附加一个事件处理函数，匹配的元素包括现在和未来。<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">&#x27;a&#x27;</span>).<span class="title function_">live</span>(<span class="string">&#x27;click&#x27;</span>, <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="title function_">alert</span>(<span class="string">&#x27;ok&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></li>
-<li>delegate(selector, eventType, handler(eventObject))<br>为所有匹配选择器的元素绑定一个或多个事件处理函数，基于一个指定的根元素的子集，匹配的元素包括现在和未来。<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">&#x27;#container&#x27;</span>).<span class="title function_">delegate</span>(<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;click&#x27;</span>, <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="title function_">alert</span>(<span class="string">&#x27;ok&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></li>
-<li>on(events [, selector] [, data], handler(eventObject))<br>在选择元素上绑定一个或多个事件的事件处理函数<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">&#x27;a&#x27;</span>).<span class="title function_">on</span>(&#123;</span><br><span class="line">    <span class="string">&#x27;click&#x27;</span>: <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="title function_">alert</span>(<span class="string">&#x27;ok&#x27;</span>);</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&#x27;mouseenter&#x27;</span>: <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;enter&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p>差别：</p>
-<ul>
-<li>bind() 是直接绑定在元素上</li>
-<li>live() 则是通过冒泡的方式来绑定到元素上的。和 bind() 相比优势是支持动态添加元素；缺点是耗费时间，并且不支持链式操作。</li>
-<li>delegate() 则是更精确的小范围使用事件代理。和 live() 相比优势是速度性、灵活性、CSS 选择支持广泛。</li>
-<li>on() 则是整合了之前的三种方式，是当前推荐使用的事件绑定方法。删除绑定方法是 off()；要绑定事件，并且只运行一次，然后删除自己的方法是 one()。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1116,7 +1129,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-count">54</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1148,7 +1161,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
